@@ -23,11 +23,74 @@
     </header>
     <!--Main content here we put all big shit :)-->
     <main>
-        <!--catalog artwork-->     
-        <section id = "catalogue">
-            <header>
-                <h1>Artwork catalogue</h1>
-            </header>
+
+        <!-- HERO / HEADER -->
+        <section class="hero">
+            <div class="container">
+                <h1>Discover Rare Digital Art</h1>
+                <p>Curated artworks from artists and galleries worldwide.</p>
+            </div>
         </section>
+
+        <!-- CATALOGUE -->
+        <section class="catalogue">
+            <div class="container">
+
+                <!-- TOP BAR -->
+                <div class="catalogue-header">
+                    <h2>Explore Artworks</h2>
+
+                    <div class="catalogue-controls">
+                        <input type="text" placeholder="Search artworks">
+
+                        <select>
+                            <option>All Mediums</option>
+                        </select>
+
+                        <select>
+                            <option>All Styles</option>
+                        </select>
+
+                        <select>
+                            <option>Sort by</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- GRID -->
+                <div class="grid">
+
+                    <!-- CARD -->
+                    <article class="card">
+                        <a href="/artwork/1" class="card-link">
+
+                            <div class="card-image">
+                                <img src="image.jpg" alt="Artwork">
+                            </div>
+
+                            <div class="card-body">
+                                <h3 class="card-title">Artwork Title</h3>
+                                <p class="card-meta">Oil • 50x70 cm</p>
+                                <p class="card-price">$500</p>
+                            </div>
+
+                        </a>
+                    </article>
+
+                    <!-- Repeat cards -->
+
+                </div>
+            </div>
+        </section>
+
     </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer">
+            <p>© ArtVault</p>
+        </div>
+    </footer>
+
 </body>
+</html>
