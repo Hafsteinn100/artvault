@@ -4,91 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArtVault</title>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <!--Navigation implement here-->
-    <header>
-        <nav>
-            <div class = "nav-container">
-                <div class = "nav-logo">
-                    <a href = "/">ArtVault</a>
-                </div>
-                <ul class = "nav-links">
-                    <li><a href="/catalogue">Explore</a></li>
-                    <li><a href="/bids">Bids</a></li>
-                    <li><a href="/profile">Profile</a></li>
+
+    <!-- Header -->
+    <header class="header">
+
+        <!-- Top bar -->
+        <div class="topbar container">
+
+            <div class="logo">
+                <a href="/">Art<span>Vault</span></a>
+            </div>
+
+            <div class="search">
+                <form action="/search" method="get">
+                    <label for="search-input" class="visually-hidden">Leita</label>
+                    <input id="search-input" type="text" name="q" placeholder="Leitaðu á vefnum">
+                </form>
+            </div>
+
+            <nav class="actions" aria-label="User actions">
+                <ul>
+                    <!--we will need to update sign in and liked-->
+                    <li><a href="#">Sign in</a></li>
+                    <li><a href="#">Liked</a></li>
                 </ul>
+            </nav>
+
+        </div>
+
+        <!-- Main nav -->
+        <nav class="navbar" aria-label="Main navigation">
+            <div class="container">
+
+                <ul class="nav-links">
+                    <li><a href="#">Art works</a></li>
+                    <li><a href="#">Filter</a></li>
+                </ul>
+
+                <div class="nav-right">
+                    <a href="#">contact</a>
+                </div>
+
             </div>
         </nav>
+
     </header>
-    <!--Main content-->
+
+    <!-- Main -->
     <main>
 
-        <!-- HEADER -->
         <section class="hero">
-            <div class="container">
-                <h1>Discover Art for bidding</h1>
-                <p>Curated artworks from artists and galleries worldwide.</p>
-            </div>
-        </section>
 
-        <!-- CATALOGUE -->
-        <section class="catalogue">
-            <div class="container">
+            <div class="hero-container container">
 
-                <!-- TOP BAR -->
-                <div class="catalogue-header">
-                    <h2>Explore Artworks</h2>
-
-                    <div class="catalogue-controls">
-                        <input type="text" placeholder="Search artworks">
-
-                        <select>
-                            <option>All Mediums</option>
-                        </select>
-
-                        <select>
-                            <option>All Styles</option>
-                        </select>
-
-                        <select>
-                            <option>Sort by</option>
-                        </select>
+                <!-- Left -->
+                <div class="hero-left">
+                    <div class="art-grid">
+                        <img src="img1.jpg" alt="Artwork example">
+                        <img src="img2.jpg" alt="Artwork example">
+                        <img src="img3.jpg" alt="Artwork example">
                     </div>
                 </div>
 
-                <!-- GRID -->
-                <div class="grid">
-
-                    <!-- CARD -->
-                    <article class="card">
-                        <a href="/artwork/1" class="card-link">
-
-                            <div class="card-image">
-                                <img src="image.jpg" alt="Artwork">
-                            </div>
-
-                            <div class="card-body">
-                                <h3 class="card-title">Artwork Title</h3>
-                                <p class="card-meta">Oil • 50x70 cm</p>
-                                <p class="card-price">$500</p>
-                            </div>
-
-                        </a>
-                    </article>
-
-                    <!-- Repeat cards -->
-
+                <!-- Center -->
+                <div class="hero-content">
+                    <h1>Íslensk myndlist í fararbroddi</h1>
+                    <p>
+                        Vertu heima og fjárfestu í íslenskri myndlist.
+                        Beint frá vinnustofum listamanna, heim til þín.
+                    </p>
+                    <a href="#" class="cta-button">Skoða öll verk</a>
                 </div>
+
+                <!-- Right -->
+                <div class="hero-right">
+                    <div class="art-grid">
+                        <!--remember to chnge image name when art implemented-->
+                        <img src="img4.jpg" alt="Artwork example">
+                        <img src="img5.jpg" alt="Artwork example">
+                        <img src="img6.jpg" alt="Artwork example">
+                    </div>
+                </div>
+
             </div>
+
         </section>
 
     </main>
 
-    <!-- FOOTER -->
+    <!-- Footer -->
     <footer>
-        <div class="container footer">
-            <p>© ArtVault</p>
+        <div class="container">
+            <p>&copy; ArtVault</p>
         </div>
     </footer>
 
