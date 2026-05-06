@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ArtVault | Buy or Sell Art{% endblock %}
+
+{% block content %}
+<section class="hero-section" aria-labelledby="hero-title">
+    <div class="hero-copy">
+        <h1 id="hero-title">Buy or sell art</h1>
+    </div>
+    <div class="hero-art-wrap">
+        <img class="hero-art" src="{% static 'marketplace/images/hero-artwork.webp' %}" alt="Framed landscape painting hanging above a cabinet">
+    </div>
+</section>
+
+<section class="latest-section" aria-labelledby="latest-title">
+    <div class="section-inner">
+        <h2 id="latest-title">Latest Pieces</h2>
+
+        <div class="artwork-grid">
+            {% for piece in latest_pieces %}
+                <article class="art-card">
+                    <div class="art-image-wrap">
+                        <span class="new-tag">New</span>
+                        <img src="{% static piece.image %}" alt="{{ piece.name }}">
+                    </div>
+                    <div class="art-card-body">
+                        <p class="medium">{{ piece.medium }}</p>
+                        <h3>{{ piece.name }}</h3>
+                        <p class="price">{{ piece.price }}</p>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

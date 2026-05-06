@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 390" role="img" aria-labelledby="title">
+  <title id="title">Amber abstract artwork</title>
+  <rect width="520" height="390" fill="#f4efe7"/>
+  <circle cx="374" cy="112" r="76" fill="#A65332"/>
+  <path d="M0 250 C82 187 177 214 250 161 C346 92 414 97 520 45 L520 390 L0 390 Z" fill="#C8A97E"/>
+  <path d="M0 302 C128 265 197 325 300 283 C382 249 426 198 520 187 L520 390 L0 390 Z" fill="#3B1F0E" opacity=".88"/>
+  <path d="M61 73 L208 42 L303 181 L155 247 Z" fill="#FFFFFF" opacity=".68"/>
+</svg>

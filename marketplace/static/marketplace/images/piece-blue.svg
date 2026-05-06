@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 390" role="img" aria-labelledby="title">
+  <title id="title">Blue watercolor artwork</title>
+  <rect width="520" height="390" fill="#edf2f2"/>
+  <path d="M-15 105 C71 42 174 72 245 114 C335 166 411 154 535 75 L535 390 L-15 390 Z" fill="#20485A"/>
+  <path d="M0 267 C91 198 157 235 246 223 C348 209 386 140 520 144 L520 390 L0 390 Z" fill="#C8A97E" opacity=".9"/>
+  <path d="M63 317 C172 278 264 339 362 292 C421 264 466 250 520 260" fill="none" stroke="#3B1F0E" stroke-width="22" stroke-linecap="round" opacity=".75"/>
+  <circle cx="150" cy="100" r="48" fill="#FFFFFF" opacity=".58"/>
+</svg>

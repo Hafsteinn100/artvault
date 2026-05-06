@@ -7,99 +7,96 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <header class="site-header">
+        <nav class="top-nav" aria-label="Main navigation">
+            <a class="brand" href="/">ArtVault</a>
 
-    <!-- Header -->
-    <header class="header">
-
-        <!-- Top bar -->
-        <div class="topbar container">
-
-            <div class="logo">
-                <a href="/">Art<span>Vault</span></a>
+            <div class="primary-links">
+                <a href="#">Browse art</a>
+                <a href="#">My bids</a>
             </div>
 
-            <div class="search">
-                <form action="/search" method="get">
-                    <label for="search-input" class="visually-hidden">Search</label>
-                    <input id="search-input" type="text" name="q" placeholder="Search">
+            <div class="nav-actions">
+                <button class="icon-button menu-button" type="button" aria-label="Open menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <form class="search-form" action="#" method="get">
+                    <label class="sr-only" for="site-search">Search ArtVault</label>
+                    <input id="site-search" type="search" name="q" placeholder="Hinted search text">
+                    <button class="search-button" type="submit" aria-label="Search">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="m16.5 16.5 4 4"></path>
+                        </svg>
+                    </button>
                 </form>
-            </div>
 
-            <nav class="actions" aria-label="User actions">
-                <ul>
-                    <!--we will need to update sign in and liked-->
-                    <li><a href="#">Sign in</a></li>
-                    <li><a href="#">Liked</a></li>
-                </ul>
-            </nav>
-
-        </div>
-
-        <!-- Main nav -->
-        <nav class="navbar" aria-label="Main navigation">
-            <div class="container">
-
-                <ul class="nav-links">
-                    <li><a href="#">Art works</a></li>
-                    <li><a href="#">Filter</a></li>
-                </ul>
-
-                <div class="nav-right">
-                    <a href="#">contact</a>
-                </div>
-
+                <a class="login-button" href="#">Log In</a>
+                <a class="profile-button" href="#" aria-label="Profile"></a>
             </div>
         </nav>
-
     </header>
 
-    <!-- Main -->
     <main>
-
-        <section class="hero">
-
-            <div class="hero-container container">
-
-                <!-- Left -->
-                <div class="hero-left">
-                    <div class="art-grid">
-                        <img src="img1.jpg" alt="Artwork example">
-                        <img src="img2.jpg" alt="Artwork example">
-                        <img src="img3.jpg" alt="Artwork example">
-                    </div>
-                </div>
-
-                <!-- Center -->
-                <div class="hero-content">
-                    <h1>Epic art for dayz</h1>
-                    <p>
-                        This text right here is so awsome somone should change it tho arni?
-                    </p>
-                    <a href="#" class="cta-button">search art</a>
-                </div>
-
-                <!-- Right -->
-                <div class="hero-right">
-                    <div class="art-grid">
-                        <!--remember to chnge image name when art implemented-->
-                        <img src="img4.jpg" alt="Artwork example">
-                        <img src="img5.jpg" alt="Artwork example">
-                        <img src="img6.jpg" alt="Artwork example">
-                    </div>
-                </div>
-
+        <section class="hero-section" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <h1 id="hero-title">Buy or sell art</h1>
             </div>
-
+            <div class="hero-art-wrap">
+                <img class="hero-art" src="marketplace/static/marketplace/images/hero-artwork.webp" alt="Framed landscape painting hanging above a cabinet">
+            </div>
         </section>
 
+        <section class="latest-section" aria-labelledby="latest-title">
+            <div class="section-inner">
+                <h2 id="latest-title">Latest Pieces</h2>
+
+                <div class="artwork-grid">
+                    <article class="art-card">
+                        <div class="art-image-wrap">
+                            <span class="new-tag">New</span>
+                            <img src="marketplace/static/marketplace/images/piece-amber.svg" alt="Amber Stillness">
+                        </div>
+                        <div class="art-card-body">
+                            <p class="medium">Oil</p>
+                            <h3>Amber Stillness</h3>
+                            <p class="price">$100</p>
+                        </div>
+                    </article>
+
+                    <article class="art-card">
+                        <div class="art-image-wrap">
+                            <span class="new-tag">New</span>
+                            <img src="marketplace/static/marketplace/images/piece-blue.svg" alt="Blue Hour Study">
+                        </div>
+                        <div class="art-card-body">
+                            <p class="medium">Watercolor</p>
+                            <h3>Blue Hour Study</h3>
+                            <p class="price">$100</p>
+                        </div>
+                    </article>
+
+                    <article class="art-card">
+                        <div class="art-image-wrap">
+                            <span class="new-tag">New</span>
+                            <img src="marketplace/static/marketplace/images/piece-geometry.svg" alt="Quiet Geometry">
+                        </div>
+                        <div class="art-card-body">
+                            <p class="medium">Acrylic</p>
+                            <h3>Quiet Geometry</h3>
+                            <p class="price">$100</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; ArtVault</p>
-        </div>
+    <footer class="site-footer">
+        <p>&copy; 2026 ArtVault</p>
     </footer>
-
 </body>
 </html>

@@ -77,13 +77,17 @@ a {
     align-items: center;
     justify-content: center;
     gap: 40px;
-    color: var(--brown);
     font-size: 15px;
     font-weight: 600;
+    color: var(--brown);
 }
 
-.primary-links a:hover,
-.login-button:hover {
+.primary-links a,
+.login-button {
+    transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.primary-links a:hover {
     color: var(--gold);
 }
 
@@ -133,13 +137,18 @@ a {
     border: 0;
     padding: 0 0 0 15px;
     color: var(--ink);
-    background: transparent;
     font: inherit;
     font-size: 13px;
+    background: transparent;
 }
 
 .search-form input::placeholder {
     color: #9B928B;
+}
+
+.search-form input:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: -2px;
 }
 
 .search-button {
@@ -163,15 +172,23 @@ a {
     align-items: center;
     justify-content: center;
     padding: 0 6px;
+    border: 0;
+    border-radius: 0;
     color: var(--brown);
     font-size: 15px;
     font-weight: 600;
     white-space: nowrap;
 }
 
+.login-button:hover {
+    background: transparent;
+    color: var(--gold);
+}
+
 .profile-button {
     width: 24px;
     height: 24px;
+    border: 0;
     border-radius: 50%;
     background: var(--brown);
 }
@@ -305,12 +322,12 @@ a {
 }
 
 .site-footer {
+    background: var(--brown);
+    color: var(--white);
     min-height: 78px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--brown);
-    color: var(--white);
 }
 
 .site-footer p {
@@ -356,6 +373,7 @@ a {
     }
 
     .hero-copy {
+        justify-content: flex-start;
         padding: 176px 28px 48px;
     }
 

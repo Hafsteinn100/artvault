@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ArtVault{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'marketplace/css/styles.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="top-nav" aria-label="Main navigation">
+            <a class="brand" href="{% url 'home' %}">ArtVault</a>
+
+            <div class="primary-links">
+                <a href="#">Browse art</a>
+                <a href="#">My bids</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="icon-button menu-button" type="button" aria-label="Open menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <form class="search-form" action="#" method="get">
+                    <label class="sr-only" for="site-search">Search ArtVault</label>
+                    <input id="site-search" type="search" name="q" placeholder="Hinted search text">
+                    <button class="search-button" type="submit" aria-label="Search">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="m16.5 16.5 4 4"></path>
+                        </svg>
+                    </button>
+                </form>
+
+                <a class="login-button" href="#">Log In</a>
+                <a class="profile-button" href="#" aria-label="Profile"></a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 ArtVault</p>
+    </footer>
+</body>
+</html>

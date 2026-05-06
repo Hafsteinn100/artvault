@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" role="img" aria-labelledby="title desc">
+  <title id="title">Abstract framed artwork</title>
+  <desc id="desc">Layered abstract artwork in cream, gold, brown, blue, and red.</desc>
+  <rect width="900" height="620" fill="#f4efe7"/>
+  <path d="M0 410 C140 322 230 348 343 255 C452 166 563 132 900 168 L900 620 L0 620 Z" fill="#C8A97E"/>
+  <path d="M0 474 C151 437 233 482 357 403 C493 318 631 326 900 265 L900 620 L0 620 Z" fill="#3B1F0E" opacity=".86"/>
+  <path d="M62 77 C197 34 337 34 449 115 C574 206 657 215 838 114 L900 86 L900 0 L0 0 L0 102 Z" fill="#20485A"/>
+  <circle cx="602" cy="175" r="83" fill="#A65332"/>
+  <path d="M93 510 C200 432 310 437 412 470 C527 506 625 457 744 384 C813 342 862 330 900 333 L900 620 L80 620 Z" fill="#F5F5F5" opacity=".88"/>
+  <path d="M143 167 L333 104 L474 293 L272 365 Z" fill="#FFFFFF" opacity=".74"/>
+  <path d="M512 304 L728 231 L813 432 L598 492 Z" fill="#D9CDBB" opacity=".76"/>
+  <path d="M157 519 C284 542 428 558 566 526 C675 501 779 448 900 437" fill="none" stroke="#C8A97E" stroke-width="24" stroke-linecap="round"/>
+  <path d="M70 267 C185 218 278 238 385 218 C535 191 630 105 800 84" fill="none" stroke="#3B1F0E" stroke-width="12" stroke-linecap="round" opacity=".72"/>
+</svg>

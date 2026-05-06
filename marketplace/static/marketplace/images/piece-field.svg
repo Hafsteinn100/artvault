@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 390" role="img" aria-labelledby="title">
+  <title id="title">Pastel field artwork</title>
+  <rect width="520" height="390" fill="#efe8de"/>
+  <path d="M0 155 C78 123 143 147 209 126 C310 95 390 56 520 84 L520 390 L0 390 Z" fill="#C8A97E"/>
+  <path d="M0 250 C121 213 192 243 289 213 C394 181 452 179 520 204 L520 390 L0 390 Z" fill="#7D8A65"/>
+  <path d="M0 304 C118 280 180 322 281 295 C391 265 452 287 520 269 L520 390 L0 390 Z" fill="#3B1F0E" opacity=".84"/>
+  <path d="M80 90 C140 67 198 72 260 98" fill="none" stroke="#A65332" stroke-width="14" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 390" role="img" aria-labelledby="title">
+  <title id="title">Geometric abstract artwork</title>
+  <rect width="520" height="390" fill="#F5F5F5"/>
+  <rect x="47" y="48" width="160" height="236" fill="#3B1F0E"/>
+  <rect x="207" y="48" width="132" height="132" fill="#C8A97E"/>
+  <rect x="339" y="48" width="134" height="236" fill="#20485A"/>
+  <rect x="207" y="180" width="132" height="104" fill="#A65332"/>
+  <path d="M48 317 L472 317" stroke="#C8A97E" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="273" cy="115" r="36" fill="#FFFFFF" opacity=".76"/>
+</svg>
