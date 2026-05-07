@@ -1,105 +1,209 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ArtVault</title>
-    <link rel="stylesheet" href="index.css">
-</head>
-<body>
+    <link rel="stylesheet" href="index.css" />
+    <script src="index.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="top-nav" aria-label="Main navigation">
+        <a class="brand" href="/">ArtVault</a>
 
-    <!-- Header -->
-    <header class="header">
+        <div class="nav-actions">
+          <div class="primary-links">
+            <a href="#">Browse art</a>
+            <a href="#">My bids</a>
+          </div>
 
-        <!-- Top bar -->
-        <div class="topbar container">
+          <form class="search-form" action="/search" method="get">
+            <label class="visually-hidden" for="search-input"
+              >Search ArtVault</label
+            >
+            <input
+              id="search-input"
+              type="search"
+              name="q"
+              placeholder="Hinted search text"
+            />
+            <button class="search-button" type="submit" aria-label="Search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m16.5 16.5 4 4"></path>
+              </svg>
+            </button>
+          </form>
 
-            <div class="logo">
-                <a href="/">Art<span>Vault</span></a>
-            </div>
-
-            <div class="search">
-                <form action="/search" method="get">
-                    <label for="search-input" class="visually-hidden">Search</label>
-                    <input id="search-input" type="text" name="q" placeholder="Search">
-                </form>
-            </div>
-
-            <nav class="actions" aria-label="User actions">
-                <ul>
-                    <!--we will need to update sign in and liked-->
-                    <a href="signin.html">Sign in</a>
-                    <li><a href="#">Liked</a></li>
-                </ul>
-            </nav>
-
+          <a class="login-button" href="signin.html">Log In</a>
+          <a class="profile-button" href="#" aria-label="Profile"></a>
         </div>
-
-        <!-- Main nav -->
-        <nav class="navbar" aria-label="Main navigation">
-            <div class="container">
-
-                <ul class="nav-links">
-                    <li><a href="#">Art works</a></li>
-                    <li><a href="#">Filter</a></li>
-                </ul>
-
-                <div class="nav-right">
-                    <a href="#">contact</a>
-                </div>
-
-            </div>
-        </nav>
-
+      </nav>
     </header>
-
-    <!-- Main -->
-    <main>
-
-        <section class="hero">
-
-            <div class="hero-container container">
-
-                <!-- Left -->
-                <div class="hero-left">
-                    <div class="art-grid">
-                        <img src="img1.jpg" alt="Artwork example">
-                        <img src="img2.jpg" alt="Artwork example">
-                        <img src="img3.jpg" alt="Artwork example">
-                    </div>
-                </div>
-
-                <!-- Center -->
-                <div class="hero-content">
-                    <h1>Epic art for dayz</h1>
-                    <p>
-                        This text right here is so awsome somone should change it tho arni?
-                    </p>
-                    <a href="#" class="cta-button">search art</a>
-                </div>
-
-                <!-- Right -->
-                <div class="hero-right">
-                    <div class="art-grid">
-                        <!--remember to chnge image name when art implemented-->
-                        <img src="img4.jpg" alt="Artwork example">
-                        <img src="img5.jpg" alt="Artwork example">
-                        <img src="img6.jpg" alt="Artwork example">
-                    </div>
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; ArtVault</p>
+    <section class="hero">
+      <div class="cover">
+        <div class="hero-copy">
+          <h1>Discover Extraordinary Art</h1>
+          <p>
+            Explore original works from emerging and established artists
+            worldwide.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-filled" href="#">Explore Collection</a>
+            <a class="button button-outline" href="#">Start Selling</a>
+          </div>
         </div>
-    </footer>
+        <div class="hero-media">
+          <img
+            src="coverimg2verklegt2.webp"
+            alt="Decorative painting on a wall"
+            class="coverimage"
+          />
+        </div>
+      </div>
+    </section>
 
-</body>
+    <section class="latest-section">
+      <div class="section-inner">
+        <h2>Latest Pieces</h2>
+        <div class="artwork-grid">
+          <article class="art-card">
+            <div class="art-image-wrap">
+              <span class="new-tag">New</span>
+              <img src="img1.jpg" alt="Abstract artwork" />
+            </div>
+            <div class="art-card-body">
+              <p class="medium">Oil</p>
+              <h3>Forest Light</h3>
+              <p class="price">$100</p>
+            </div>
+          </article>
+
+          <article class="art-card">
+            <div class="art-image-wrap">
+              <span class="new-tag">New</span>
+              <img
+                src="il_fullxfull.4386567875_i7lx.png"
+                alt="Framed landscape painting"
+              />
+            </div>
+            <div class="art-card-body">
+              <p class="medium">Watercolor</p>
+              <h3>Quiet Interior</h3>
+              <p class="price">$100</p>
+            </div>
+          </article>
+
+          <article class="art-card">
+            <div class="art-image-wrap">
+              <span class="new-tag">New</span>
+              <img src="img1.jpg" alt="Gallery artwork" />
+            </div>
+            <div class="art-card-body">
+              <p class="medium">Digital</p>
+              <h3>Amber Study</h3>
+              <p class="price">$100</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="medium-section">
+      <div class="section-inner">
+        <h2>Browse by Medium</h2>
+        <div class="medium-row">
+          <a class="medium-item" href="#">
+            <img src="img1.jpg" alt="" />
+            <span>Oil</span>
+          </a>
+          <a class="medium-item" href="#">
+            <img src="il_fullxfull.4386567875_i7lx.png" alt="" />
+            <span>Watercolor</span>
+          </a>
+          <a class="medium-item" href="#">
+            <img src="img1.jpg" alt="" />
+            <span>Sculpture</span>
+          </a>
+          <a class="medium-item" href="#">
+            <img src="il_fullxfull.4386567875_i7lx.png" alt="" />
+            <span>Photography</span>
+          </a>
+          <a class="medium-item" href="#">
+            <img src="img1.jpg" alt="" />
+            <span>Digital</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-section">
+      <div class="section-inner">
+        <h2>How It Works</h2>
+        <div class="how-grid">
+          <article class="how-card">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <h3>Discover</h3>
+            <p>Browse curated artworks from verified sellers</p>
+          </article>
+          <article class="how-card">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m14 5 5 5"></path>
+              <path d="m12 7 5 5"></path>
+              <path d="m3 21 7-7"></path>
+              <path d="m9 4 11 11"></path>
+            </svg>
+            <h3>Bid</h3>
+            <p>Place competitive bids on pieces you love</p>
+          </article>
+          <article class="how-card">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m21 8-9-5-9 5 9 5 9-5Z"></path>
+              <path d="M3 8v8l9 5 9-5V8"></path>
+              <path d="M12 13v8"></path>
+            </svg>
+            <h3>Collect</h3>
+            <p>Secure payment and delivery to your door</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <h2>Ready to find your next masterpiece?</h2>
+      <a class="cta-button" href="#">Browse Artworks</a>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <h3>About</h3>
+          <p>
+            ArtVault connects collectors with original works from artists and
+            trusted sellers around the world.
+          </p>
+        </div>
+        <div>
+          <h3>Quick Links</h3>
+          <a href="#">Browse</a>
+          <a href="#">My Bids</a>
+          <a href="#">Profile</a>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>hello@artvault.com</p>
+          <div class="social-icons" aria-label="Social links">
+            <a href="#" aria-label="Instagram">Ig</a>
+            <a href="#" aria-label="X">X</a>
+            <a href="#" aria-label="Facebook">Fb</a>
+          </div>
+        </div>
+      </div>
+      <p class="copyright">&copy; 2026 ArtVault. All rights reserved.</p>
+    </footer>
+  </body>
 </html>
