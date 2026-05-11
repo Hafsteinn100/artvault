@@ -13,6 +13,15 @@ body {
     overflow-x: hidden;
 }
 
+:root {
+    --brown: #3B1F0E;
+    --cream: #F7F5F2;
+    --hero-bg: #F0EDEB;
+    --page-max: 1360px;
+    --page-gutter: clamp(20px, 4vw, 64px);
+    --hero-height: clamp(520px, 68vh, 760px);
+}
+
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -41,7 +50,7 @@ body {
     z-index: 10;
     width: 100%;
     background: transparent;
-    color: #3B1F0E;
+    color: var(--brown);
     transition:
         background 180ms ease,
         border-color 180ms ease,
@@ -58,19 +67,19 @@ body {
 }
 
 .top-nav {
-    min-height: 68px;
-    width: min(1180px, calc(100% - 48px));
+    min-height: 64px;
+    width: min(var(--page-max), calc(100% - (var(--page-gutter) * 2)));
     margin: 0 auto;
-    padding: 14px 0;
+    padding: clamp(10px, 1.6vw, 16px) 0;
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    gap: 30px;
+    gap: clamp(18px, 3vw, 42px);
 }
 
 .hero {
     position: relative;
-    background: #F0EDEB;
+    background: var(--hero-bg);
 }
 
 .hero::after {
@@ -79,7 +88,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    height: 150px;
+    height: clamp(110px, 18vh, 180px);
     pointer-events: none;
     background: linear-gradient(
         to top,
@@ -93,9 +102,9 @@ body {
 .cover {
     position: relative;
     width: 100%;
-    height: 500px;
+    min-height: var(--hero-height);
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(320px, 50vw) 1fr;
     overflow: hidden;
     isolation: isolate;
 }
@@ -107,8 +116,12 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    min-height: 580px;
-    padding: 124px max(48px, calc((100vw - 1180px) / 2)) 78px;
+    min-height: var(--hero-height);
+    padding:
+        clamp(92px, 14vh, 144px)
+        clamp(26px, 5vw, 78px)
+        clamp(54px, 9vh, 86px)
+        max(var(--page-gutter), calc((100vw - var(--page-max)) / 2));
     background: rgba(255, 255, 255, 0.46);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -118,38 +131,38 @@ body {
 }
 
 .hero-copy h1 {
-    max-width: 460px;
+    max-width: min(10ch, 100%);
     margin: 0;
-    color: #3B1F0E;
-    font-size: 46px;
+    color: var(--brown);
+    font-size: clamp(2.35rem, 3.4vw, 4.25rem);
     line-height: 1.08;
     font-weight: 800;
     letter-spacing: 0;
 }
 
 .hero-copy p {
-    max-width: 470px;
-    margin: 18px 0 0;
+    max-width: min(32rem, 100%);
+    margin: clamp(14px, 2vw, 20px) 0 0;
     color: #5F5650;
-    font-size: 18px;
+    font-size: clamp(0.98rem, 1.18vw, 1.2rem);
     line-height: 1.55;
 }
 
 .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 14px;
-    margin-top: 30px;
+    gap: clamp(10px, 1.5vw, 16px);
+    margin-top: clamp(22px, 3vw, 32px);
 }
 
 .button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 44px;
-    padding: 0 22px;
+    min-height: clamp(38px, 4vw, 44px);
+    padding: 0 clamp(16px, 2vw, 22px);
     border-radius: 8px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     text-decoration: none;
     transition:
@@ -184,8 +197,8 @@ body {
     position: absolute;
     inset: 0;
     z-index: 0;
-    height: 580px;
-    min-height: 580px;
+    height: 100%;
+    min-height: 100%;
     overflow: hidden;
 }
 
@@ -198,22 +211,23 @@ body {
 }
 
 .section-inner {
-    width: min(1180px, calc(100% - 40px));
-    padding: 20px;
+    width: min(var(--page-max), calc(100% - (var(--page-gutter) * 2)));
+    margin: 0 auto;
+    padding: 0;
 }
 
 .latest-section,
 .medium-section {
-    background: #F7F5F2;
-    padding-top: 20px;
+    background: var(--cream);
+    padding: clamp(42px, 6vw, 72px) 0;
 }
 
 .latest-section h2,
 .medium-section h2,
 .how-section h2 {
-    margin-bottom: 20px;
+    margin-bottom: clamp(18px, 3vw, 28px);
     color: #111;
-    font-size: 24px;
+    font-size: clamp(1.35rem, 1.8vw, 1.75rem);
     line-height: 1.15;
     font-weight: 800;
     letter-spacing: 0;
@@ -222,8 +236,9 @@ body {
 
 .artwork-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 28px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: clamp(18px, 2.5vw, 28px);
+    max-width: min(100%, 1040px);
 }
 
 .art-card {
@@ -290,7 +305,7 @@ body {
 }
 
 .medium-section {
-    padding-top: 28px;
+    padding-top: clamp(36px, 5vw, 60px);
 }
 
 .medium-section h2 {
@@ -301,7 +316,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 34px;
+    gap: clamp(22px, 4vw, 46px);
 }
 
 .medium-item {
@@ -314,8 +329,8 @@ body {
 }
 
 .medium-item img {
-    width: 116px;
-    height: 116px;
+    width: clamp(86px, 9vw, 124px);
+    height: clamp(86px, 9vw, 124px);
     object-fit: cover;
     border-radius: 50%;
     border: 4px solid #fff;
@@ -323,19 +338,19 @@ body {
 }
 
 .how-section {
-    background: #F0EDEB;
-    padding: 68px 0;
+    background: var(--hero-bg);
+    padding: clamp(48px, 7vw, 84px) 0;
 }
 
 .how-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: clamp(18px, 3vw, 38px);
 }
 
 .how-card {
     position: relative;
-    padding: 20px 34px;
+    padding: clamp(16px, 2vw, 24px) clamp(18px, 3vw, 34px);
     background: transparent;
     border: 0;
     border-radius: 0;
@@ -369,15 +384,15 @@ body {
     display: grid;
     justify-items: center;
     gap: 22px;
-    padding: 68px 20px;
-    background: #3B1F0E;
+    padding: clamp(52px, 7vw, 78px) var(--page-gutter);
+    background: var(--brown);
     color: #fff;
     text-align: center;
 }
 
 .cta-section h2 {
     margin: 0;
-    font-size: 30px;
+    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
     line-height: 1.2;
 }
 
@@ -395,17 +410,17 @@ body {
 }
 
 .site-footer {
-    background: #3B1F0E;
+    background: var(--brown);
     color: #fff;
-    padding: 54px 0 24px;
+    padding: clamp(44px, 6vw, 62px) 0 24px;
 }
 
 .footer-inner {
-    width: min(1180px, calc(100% - 40px));
+    width: min(var(--page-max), calc(100% - (var(--page-gutter) * 2)));
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1.4fr 1fr 1fr;
-    gap: 38px;
+    gap: clamp(28px, 4vw, 48px);
 }
 
 .site-footer h3 {
@@ -446,7 +461,7 @@ body {
 }
 
 .copyright {
-    width: min(1180px, calc(100% - 40px));
+    width: min(var(--page-max), calc(100% - (var(--page-gutter) * 2)));
     margin: 38px auto 0;
     padding-top: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.18);
@@ -455,10 +470,10 @@ body {
 
 .brand {
     font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-    font-size: 29px;
+    font-size: 26px;
     font-weight: 400;
     line-height: 1;
-    color: #3B1F0E;
+    color: var(--brown);
     text-decoration: none;
 }
 
@@ -466,13 +481,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 28px;
+    gap: clamp(14px, 2vw, 28px);
 }
 
 .primary-links a,
 .login-button {
     color: #3B1F0E;
-    font-size: 15px;
+    font-size: clamp(0.82rem, 1vw, 0.95rem);
     font-weight: 600;
     text-decoration: none;
     transition: color 160ms ease;
@@ -482,7 +497,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 10px;
+    gap: clamp(8px, 1.2vw, 14px);
 }
 
 .search-button {
@@ -492,10 +507,10 @@ body {
 }
 
 .search-form {
-    width: 242px;
-    height: 34px;
+    width: clamp(160px, 16vw, 230px);
+    height: 32px;
     display: grid;
-    grid-template-columns: 1fr 34px;
+    grid-template-columns: 1fr 32px;
     align-items: center;
     overflow: hidden;
     background: #e8e8e8;
@@ -511,7 +526,7 @@ body {
     background: transparent;
     color: #111;
     font: inherit;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .search-form input::placeholder {
@@ -550,8 +565,8 @@ body {
 }
 
 .profile-button {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     background: #3B1F0E;
 }
@@ -577,12 +592,6 @@ body {
         padding-top: 190px;
     }
 
-    .hero-media {
-        height: 420px;
-        min-height: 420px;
-    }
-
-    .artwork-grid,
     .how-grid,
     .footer-inner {
         grid-template-columns: 1fr;
@@ -609,11 +618,6 @@ body {
 
     .hero-copy p {
         font-size: 16px;
-    }
-
-    .hero-media {
-        height: 340px;
-        min-height: 340px;
     }
 
     .latest-section,
