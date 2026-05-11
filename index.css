@@ -50,7 +50,7 @@ body {
     z-index: 10;
     width: 100%;
     background: transparent;
-    color: var(--brown);
+    color: #fff;
     transition:
         background 180ms ease,
         border-color 180ms ease,
@@ -59,11 +59,11 @@ body {
 }
 
 .site-header.is-scrolled {
-    background: rgba(255, 255, 255, 0.46);
+    background: rgba(0, 0, 0, 0.36);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.24);
 }
 
 .top-nav {
@@ -122,18 +122,18 @@ body {
         clamp(24px, 4vw, 64px)
         clamp(64px, 8vh, 92px)
         max(var(--page-gutter), calc((100vw - var(--page-max)) / 2));
-    background: rgba(255, 255, 255, 0.46);
+    background: rgba(0, 0, 0, 0.36);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.24);
 }
 
 .hero-copy h1 {
     max-width: min(10.5ch, 100%);
     margin: 0;
-    color: var(--brown);
+    color: #fff;
     font-size: clamp(2.8rem, 4vw, 5.4rem);
     line-height: 1.08;
     font-weight: 800;
@@ -143,7 +143,7 @@ body {
 .hero-copy p {
     max-width: min(32rem, 100%);
     margin: clamp(14px, 2vw, 20px) 0 0;
-    color: #5F5650;
+    color: rgba(255, 255, 255, 0.78);
     font-size: clamp(1.05rem, 1.22vw, 1.35rem);
     line-height: 1.55;
 }
@@ -165,32 +165,18 @@ body {
     font-size: clamp(0.9rem, 0.95vw, 1.05rem);
     font-weight: 700;
     text-decoration: none;
-    transition:
-        background 160ms ease,
-        color 160ms ease,
-        border-color 160ms ease;
 }
 
 .button-filled {
-    background: #3B1F0E;
+    background: transparent;
     color: #fff;
-    border: 1px solid #3B1F0E;
+    border: 1px solid rgba(255, 255, 255, 0.76);
 }
 
 .button-outline {
     background: transparent;
-    color: #3B1F0E;
-    border: 1px solid #3B1F0E;
-}
-
-.button-filled:hover {
-    background: transparent;
-    color: #3B1F0E;
-}
-
-.button-outline:hover {
-    background: #3B1F0E;
     color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.76);
 }
 
 .hero-media {
@@ -409,37 +395,8 @@ body {
     line-height: 1.5;
 }
 
-.cta-section {
-    display: grid;
-    justify-items: center;
-    gap: 22px;
-    padding: clamp(52px, 7vw, 78px) var(--page-gutter);
-    background: var(--brown);
-    color: #fff;
-    text-align: center;
-}
-
-.cta-section h2 {
-    margin: 0;
-    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
-    line-height: 1.2;
-}
-
-.cta-button {
-    display: inline-flex;
-    min-height: 44px;
-    align-items: center;
-    justify-content: center;
-    padding: 0 22px;
-    border: 1px solid #fff;
-    border-radius: 8px;
-    color: #fff;
-    font-weight: 700;
-    text-decoration: none;
-}
-
 .site-footer {
-    background: var(--brown);
+    background: #120803;
     color: #fff;
     padding: clamp(44px, 6vw, 62px) 0 24px;
 }
@@ -499,10 +456,10 @@ body {
 
 .brand {
     font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-    font-size: clamp(2.35rem, 2.7vw, 4rem);
+    font-size: clamp(2.04rem, 2.4vw, 3.69rem);
     font-weight: 400;
     line-height: 1;
-    color: var(--brown);
+    color: #fff;
     text-decoration: none;
 }
 
@@ -515,7 +472,7 @@ body {
 
 .primary-links a,
 .login-button {
-    color: #3B1F0E;
+    color: #fff;
     font-size: clamp(1rem, 1.08vw, 1.3rem);
     font-weight: 600;
     text-decoration: none;
@@ -542,8 +499,8 @@ body {
     grid-template-columns: 1fr 42px;
     align-items: center;
     overflow: hidden;
-    background: #e8e8e8;
-    border-radius: 999px;
+    background: transparent;
+    border-radius: 0;
 }
 
 .search-form input {
@@ -597,7 +554,7 @@ body {
     width: clamp(28px, 1.7vw, 36px);
     height: clamp(28px, 1.7vw, 36px);
     border-radius: 50%;
-    background: #3B1F0E;
+    background: #fff;
 }
 
 @media (max-width: 980px) {
