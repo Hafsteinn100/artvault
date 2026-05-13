@@ -1,138 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ArtVault</title>
-    <link rel="stylesheet" href="index.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="index.css" />
+    <script src="index.js" defer></script>
+  </head>
+  <body class="search-page">
     <header class="site-header">
-        <nav class="top-nav" aria-label="Main navigation">
-            <a class="brand" href="/">ArtVault</a>
+      <nav class="top-nav" aria-label="Main navigation">
+        <a class="brand" href="/">ArtVault</a>
 
-            <div class="primary-links">
-                <a href="#">Browse art</a>
-                <a href="#">My bids</a>
-            </div>
+        <div class="nav-actions">
+          <div class="primary-links">
+            <a href="#">Browse art</a>
+            <a href="#">My bids</a>
+          </div>
 
-            <div class="nav-actions">
-                <button class="icon-button menu-button" type="button" aria-label="Open menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+          <form class="search-form" action="/search" method="get">
+            <label class="visually-hidden" for="search-input"
+              >Search ArtVault</label
+            >
+            <input
+              id="search-input"
+              type="search"
+              name="q"
+              placeholder="Hinted search text"
+            />
+            <button class="search-button" type="submit" aria-label="Search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m16.5 16.5 4 4"></path>
+              </svg>
+            </button>
+          </form>
 
-                <form class="search-form" action="/search" method="get">
-                    <label class="visually-hidden" for="search-input">Search ArtVault</label>
-                    <input id="search-input" type="search" name="q" placeholder="Hinted search text">
-                    <button class="search-button" type="submit" aria-label="Search">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <circle cx="11" cy="11" r="7"></circle>
-                            <path d="m16.5 16.5 4 4"></path>
-                        </svg>
-                    </button>
-                </form>
-
-                <a class="login-button" href="signin.html">Log In</a>
-                <a class="profile-button" href="#" aria-label="Profile"></a>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Main -->
-    <main>
-
-        <section class="hero">
-
-            <div class="hero-container container">
-
-                <!-- Left -->
-                <div class="hero-left">
-                    <div class="art-grid">
-                        <img src="img1.jpg" alt="Artwork example">
-                        <img src="img2.jpg" alt="Artwork example">
-                        <img src="img3.jpg" alt="Artwork example">
-                    </div>
-                </div>
-
-                <!-- Center -->
-                <div class="hero-content">
-                    <h1>Epic art for dayz</h1>
-                    <p>
-                        This text right here is so awsome somone should change it tho arni?
-                    </p>
-                    <a href="#" class="cta-button">search art</a>
-                </div>
-
-                <!-- Right -->
-                <div class="hero-right">
-                    <div class="art-grid">
-                        <!--remember to chnge image name when art implemented-->
-                        <img src="img4.jpg" alt="Artwork example">
-                        <img src="img5.jpg" alt="Artwork example">
-                        <img src="img6.jpg" alt="Artwork example">
-                    </div>
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; ArtVault</p>
+          <a class="profile-button" href="signin.html" aria-label="Log in"></a>
         </div>
-    </footer>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search - ArtVault</title>
-    <link rel="stylesheet" href="index.css">
-</head>
-<body>
-
-    <header class="site-header">
-        <nav class="top-nav" aria-label="Main navigation">
-            <a class="brand" href="/">ArtVault</a>
-
-            <div class="primary-links">
-                <a href="#">Browse art</a>
-                <a href="#">My bids</a>
-            </div>
-
-            <div class="nav-actions">
-                <button class="icon-button menu-button" type="button" aria-label="Open menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-
-                <form class="search-form" action="/search" method="get">
-                    <label class="visually-hidden" for="search-input">Search ArtVault</label>
-                    <input id="search-input" type="search" name="q" placeholder="Hinted search text">
-                    <button class="search-button" type="submit" aria-label="Search">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <circle cx="11" cy="11" r="7"></circle>
-                            <path d="m16.5 16.5 4 4"></path>
-                        </svg>
-                    </button>
-                </form>
-
-                <a class="login-button" href="signin.html">Log In</a>
-                <a class="profile-button" href="#" aria-label="Profile"></a>
-            </div>
-        </nav>
+      </nav>
     </header>
+    <main class="search-results-page">
+      <section class="search-results-hero" aria-labelledby="search-results-title">
+        <div class="section-inner search-results-inner">
+          <div class="search-results-heading">
+            <h1 id="search-results-title">
+              search results from: "<span id="search-term">{search}</span>"
+            </h1>
+          </div>
 
-</body>
+          <div class="search-results-bottom">
+            <div class="filter-control">
+              <h2>Filters</h2>
+              <div class="filter-options" aria-label="Artwork filters">
+                <label><input type="checkbox" name="filters" value="oil" /> Oil</label>
+                <label><input type="checkbox" name="filters" value="watercolor" /> Watercolor</label>
+                <label><input type="checkbox" name="filters" value="sculpture" /> Sculpture</label>
+                <label><input type="checkbox" name="filters" value="photography" /> Photography</label>
+                <label><input type="checkbox" name="filters" value="digital" /> Digital</label>
+              </div>
+            </div>
+
+            <div class="search-browse-strip" aria-label="Mock artwork results">
+              <article class="search-result-card">
+                <img src="medium-oil.jpg" alt="Abstract oil painting" />
+              </article>
+              <article class="search-result-card">
+                <img src="medium-watercolor.jpg" alt="Blue watercolor painting" />
+              </article>
+              <article class="search-result-card">
+                <img src="medium-sculpture.jpg" alt="Sculpture artwork" />
+              </article>
+              <article class="search-result-card">
+                <img src="medium-photography.jpg" alt="Red rock landscape photograph" />
+              </article>
+              <article class="search-result-card">
+                <img src="medium-digital.jpg" alt="Colorful digital geometric artwork" />
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>
