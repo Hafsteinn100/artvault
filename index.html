@@ -18,45 +18,37 @@
                 <a href="#">My bids</a>
             </div>
 
-            <form class="search-form" action="/search" method="get">
-                <label class="visually-hidden" for="search-input">Search ArtVault</label>
-                <input id="search-input" type="search" name="q" placeholder="Hinted search text" />
-                <button class="search-button" type="submit" aria-label="Search">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <path d="m16.5 16.5 4 4"></path>
-                </svg>
-                </button>
+            <form class="search-form" action="index_search.html" method="get">
+              <label class="visually-hidden" for="search-input">
+                  Search ArtVault
+              </label>
+
+              <input
+                  id="search-input"
+                  type="search"
+                  name="q"
+                  placeholder="Hinted search text"
+              >
+
+              <button class="search-button" type="submit" aria-label="Search">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="11" cy="11" r="7"></circle>
+                      <path d="m16.5 16.5 4 4"></path>
+                  </svg>
+              </button>
             </form>
 
             <a class="profile-button" href="profile.html" aria-label="Profile">
-              <span id="homepage-username"></span>
-              <img
-                  id="homepage-profile"
-                  src="profile.png"
-                  alt="Profile"
-                  style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"
-              >
-            </a>
-          <form class="search-form" action="index_search.html" method="get">
-            <label class="visually-hidden" for="search-input"
-              >Search ArtVault</label
-            >
-            <input
-              id="search-input"
-              type="search"
-              name="q"
-              placeholder="Hinted search text"
-            />
-            <button class="search-button" type="submit" aria-label="Search">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="11" cy="11" r="7"></circle>
-                <path d="m16.5 16.5 4 4"></path>
-              </svg>
-            </button>
-          </form>
+                <span id="homepage-username"></span>
 
-          <a class="profile-button" href="signin.html" aria-label="Log in"></a>
+                <img
+                    id="homepage-profile"
+                    src="profile.png"
+                    alt="Profile"
+                    style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"
+                >
+            </a>
+            
         </div>
       </nav>
     </header>
