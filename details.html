@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Artwork Details - ArtVault</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <link rel="stylesheet" href="index.css" />
     <script src="index.js" defer></script>
   </head>
@@ -53,8 +57,62 @@
 
     <main class="details-main">
       <section class="details-shell">
-        <h1>Artwork Details</h1>
+        <div class="details-image-panel">
+          <img
+            id="selected-artwork-image"
+            src="medium-photography.jpg"
+            alt="Spring Canopy"
+          />
+        </div>
+        <div class="details-content">
+          <h1 id="selected-artwork-title">Spring Canopy</h1>
+        </div>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <h3>About</h3>
+          <p>
+            ArtVault connects collectors with original works from artists and
+            trusted sellers around the world.
+          </p>
+        </div>
+        <div>
+          <h3>Quick Links</h3>
+          <a href="index_search.html">Browse</a>
+          <a href="#">My Bids</a>
+          <a href="profile.html">Profile</a>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>hello@artvault.com</p>
+          <div class="social-icons" aria-label="Social links">
+            <a class="instagram-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a class="social-icon-link" href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+            <a class="social-icon-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          </div>
+        </div>
+      </div>
+      <p class="copyright">&copy; 2026 ArtVault. All rights reserved.</p>
+    </footer>
+
+    <script>
+      const detailsParams = new URLSearchParams(window.location.search);
+      const selectedImage = detailsParams.get("img");
+      const selectedTitle = detailsParams.get("title");
+      const detailsImage = document.getElementById("selected-artwork-image");
+      const detailsTitle = document.getElementById("selected-artwork-title");
+
+      if (selectedImage) {
+        detailsImage.src = selectedImage;
+      }
+
+      if (selectedTitle) {
+        detailsImage.alt = selectedTitle;
+        detailsTitle.textContent = selectedTitle;
+      }
+    </script>
   </body>
 </html>

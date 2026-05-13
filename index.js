@@ -9,7 +9,8 @@ function moveNavbar() {
     const currentScroll = window.scrollY;
     const isHomepage =
         !document.body.classList.contains("search-page") &&
-        !document.body.classList.contains("profile-page");
+        !document.body.classList.contains("profile-page") &&
+        !document.body.classList.contains("details-page");
 
     if (isHomepage) {
         header.classList.toggle("is-scrolled", currentScroll > 12);
