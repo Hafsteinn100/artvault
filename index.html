@@ -13,31 +13,25 @@
         <a class="brand" href="/">ArtVault</a>
 
         <div class="nav-actions">
-          <div class="primary-links">
-            <a href="#">Browse art</a>
-            <a href="#">My bids</a>
-          </div>
+            <div class="primary-links">
+                <a href="#">Browse art</a>
+                <a href="#">My bids</a>
+            </div>
 
-          <form class="search-form" action="/search" method="get">
-            <label class="visually-hidden" for="search-input"
-              >Search ArtVault</label
-            >
-            <input
-              id="search-input"
-              type="search"
-              name="q"
-              placeholder="Hinted search text"
-            />
-            <button class="search-button" type="submit" aria-label="Search">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="11" cy="11" r="7"></circle>
-                <path d="m16.5 16.5 4 4"></path>
-              </svg>
-            </button>
-          </form>
+            <form class="search-form" action="/search" method="get">
+                <label class="visually-hidden" for="search-input">Search ArtVault</label>
+                <input id="search-input" type="search" name="q" placeholder="Hinted search text" />
+                <button class="search-button" type="submit" aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="m16.5 16.5 4 4"></path>
+                </svg>
+                </button>
+            </form>
 
-          <a class="login-button" href="profile.html">Log In</a>
-          <a class="profile-button" href="#" aria-label="Profile"></a>
+            <a class="profile-button" href="profile.html" aria-label="Profile">
+                <img src="avatar-placeholder.jpg" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+            </a>
         </div>
       </nav>
     </header>
