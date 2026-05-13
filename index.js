@@ -1,14 +1,22 @@
 const header = document.querySelector(".site-header");
-const searchTerm = document.querySelector("#search-term");
+const pageSearchInput = document.querySelector("#page-search-input");
 
-function updateHeaderGlass() {
+// Makes the navbar easier to read after the page moves a little.
+function checkNavbar() {
+  if (!header) return;
+
   header.classList.toggle("is-scrolled", window.scrollY > 12);
 }
 
-updateHeaderGlass();
-window.addEventListener("scroll", updateHeaderGlass, { passive: true });
+checkNavbar();
+window.addEventListener("scroll", checkNavbar, { passive: true });
 
-if (searchTerm) {
+// If someone searches from the home page, keep their text in the big box.
+if (pageSearchInput) {
   const params = new URLSearchParams(window.location.search);
-  searchTerm.textContent = params.get("q") || "{search}";
+  const searchText = params.get("q");
+
+  if (searchText) {
+    pageSearchInput.value = searchText;
+  }
 }

@@ -10,7 +10,7 @@
   <body class="search-page">
     <header class="site-header">
       <nav class="top-nav" aria-label="Main navigation">
-        <a class="brand" href="/">ArtVault</a>
+        <a class="brand" href="index.html">ArtVault</a>
 
         <div class="nav-actions">
           <div class="primary-links">
@@ -18,7 +18,7 @@
             <a href="#">My bids</a>
           </div>
 
-          <form class="search-form" action="/search" method="get">
+          <form class="search-form" action="index_search.html" method="get">
             <label class="visually-hidden" for="search-input"
               >Search ArtVault</label
             >
@@ -41,14 +41,30 @@
       </nav>
     </header>
     <main class="search-results-page">
-      <section class="search-results-hero" aria-labelledby="search-results-title">
+      <!-- Search box at the top of the results page -->
+      <section class="search-results-hero" aria-label="Artwork search">
         <div class="section-inner search-results-inner">
           <div class="search-results-heading">
-            <h1 id="search-results-title">
-              search results from: "<span id="search-term">{search}</span>"
-            </h1>
+            <form class="search-form page-search-form" action="index_search.html" method="get">
+              <label class="visually-hidden" for="page-search-input">
+                Search ArtVault
+              </label>
+              <input
+                id="page-search-input"
+                type="search"
+                name="q"
+                placeholder="Hinted search text"
+              />
+              <button class="search-button" type="submit" aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <path d="m16.5 16.5 4 4"></path>
+                </svg>
+              </button>
+            </form>
           </div>
 
+          <!-- Filters and mock result cards -->
           <div class="search-results-bottom">
             <div class="filter-control">
               <h2>Filters</h2>
@@ -77,6 +93,13 @@
               <article class="search-result-card">
                 <img src="medium-digital.jpg" alt="Colorful digital geometric artwork" />
               </article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
             </div>
           </div>
         </div>
