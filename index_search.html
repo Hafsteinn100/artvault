@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ArtVault</title>
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="index_search.css" />
     <script src="index.js" defer></script>
   </head>
   <body class="search-page">
@@ -38,11 +39,7 @@
 
           <a class="profile-button" href="profile.html" aria-label="Profile">
             <span id="homepage-username"></span>
-            <img
-              id="homepage-profile"
-              src="profile.png"
-              alt="Profile"
-            >
+            <img id="homepage-profile" src="profile.png" alt="Profile" />
           </a>
         </div>
       </nav>
@@ -52,7 +49,11 @@
       <section class="search-results-hero" aria-label="Artwork search">
         <div class="section-inner search-results-inner">
           <div class="search-results-heading">
-            <form class="search-form page-search-form" action="index_search.html" method="get">
+            <form
+              class="search-form page-search-form"
+              action="index_search.html"
+              method="get"
+            >
               <label class="visually-hidden" for="page-search-input">
                 Search ArtVault
               </label>
@@ -76,47 +77,102 @@
             <div class="filter-control">
               <h2>Filters</h2>
               <div class="filter-options" aria-label="Artwork filters">
-                <label><input type="checkbox" name="filters" value="oil" /> Oil</label>
-                <label><input type="checkbox" name="filters" value="watercolor" /> Watercolor</label>
-                <label><input type="checkbox" name="filters" value="sculpture" /> Sculpture</label>
-                <label><input type="checkbox" name="filters" value="photography" /> Photography</label>
-                <label><input type="checkbox" name="filters" value="digital" /> Digital</label>
+                <label
+                  ><input type="checkbox" name="filters" value="oil" />
+                  Oil</label
+                >
+                <label
+                  ><input type="checkbox" name="filters" value="watercolor" />
+                  Watercolor</label
+                >
+                <label
+                  ><input type="checkbox" name="filters" value="sculpture" />
+                  Sculpture</label
+                >
+                <label
+                  ><input type="checkbox" name="filters" value="photography" />
+                  Photography</label
+                >
+                <label
+                  ><input type="checkbox" name="filters" value="digital" />
+                  Digital</label
+                >
               </div>
             </div>
 
             <div class="search-browse-strip" aria-label="Mock artwork results">
               <article class="search-result-card">
-                <a href="details.html?img=medium-oil.jpg&title=Abstract%20Oil%20Painting">
+                <a
+                  href="details.html?img=medium-oil.jpg&title=Abstract%20Oil%20Painting"
+                >
                   <img src="medium-oil.jpg" alt="Abstract oil painting" />
                 </a>
               </article>
               <article class="search-result-card">
-                <a href="details.html?img=medium-watercolor.jpg&title=Blue%20Watercolor%20Painting">
-                  <img src="medium-watercolor.jpg" alt="Blue watercolor painting" />
+                <a
+                  href="details.html?img=medium-watercolor.jpg&title=Blue%20Watercolor%20Painting"
+                >
+                  <img
+                    src="medium-watercolor.jpg"
+                    alt="Blue watercolor painting"
+                  />
                 </a>
               </article>
               <article class="search-result-card">
-                <a href="details.html?img=medium-sculpture.jpg&title=Sculpture%20Artwork">
+                <a
+                  href="details.html?img=medium-sculpture.jpg&title=Sculpture%20Artwork"
+                >
                   <img src="medium-sculpture.jpg" alt="Sculpture artwork" />
                 </a>
               </article>
               <article class="search-result-card">
-                <a href="details.html?img=medium-photography.jpg&title=Red%20Rock%20Landscape%20Photograph">
-                  <img src="medium-photography.jpg" alt="Red rock landscape photograph" />
+                <a
+                  href="details.html?img=medium-photography.jpg&title=Red%20Rock%20Landscape%20Photograph"
+                >
+                  <img
+                    src="medium-photography.jpg"
+                    alt="Red rock landscape photograph"
+                  />
                 </a>
               </article>
               <article class="search-result-card">
-                <a href="details.html?img=medium-digital.jpg&title=Colorful%20Digital%20Geometric%20Artwork">
-                  <img src="medium-digital.jpg" alt="Colorful digital geometric artwork" />
+                <a
+                  href="details.html?img=medium-digital.jpg&title=Colorful%20Digital%20Geometric%20Artwork"
+                >
+                  <img
+                    src="medium-digital.jpg"
+                    alt="Colorful digital geometric artwork"
+                  />
                 </a>
               </article>
-              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
-              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
-              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
-              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
-              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
-              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
-              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article
+                class="search-result-card empty-card"
+                aria-label="Artwork placeholder"
+              ></article>
+              <article
+                class="search-result-card empty-card"
+                aria-label="Artwork placeholder"
+              ></article>
+              <article
+                class="search-result-card empty-card"
+                aria-label="Artwork placeholder"
+              ></article>
+              <article
+                class="search-result-card empty-card"
+                aria-label="Artwork placeholder"
+              ></article>
+              <article
+                class="search-result-card empty-card"
+                aria-label="Artwork placeholder"
+              ></article>
+              <article
+                class="search-result-card empty-card"
+                aria-label="Artwork placeholder"
+              ></article>
+              <article
+                class="search-result-card empty-card"
+                aria-label="Artwork placeholder"
+              ></article>
             </div>
           </div>
         </div>
