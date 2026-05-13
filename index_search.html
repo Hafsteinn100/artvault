@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ArtVault</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="index.js" defer></script>
+  </head>
+  <body class="search-page">
+    <header class="site-header">
+      <nav class="top-nav" aria-label="Main navigation">
+        <a class="brand" href="index.html">ArtVault</a>
+
+        <div class="nav-actions">
+          <div class="primary-links">
+            <a href="#">Browse art</a>
+            <a href="#">My bids</a>
+          </div>
+
+          <form class="search-form" action="index_search.html" method="get">
+            <label class="visually-hidden" for="search-input"
+              >Search ArtVault</label
+            >
+            <input
+              id="search-input"
+              type="search"
+              name="q"
+              placeholder="Hinted search text"
+            />
+            <button class="search-button" type="submit" aria-label="Search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m16.5 16.5 4 4"></path>
+              </svg>
+            </button>
+          </form>
+
+          <a class="profile-button" href="signin.html" aria-label="Log in"></a>
+        </div>
+      </nav>
+    </header>
+    <main class="search-results-page">
+      <!-- Search box at the top of the results page -->
+      <section class="search-results-hero" aria-label="Artwork search">
+        <div class="section-inner search-results-inner">
+          <div class="search-results-heading">
+            <form class="search-form page-search-form" action="index_search.html" method="get">
+              <label class="visually-hidden" for="page-search-input">
+                Search ArtVault
+              </label>
+              <input
+                id="page-search-input"
+                type="search"
+                name="q"
+                placeholder="Hinted search text"
+              />
+              <button class="search-button" type="submit" aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <path d="m16.5 16.5 4 4"></path>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- Filters and mock result cards -->
+          <div class="search-results-bottom">
+            <div class="filter-control">
+              <h2>Filters</h2>
+              <div class="filter-options" aria-label="Artwork filters">
+                <label><input type="checkbox" name="filters" value="oil" /> Oil</label>
+                <label><input type="checkbox" name="filters" value="watercolor" /> Watercolor</label>
+                <label><input type="checkbox" name="filters" value="sculpture" /> Sculpture</label>
+                <label><input type="checkbox" name="filters" value="photography" /> Photography</label>
+                <label><input type="checkbox" name="filters" value="digital" /> Digital</label>
+              </div>
+            </div>
+
+            <div class="search-browse-strip" aria-label="Mock artwork results">
+              <article class="search-result-card">
+                <img src="medium-oil.jpg" alt="Abstract oil painting" />
+              </article>
+              <article class="search-result-card">
+                <img src="medium-watercolor.jpg" alt="Blue watercolor painting" />
+              </article>
+              <article class="search-result-card">
+                <img src="medium-sculpture.jpg" alt="Sculpture artwork" />
+              </article>
+              <article class="search-result-card">
+                <img src="medium-photography.jpg" alt="Red rock landscape photograph" />
+              </article>
+              <article class="search-result-card">
+                <img src="medium-digital.jpg" alt="Colorful digital geometric artwork" />
+              </article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+              <article class="search-result-card empty-card" aria-label="Artwork placeholder"></article>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

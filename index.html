@@ -10,7 +10,7 @@
   <body>
     <header class="site-header">
       <nav class="top-nav" aria-label="Main navigation">
-        <a class="brand" href="/">ArtVault</a>
+        <a class="brand" href="index.html">ArtVault</a>
 
         <div class="nav-actions">
             <div class="primary-links">
@@ -38,6 +38,25 @@
                   style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"
               >
             </a>
+          <form class="search-form" action="index_search.html" method="get">
+            <label class="visually-hidden" for="search-input"
+              >Search ArtVault</label
+            >
+            <input
+              id="search-input"
+              type="search"
+              name="q"
+              placeholder="Hinted search text"
+            />
+            <button class="search-button" type="submit" aria-label="Search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m16.5 16.5 4 4"></path>
+              </svg>
+            </button>
+          </form>
+
+          <a class="profile-button" href="signin.html" aria-label="Log in"></a>
         </div>
       </nav>
     </header>
@@ -181,6 +200,11 @@
           </article>
         </div>
       </div>
+    </section>
+
+    <section class="cta-section">
+      <h2>Ready to find your next masterpiece?</h2>
+      <a class="cta-button" href="#">Browse Artworks</a>
     </section>
 
     <footer class="site-footer">
