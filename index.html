@@ -30,13 +30,13 @@
             </form>
 
             <a class="profile-button" href="profile.html" aria-label="Profile">
-              <img 
+              <img
                   id="homepage-profile"
-                  src="avatar-placeholder.jpg" 
+                  src="profile.png"
                   alt="Profile"
                   style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"
               >
-          </a>
+            </a>
         </div>
       </nav>
     </header>
@@ -210,12 +210,16 @@
       <p class="copyright">&copy; 2026 ArtVault. All rights reserved.</p>
     </footer>
     <script>
-      const savedImage = localStorage.getItem('profileImage');
-      const homepageProfile = document.getElementById('homepage-profile');
+      document.addEventListener("DOMContentLoaded", function () {
+          const img = document.getElementById("homepage-profile");
+          const savedImage = localStorage.getItem("profileImage");
 
-      if (savedImage && homepageProfile) {
-          homepageProfile.src = savedImage;
-      }
-  </script>
+          if (savedImage) {
+              img.src = savedImage;
+          } else {
+              img.src = "profile.png";
+          }
+      });
+    </script>
   </body>
 </html>

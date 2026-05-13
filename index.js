@@ -6,3 +6,11 @@ function updateHeaderGlass() {
 
 updateHeaderGlass();
 window.addEventListener("scroll", updateHeaderGlass, { passive: true });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const img = document.getElementById("homepage-profile");
+
+    const savedImage = localStorage.getItem("profileImage");
+
+    img.src = savedImage || "profile.png";
+});
