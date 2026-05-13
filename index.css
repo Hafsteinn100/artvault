@@ -87,8 +87,7 @@ body {
 .nav-actions { gap: clamp(12px, 1.6vw, 22px); }
 .primary-links { gap: clamp(18px, 2.4vw, 34px); }
 
-.primary-links a,
-.login-button {
+.primary-links a {
     color: #fff;
     font-size: clamp(1rem, 1.08vw, 1.3rem);
     font-weight: 600;
@@ -115,7 +114,7 @@ body {
     width: 100%;
     min-width: 0;
     padding-left: 15px;
-    color: #111;
+    color: #fff;
     font: inherit;
     font-size: clamp(0.9rem, 0.95vw, 1rem);
 }
@@ -138,17 +137,10 @@ body {
     stroke-linecap: round;
 }
 
-.login-button {
-    min-height: 38px;
-    display: inline-flex;
-    align-items: center;
-    padding: 0 6px;
-    white-space: nowrap;
-}
-
 .profile-button {
     width: clamp(28px, 1.7vw, 36px);
     height: clamp(28px, 1.7vw, 36px);
+    display: block;
     border-radius: 50%;
     background: #fff;
 }

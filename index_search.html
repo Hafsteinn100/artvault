@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtVault</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <nav class="top-nav" aria-label="Main navigation">
+            <a class="brand" href="/">ArtVault</a>
+
+            <div class="primary-links">
+                <a href="#">Browse art</a>
+                <a href="#">My bids</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="icon-button menu-button" type="button" aria-label="Open menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <form class="search-form" action="/search" method="get">
+                    <label class="visually-hidden" for="search-input">Search ArtVault</label>
+                    <input id="search-input" type="search" name="q" placeholder="Hinted search text">
+                    <button class="search-button" type="submit" aria-label="Search">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="m16.5 16.5 4 4"></path>
+                        </svg>
+                    </button>
+                </form>
+
+                <a class="login-button" href="signin.html">Log In</a>
+                <a class="profile-button" href="#" aria-label="Profile"></a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main -->
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-container container">
+
+                <!-- Left -->
+                <div class="hero-left">
+                    <div class="art-grid">
+                        <img src="img1.jpg" alt="Artwork example">
+                        <img src="img2.jpg" alt="Artwork example">
+                        <img src="img3.jpg" alt="Artwork example">
+                    </div>
+                </div>
+
+                <!-- Center -->
+                <div class="hero-content">
+                    <h1>Epic art for dayz</h1>
+                    <p>
+                        This text right here is so awsome somone should change it tho arni?
+                    </p>
+                    <a href="#" class="cta-button">search art</a>
+                </div>
+
+                <!-- Right -->
+                <div class="hero-right">
+                    <div class="art-grid">
+                        <!--remember to chnge image name when art implemented-->
+                        <img src="img4.jpg" alt="Artwork example">
+                        <img src="img5.jpg" alt="Artwork example">
+                        <img src="img6.jpg" alt="Artwork example">
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; ArtVault</p>
+        </div>
+    </footer>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - ArtVault</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <nav class="top-nav" aria-label="Main navigation">
+            <a class="brand" href="/">ArtVault</a>
+
+            <div class="primary-links">
+                <a href="#">Browse art</a>
+                <a href="#">My bids</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="icon-button menu-button" type="button" aria-label="Open menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <form class="search-form" action="/search" method="get">
+                    <label class="visually-hidden" for="search-input">Search ArtVault</label>
+                    <input id="search-input" type="search" name="q" placeholder="Hinted search text">
+                    <button class="search-button" type="submit" aria-label="Search">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="m16.5 16.5 4 4"></path>
+                        </svg>
+                    </button>
+                </form>
+
+                <a class="login-button" href="signin.html">Log In</a>
+                <a class="profile-button" href="#" aria-label="Profile"></a>
+            </div>
+        </nav>
+    </header>
+
+</body>
+</html>
