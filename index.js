@@ -1,18 +1,11 @@
 const header = document.querySelector(".site-header");
-const pageSearchInput = document.querySelector("#page-search-input");
 
-checkNavbar();
-window.addEventListener("scroll", checkNavbar, { passive: true });
-
-// If someone searches from the home page, keep their text in the big box.
-if (pageSearchInput) {
-  const params = new URLSearchParams(window.location.search);
-  const searchText = params.get("q");
-
-  if (searchText) {
-    pageSearchInput.value = searchText;
-  }
+function updateHeaderGlass() {
+  header.classList.toggle("is-scrolled", window.scrollY > 12);
 }
+
+updateHeaderGlass();
+window.addEventListener("scroll", updateHeaderGlass, { passive: true });
 
 document.addEventListener("DOMContentLoaded", function () {
     const img = document.getElementById("homepage-profile");
@@ -29,3 +22,17 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+const pageSearchInput = document.querySelector("#page-search-input");
+
+checkNavbar();
+window.addEventListener("scroll", checkNavbar, { passive: true });
+
+// If someone searches from the home page, keep their text in the big box.
+if (pageSearchInput) {
+  const params = new URLSearchParams(window.location.search);
+  const searchText = params.get("q");
+
+  if (searchText) {
+    pageSearchInput.value = searchText;
+  }
+}
