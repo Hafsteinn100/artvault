@@ -10,6 +10,7 @@
     --cream: #F7F5F2;
     --soft-gray: #F0EDEB;
     --search-brown: rgb(36, 21, 0);
+    --footer-brown: #2A1509;
     --page-max: 1800px;
     --gutter: clamp(28px, 5vw, 100px);
     --hero-height: clamp(640px, 80vh, 920px);
@@ -48,15 +49,18 @@ body {
     color: #fff;
     background: transparent;
     border-bottom: 1px solid rgba(255, 255, 255, 0);
-    transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, backdrop-filter 180ms ease;
+    transform: translateY(0);
+    transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
 .site-header.is-scrolled {
-    background: rgba(0, 0, 0, 0.36);
+    background: var(--footer-brown);
     border-bottom-color: rgba(255, 255, 255, 0.14);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.24);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+}
+
+.site-header.is-hidden {
+    transform: translateY(-100%);
 }
 
 .top-nav {
@@ -447,11 +451,9 @@ body {
 }
 
 .search-page .site-header {
-    background: rgba(0, 0, 0, 0.36);
+    background: var(--footer-brown);
     border-bottom-color: rgba(255, 255, 255, 0.14);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.24);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
 }
 
 .search-results-page {
@@ -608,7 +610,7 @@ body {
 /* Footer */
 .site-footer {
     padding: clamp(44px, 6vw, 62px) 0 24px;
-    background: #2A1509;
+    background: var(--footer-brown);
     color: #fff;
 }
 
@@ -647,6 +649,15 @@ body {
     color: var(--gold);
     font-size: 11px;
     font-weight: 800;
+}
+
+.social-icons .instagram-link,
+.social-icons .social-icon-link {
+    width: auto;
+    height: auto;
+    border: 0;
+    color: #fff;
+    font-size: 22px;
 }
 
 .site-footer .copyright {
