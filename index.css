@@ -139,12 +139,36 @@ body {
     stroke-linecap: round;
 }
 
+.login-button {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 6px;
+    white-space: nowrap;
+}
+
+/* Updated Profile Button Styles */
 .profile-button {
-    width: clamp(28px, 1.7vw, 36px);
-    height: clamp(28px, 1.7vw, 36px);
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    background: transparent;
+}
+
+#homepage-username {
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+#homepage-profile {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: #fff;
+    object-fit: cover;
 }
 
 /* Hero */
