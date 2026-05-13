@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - ArtVault</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="profile.css">
 
     <style>
         .profile-avatar {
@@ -21,9 +21,27 @@
 
 <body>
 
-    <header class="top-bar">
-        <a href="index.html" class="logo">ArtVault</a>
-    </header>
+    <header class="site-header">
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="brand" href="/">ArtVault</a>
+
+    <div class="nav-actions">
+        <div class="primary-links">
+            <a href="#">Browse art</a>
+            <a href="#">My bids</a>
+        </div>
+
+        <a class="profile-button" href="profile.html" aria-label="Profile">
+          <span id="homepage-username"></span>
+          <img
+              id="homepage-profile"
+              src="profile.png"
+              alt="Profile"
+          >
+        </a>
+    </div>
+  </nav>
+</header>
 
     <main class="auth">
         <div class="auth-container">
