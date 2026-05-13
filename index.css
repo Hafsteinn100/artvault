@@ -260,6 +260,13 @@ body {
     font-size: clamp(0.9rem, 0.95vw, 1.05rem);
     font-weight: 700;
     text-decoration: none;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.button:hover {
+    background: #fff;
+    color: var(--brown);
+    border-color: #fff;
 }
 
 /* Content */
@@ -454,6 +461,33 @@ body {
     background: var(--footer-brown);
     border-bottom-color: rgba(255, 255, 255, 0.14);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.24);
+}
+
+.details-page {
+    background: var(--cream);
+}
+
+.details-page .site-header {
+    background: var(--footer-brown);
+    border-bottom-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.24);
+}
+
+.details-main {
+    min-height: 100vh;
+    padding: 132px var(--gutter) 64px;
+}
+
+.details-shell {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+}
+
+.details-shell h1 {
+    color: var(--brown);
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1.1;
 }
 
 .search-results-page {

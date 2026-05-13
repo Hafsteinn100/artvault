@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artwork Details - ArtVault</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="index.js" defer></script>
+  </head>
+
+  <body class="details-page">
+    <header class="site-header">
+      <nav class="top-nav" aria-label="Main navigation">
+        <a class="brand" href="index.html">ArtVault</a>
+
+        <div class="nav-actions">
+            <div class="primary-links">
+                <a href="index_search.html">Browse art</a>
+                <a href="#">My bids</a>
+            </div>
+
+            <form class="search-form" action="index_search.html" method="get">
+              <label class="visually-hidden" for="search-input">
+                  Search ArtVault
+              </label>
+
+              <input
+                  id="search-input"
+                  type="search"
+                  name="q"
+                  placeholder="Hinted search text"
+              >
+
+              <button class="search-button" type="submit" aria-label="Search">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="11" cy="11" r="7"></circle>
+                      <path d="m16.5 16.5 4 4"></path>
+                  </svg>
+              </button>
+            </form>
+
+            <a class="profile-button" href="profile.html" aria-label="Profile">
+              <span id="homepage-username"></span>
+              <img
+                  id="homepage-profile"
+                  src="profile.png"
+                  alt="Profile"
+              >
+            </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="details-main">
+      <section class="details-shell">
+        <h1>Artwork Details</h1>
+      </section>
+    </main>
+  </body>
+</html>
