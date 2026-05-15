@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_http_methods
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_POST, require_http_methods
 
 from .forms import (
     BidForm,
@@ -15,7 +16,7 @@ from .forms import (
     ProfileForm,
     RegisterForm,
 )
-from .models import Artwork, Bid, BidFinalization, Profile, Seller
+from .models import Artwork, Bid, BidFinalization, Favorite, Profile, Seller
 
 
 def get_or_create_profile(user):
@@ -38,9 +39,39 @@ def artwork_queryset():
     )
 
 
+def favorite_artwork_ids(user):
+    if not user.is_authenticated:
+        return []
+    return list(
+        Favorite.objects.filter(user=user).values_list('artwork_id', flat=True)
+    )
+
+
+def redirect_after_toggle(request, fallback):
+    next_url = request.POST.get('next') or request.META.get('HTTP_REFERER')
+    if next_url and url_has_allowed_host_and_scheme(
+        next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return redirect(next_url)
+    return redirect(fallback)
+
+
 def home(request):
-    latest_artworks = artwork_queryset()[:4]
-    return render(request, 'marketplace/home.html', {'latest_artworks': latest_artworks})
+    latest_titles = ['Bloom Study', 'Quiet Interior', 'Spring Canopy', 'Prism Field']
+    latest_artworks = sorted(
+        artwork_queryset().filter(title__in=latest_titles),
+        key=lambda artwork: latest_titles.index(artwork.title),
+    )
+    return render(
+        request,
+        'marketplace/home.html',
+        {
+            'latest_artworks': latest_artworks,
+            'favorite_artwork_ids': favorite_artwork_ids(request.user),
+        },
+    )
 
 
 def artwork_list(request):
@@ -80,7 +111,7 @@ def artwork_list(request):
     else:
         artworks = artworks.order_by('-created_at')
 
-    paginator = Paginator(artworks, 9)
+    paginator = Paginator(artworks, 48)
     page_obj = paginator.get_page(request.GET.get('page'))
     mediums = Artwork.objects.order_by('medium').values_list('medium', flat=True).distinct()
     styles = Artwork.objects.order_by('style').values_list('style', flat=True).distinct()
@@ -100,6 +131,7 @@ def artwork_list(request):
                 'max_price': max_price,
                 'order': order,
             },
+            'favorite_artwork_ids': favorite_artwork_ids(request.user),
         },
     )
 
@@ -116,6 +148,10 @@ def artwork_detail(request, pk):
         {
             'artwork': artwork,
             'existing_bid': existing_bid,
+            'is_favorite': (
+                request.user.is_authenticated
+                and Favorite.objects.filter(artwork=artwork, user=request.user).exists()
+            ),
         },
     )
 
@@ -208,6 +244,40 @@ def bid_list(request):
         .order_by('-created_at')
     )
     return render(request, 'marketplace/bid_list.html', {'bids': bids})
+
+
+@login_required
+def favorite_list(request):
+    favorites = (
+        Favorite.objects.filter(user=request.user)
+        .select_related('artwork', 'artwork__seller', 'artwork__seller__user')
+        .prefetch_related('artwork__images')
+    )
+    artworks = [favorite.artwork for favorite in favorites]
+    return render(
+        request,
+        'marketplace/favorite_list.html',
+        {
+            'artworks': artworks,
+            'favorite_artwork_ids': [artwork.pk for artwork in artworks],
+        },
+    )
+
+
+@login_required
+@require_POST
+def toggle_favorite(request, pk):
+    artwork = get_object_or_404(Artwork, pk=pk)
+    favorite, created = Favorite.objects.get_or_create(
+        artwork=artwork,
+        user=request.user,
+    )
+    if created:
+        messages.success(request, f'{artwork.title} was added to your favorites.')
+    else:
+        favorite.delete()
+        messages.success(request, f'{artwork.title} was removed from your favorites.')
+    return redirect_after_toggle(request, 'marketplace:artwork_list')
 
 
 def finalization_session_key(bid):

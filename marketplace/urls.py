@@ -10,8 +10,10 @@ urlpatterns = [
     path('artworks/', views.artwork_list, name='artwork_list'),
     path('artworks/<int:pk>/', views.artwork_detail, name='artwork_detail'),
     path('artworks/<int:pk>/bid/', views.submit_bid, name='submit_bid'),
+    path('artworks/<int:pk>/favorite/', views.toggle_favorite, name='toggle_favorite'),
     path('sellers/<int:pk>/', views.seller_detail, name='seller_detail'),
     path('profile/', views.profile, name='profile'),
+    path('favorites/', views.favorite_list, name='favorite_list'),
     path('bids/', views.bid_list, name='bid_list'),
     path('bids/<int:pk>/finalize/', views.finalize_bid, name='finalize_bid'),
     path(

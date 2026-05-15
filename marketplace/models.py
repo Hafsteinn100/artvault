@@ -131,6 +131,32 @@ class ArtworkImage(models.Model):
         return f'Image for {self.artwork}'
 
 
+class Favorite(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='favorites',
+    )
+    artwork = models.ForeignKey(
+        Artwork,
+        on_delete=models.CASCADE,
+        related_name='favorites',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'artwork'],
+                name='unique_favorite_per_user_and_artwork',
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user} favorited {self.artwork}'
+
+
 class Bid(models.Model):
     class BidStatus(models.TextChoices):
         PENDING = 'Pending', 'Pending'

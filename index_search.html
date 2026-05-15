@@ -10,7 +10,7 @@
     />
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" href="index_search.css" />
-    <script src="index.js" defer></script>
+    <script src="index.js?v=5" defer></script>
   </head>
   <body class="search-page">
     <header class="site-header">
@@ -76,7 +76,7 @@
             </form>
           </div>
 
-          <!-- Filters and mock result cards -->
+          <!-- Filters and artwork result cards -->
           <div class="search-results-bottom">
             <div class="filter-control">
               <h2>Filters</h2>
@@ -104,12 +104,17 @@
               </div>
             </div>
 
-            <div class="search-browse-strip" aria-label="Mock artwork results">
+            <div class="search-browse-strip" aria-label="Artwork results">
               <article class="search-result-card">
                 <a
                   href="details.html?img=medium-oil.jpg&title=Abstract%20Oil%20Painting"
                 >
                   <img src="medium-oil.jpg" alt="Abstract oil painting" />
+                  <span class="browse-price">$1,200</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Mira Vale</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
                 </a>
               </article>
               <article class="search-result-card">
@@ -120,6 +125,11 @@
                     src="medium-watercolor.jpg"
                     alt="Blue watercolor painting"
                   />
+                  <span class="browse-price">$650</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Theo Rowan</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
                 </a>
               </article>
               <article class="search-result-card">
@@ -127,6 +137,11 @@
                   href="details.html?img=medium-sculpture.jpg&title=Sculpture%20Artwork"
                 >
                   <img src="medium-sculpture.jpg" alt="Sculpture artwork" />
+                  <span class="browse-price">$2,400</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Lena Hart</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
                 </a>
               </article>
               <article class="search-result-card">
@@ -137,6 +152,11 @@
                     src="medium-photography.jpg"
                     alt="Red rock landscape photograph"
                   />
+                  <span class="browse-price">$900</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Niko Stone</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
                 </a>
               </article>
               <article class="search-result-card">
@@ -147,36 +167,97 @@
                     src="medium-digital.jpg"
                     alt="Colorful digital geometric artwork"
                   />
+                  <span class="browse-price">$480</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Iris Calder</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
                 </a>
               </article>
-              <article
-                class="search-result-card empty-card"
-                aria-label="Artwork placeholder"
-              ></article>
-              <article
-                class="search-result-card empty-card"
-                aria-label="Artwork placeholder"
-              ></article>
-              <article
-                class="search-result-card empty-card"
-                aria-label="Artwork placeholder"
-              ></article>
-              <article
-                class="search-result-card empty-card"
-                aria-label="Artwork placeholder"
-              ></article>
-              <article
-                class="search-result-card empty-card"
-                aria-label="Artwork placeholder"
-              ></article>
-              <article
-                class="search-result-card empty-card"
-                aria-label="Artwork placeholder"
-              ></article>
-              <article
-                class="search-result-card empty-card"
-                aria-label="Artwork placeholder"
-              ></article>
+              <article class="search-result-card">
+                <a
+                  href="details.html?img=coverimg2verklegt2.webp&title=Featured%20Gallery%20Artwork"
+                >
+                  <img
+                    src="coverimg2verklegt2.webp"
+                    alt="Featured gallery artwork"
+                  />
+                  <span class="browse-price">$700</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Sam Elvar</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
+                </a>
+              </article>
+              <article class="search-result-card">
+                <a
+                  href="details.html?img=pexels-minan1398-813269.jpg&title=Green%20Gallery%20Study"
+                >
+                  <img
+                    src="pexels-minan1398-813269.jpg"
+                    alt="Green gallery study"
+                  />
+                  <span class="browse-price">$1,100</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Mira Vale</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
+                </a>
+              </article>
+              <article class="search-result-card">
+                <a
+                  href="details.html?img=pexels-ricky-kwong-113005840-35589498.jpg&title=Urban%20Collection%20Study"
+                >
+                  <img
+                    src="pexels-ricky-kwong-113005840-35589498.jpg"
+                    alt="Urban collection study"
+                  />
+                  <span class="browse-price">$1,150</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Theo Rowan</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
+                </a>
+              </article>
+              <article class="search-result-card">
+                <a
+                  href="details.html?img=pexels-sarmat-batagov-776392502-35072454.jpg&title=Landscape%20Collection%20Study"
+                >
+                  <img
+                    src="pexels-sarmat-batagov-776392502-35072454.jpg"
+                    alt="Landscape collection study"
+                  />
+                  <span class="browse-price">$1,200</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Lena Hart</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
+                </a>
+              </article>
+              <article class="search-result-card">
+                <a
+                  href="details.html?img=..%2Fdigitalart1.jpeg&title=Digital%20Artwork%20Study"
+                >
+                  <img src="../digitalart1.jpeg" alt="Digital artwork study" />
+                  <span class="browse-price">$750</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Niko Stone</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
+                </a>
+              </article>
+              <article class="search-result-card">
+                <a
+                  href="details.html?img=..%2Foilpaint1.jpeg&title=Oil%20Paint%20Study"
+                >
+                  <img src="../oilpaint1.jpeg" alt="Oil paint study" />
+                  <span class="browse-price">$1,050</span>
+                  <span class="browse-seller">
+                    <span class="seller-name">Iris Calder</span>
+                    <span class="seller-avatar" aria-hidden="true"></span>
+                  </span>
+                </a>
+              </article>
             </div>
           </div>
         </div>

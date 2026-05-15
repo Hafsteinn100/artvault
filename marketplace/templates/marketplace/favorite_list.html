@@ -1,0 +1,56 @@
+{% extends 'marketplace/base.html' %}
+{% load static %}
+
+{% block title %}Favorites | ArtVault{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">Favorites</h1>
+  <p class="lead">Saved artworks you want to revisit.</p>
+
+  <div class="grid browse-grid favorites-grid">
+    {% for artwork in artworks %}
+      <article class="card">
+        <div class="browse-image-wrap">
+          {% if artwork.thumbnail %}
+            <img class="art-thumb" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}">
+          {% else %}
+            <img class="art-thumb" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
+          {% endif %}
+          <span class="browse-price">${{ artwork.starting_bid_price }}</span>
+          <span class="browse-seller">
+            <span class="seller-name">{{ artwork.seller.name }}</span>
+            <span class="seller-avatar" aria-hidden="true"></span>
+          </span>
+          <form class="favorite-form" action="{% url 'marketplace:toggle_favorite' artwork.pk %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button
+              class="favorite-button is-favorite"
+              type="submit"
+              aria-label="Remove {{ artwork.title }} from favorites"
+              title="Remove from favorites"
+            >
+              ♥
+            </button>
+          </form>
+        </div>
+        <div class="card-body">
+          <p class="badge {% if artwork.is_sold %}sold{% else %}available{% endif %}">
+            {% if artwork.is_sold %}Sold{% else %}Available{% endif %}
+          </p>
+          <h2>{{ artwork.title }}</h2>
+          <p>{{ artwork.medium }} Â· {{ artwork.style }}</p>
+          <p>{{ artwork.dimensions }}</p>
+          <p><strong>Starting bid: ${{ artwork.starting_bid_price }}</strong></p>
+          <a class="button secondary" href="{% url 'marketplace:artwork_detail' artwork.pk %}">View details</a>
+        </div>
+      </article>
+    {% empty %}
+      <div class="empty-panel">
+        <h2>No favorites yet</h2>
+        <p class="lead">Save artworks from the catalogue to build your shortlist.</p>
+        <a class="button" href="{% url 'marketplace:artwork_list' %}">Browse art</a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

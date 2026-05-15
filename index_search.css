@@ -20,7 +20,7 @@
 }
 
 .search-results-inner {
-    width: 88vw;
+    width: min(calc(100vw - 40px), 1640px);
     max-width: none;
     min-height: calc(100vh - clamp(118px, 13vh, 150px));
     display: flex;
@@ -74,11 +74,20 @@
 }
 
 .search-browse-strip {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: clamp(14px, 2vw, 24px);
-    align-items: end;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
+    gap: clamp(16px, 1.6vw, 24px);
+    align-items: start;
+    --masonry-column-min: 190px;
+}
+
+.search-browse-strip.is-masonry-ready {
+    position: relative;
+    display: block;
+    min-height: 320px;
 }
 
 .filter-control {
@@ -142,7 +151,7 @@
 }
 
 .search-result-card {
-    aspect-ratio: 1 / 1;
+    width: 100%;
     overflow: hidden;
     background: #FCFAF6;
     border: 1px solid #EDE5DB;
@@ -150,17 +159,87 @@
     box-shadow: 0 8px 22px rgba(59, 31, 14, 0.07);
 }
 
+.search-browse-strip.is-masonry-ready .search-result-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .search-result-card a {
+    position: relative;
     display: block;
     width: 100%;
-    height: 100%;
 }
 
 .search-result-card img {
     width: 100%;
-    height: 100%;
+    height: auto;
     display: block;
-    object-fit: cover;
+}
+
+.browse-price {
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(42, 21, 9, 0.86);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    pointer-events: none;
+}
+
+.browse-seller {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 72%;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.search-result-card a:hover .browse-seller,
+.search-result-card a:focus-visible .browse-seller {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.seller-name {
+    min-width: 0;
+    padding: 4px 7px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(42, 21, 9, 0.76);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.seller-avatar {
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    border: 2px solid rgba(255, 255, 255, 0.92);
+    border-radius: 50%;
+    background: #F4EFE8;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
 }
 
 .empty-card {
@@ -201,6 +280,6 @@
 
     .search-browse-strip {
         width: 100%;
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
     }
 }
