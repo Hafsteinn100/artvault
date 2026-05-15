@@ -1,38 +1,59 @@
 const header = document.querySelector(".site-header");
-
-function updateHeaderGlass() {
-  header.classList.toggle("is-scrolled", window.scrollY > 12);
-}
-
-updateHeaderGlass();
-window.addEventListener("scroll", updateHeaderGlass, { passive: true });
-
-document.addEventListener("DOMContentLoaded", function () {
-    const img = document.getElementById("homepage-profile");
-    const name = document.getElementById("homepage-username"); // optional if you display it
-
-    const savedImage = localStorage.getItem("profileImage");
-    const savedName = localStorage.getItem("profileName");
-
-    img.src = savedImage || "profile.png";
-
-    if (name && savedName) {
-        name.textContent = savedName;
-    }
-});
-
-
 const pageSearchInput = document.querySelector("#page-search-input");
 
-checkNavbar();
-window.addEventListener("scroll", checkNavbar, { passive: true });
+let lastScroll = window.scrollY;
 
-// If someone searches from the home page, keep their text in the big box.
-if (pageSearchInput) {
-  const params = new URLSearchParams(window.location.search);
-  const searchText = params.get("q");
+function moveNavbar() {
+    if (!header) return;
 
-  if (searchText) {
-    pageSearchInput.value = searchText;
-  }
+    const currentScroll = window.scrollY;
+    const isHomepage =
+        !document.body.classList.contains("search-page") &&
+        !document.body.classList.contains("profile-page") &&
+        !document.body.classList.contains("details-page");
+
+    if (isHomepage) {
+        header.classList.toggle("is-scrolled", currentScroll > 12);
+        header.classList.remove("is-hidden");
+    } else {
+        header.classList.add("is-scrolled");
+
+        if (currentScroll <= 10 || currentScroll < lastScroll) {
+            header.classList.remove("is-hidden");
+        } else if (currentScroll > lastScroll) {
+            header.classList.add("is-hidden");
+        }
+    }
+
+    lastScroll = currentScroll;
 }
+
+function loadNavbarProfile() {
+    const img = document.getElementById("homepage-profile");
+    const name = document.getElementById("homepage-username");
+
+    if (!img) return;
+
+    img.src = localStorage.getItem("profileImage") || "profile.png";
+
+    if (name) {
+        name.textContent = localStorage.getItem("profileName") || "";
+    }
+}
+
+function fillSearchBox() {
+    if (!pageSearchInput) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const searchText = params.get("q");
+
+    if (searchText) {
+        pageSearchInput.value = searchText;
+    }
+}
+
+moveNavbar();
+loadNavbarProfile();
+fillSearchBox();
+
+window.addEventListener("scroll", moveNavbar, { passive: true });

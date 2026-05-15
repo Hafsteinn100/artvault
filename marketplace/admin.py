@@ -16,9 +16,18 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Seller)
 class SellerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'seller_type', 'created_at')
+    list_display = ('name', 'user', 'seller_type', 'city', 'created_at')
     list_filter = ('seller_type',)
-    search_fields = ('user__username', 'user__email', 'bio', 'address')
+    search_fields = (
+        'display_name',
+        'user__username',
+        'user__email',
+        'bio',
+        'address',
+        'street_name',
+        'city',
+        'postal_code',
+    )
 
 
 @admin.register(Artwork)
@@ -44,5 +53,5 @@ class BidAdmin(admin.ModelAdmin):
 
 @admin.register(BidFinalization)
 class BidFinalizationAdmin(admin.ModelAdmin):
-    list_display = ('bid', 'created_at')
+    list_display = ('bid', 'payment_method', 'country', 'finalized_at', 'created_at')
     search_fields = ('bid__artwork__title', 'bid__bidder__username', 'address')

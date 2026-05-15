@@ -1,0 +1,24 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Finalize Bid Contact | ArtVault{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">Finalize Bid</h1>
+  <p class="lead">{{ bid.artwork.title }} · ${{ bid.price }}</p>
+
+  <form class="form-panel" method="post">
+    {% csrf_token %}
+    <h2>Contact information</h2>
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }}
+        {{ field }}
+        {{ field.errors }}
+      </p>
+    {% endfor %}
+    <div class="wizard-nav">
+      <button type="submit">Continue to payment</button>
+    </div>
+  </form>
+{% endblock %}

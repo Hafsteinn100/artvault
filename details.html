@@ -3,28 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile - ArtVault</title>
+    <title>Artwork Details - ArtVault</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="profile.css" />
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="details.css" />
     <script src="index.js" defer></script>
-
-    <style>
-      .profile-avatar {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        display: block;
-        margin-bottom: 10px;
-        border: 2px solid #ccc;
-      }
-    </style>
   </head>
 
-  <body class="profile-page">
+  <body class="details-page">
     <header class="site-header">
       <nav class="top-nav" aria-label="Main navigation">
         <a class="brand" href="index.html">ArtVault</a>
@@ -67,40 +56,19 @@
       </nav>
     </header>
 
-    <main class="auth">
-      <div class="auth-container">
-        <h1>Profile</h1>
-
-        <form
-          id="profile-form"
-          action="#"
-          method="post"
-          enctype="multipart/form-data"
-        >
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input id="name" type="text" name="Name" value="Lisa" required />
-          </div>
-
-          <div class="form-group">
-            <label for="profile-image">Profile Image</label>
-
-            <img
-              id="profile-preview"
-              src="profile.png"
-              alt="Profile"
-              class="profile-avatar"
-            />
-
-            <input id="profile-image" type="file" accept="image/*" />
-          </div>
-
-          <button type="submit">Update Profile</button>
-          <button type="button" id="reset-profile">Reset Profile</button>
-        </form>
-
-        <div id="status-message" style="margin-top: 15px; display: none"></div>
-      </div>
+    <main class="details-main">
+      <section class="details-shell">
+        <div class="details-image-panel">
+          <img
+            id="selected-artwork-image"
+            src="medium-photography.jpg"
+            alt="Spring Canopy"
+          />
+        </div>
+        <div class="details-content">
+          <h1 id="selected-artwork-title">Spring Canopy</h1>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
@@ -131,6 +99,21 @@
       <p class="copyright">&copy; 2026 ArtVault. All rights reserved.</p>
     </footer>
 
-    <script src="profile.js"></script>
+    <script>
+      const detailsParams = new URLSearchParams(window.location.search);
+      const selectedImage = detailsParams.get("img");
+      const selectedTitle = detailsParams.get("title");
+      const detailsImage = document.getElementById("selected-artwork-image");
+      const detailsTitle = document.getElementById("selected-artwork-title");
+
+      if (selectedImage) {
+        detailsImage.src = selectedImage;
+      }
+
+      if (selectedTitle) {
+        detailsImage.alt = selectedTitle;
+        detailsTitle.textContent = selectedTitle;
+      }
+    </script>
   </body>
 </html>

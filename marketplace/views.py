@@ -1,3 +1,312 @@
-from django.shortcuts import render
+from decimal import Decimal, InvalidOperation
 
-# Create your views here.
+from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_http_methods
+
+from .forms import (
+    BidForm,
+    FinalizationContactForm,
+    FinalizationPaymentForm,
+    ProfileForm,
+    RegisterForm,
+)
+from .models import Artwork, Bid, BidFinalization, Profile, Seller
+
+
+def get_or_create_profile(user):
+    return Profile.objects.get_or_create(
+        user=user,
+        defaults={'name': user.get_full_name() or user.get_username()},
+    )[0]
+
+
+def artwork_queryset():
+    return (
+        Artwork.objects.select_related('seller', 'seller__user')
+        .prefetch_related('images', 'bids')
+        .annotate(
+            accepted_bid_count=Count(
+                'bids',
+                filter=Q(bids__status=Bid.BidStatus.ACCEPTED),
+            )
+        )
+    )
+
+
+def home(request):
+    latest_artworks = artwork_queryset()[:4]
+    return render(request, 'marketplace/home.html', {'latest_artworks': latest_artworks})
+
+
+def artwork_list(request):
+    artworks = artwork_queryset()
+    query = request.GET.get('q', '').strip()
+    medium = request.GET.get('medium', '').strip()
+    style = request.GET.get('style', '').strip()
+    min_price = request.GET.get('min_price', '').strip()
+    max_price = request.GET.get('max_price', '').strip()
+    order = request.GET.get('order', '').strip()
+
+    if query:
+        artworks = artworks.filter(title__icontains=query)
+    if medium:
+        artworks = artworks.filter(medium__iexact=medium)
+    if style:
+        artworks = artworks.filter(style__iexact=style)
+    if min_price:
+        try:
+            artworks = artworks.filter(price__gte=Decimal(min_price))
+        except InvalidOperation:
+            messages.error(request, 'Minimum price must be a valid number.')
+    if max_price:
+        try:
+            artworks = artworks.filter(price__lte=Decimal(max_price))
+        except InvalidOperation:
+            messages.error(request, 'Maximum price must be a valid number.')
+
+    order_options = {
+        'price': 'price',
+        '-price': '-price',
+        'title': 'title',
+        '-title': '-title',
+    }
+    if order in order_options:
+        artworks = artworks.order_by(order_options[order])
+    else:
+        artworks = artworks.order_by('-created_at')
+
+    paginator = Paginator(artworks, 9)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    mediums = Artwork.objects.order_by('medium').values_list('medium', flat=True).distinct()
+    styles = Artwork.objects.order_by('style').values_list('style', flat=True).distinct()
+
+    return render(
+        request,
+        'marketplace/artwork_list.html',
+        {
+            'page_obj': page_obj,
+            'mediums': mediums,
+            'styles': styles,
+            'filters': {
+                'q': query,
+                'medium': medium,
+                'style': style,
+                'min_price': min_price,
+                'max_price': max_price,
+                'order': order,
+            },
+        },
+    )
+
+
+def artwork_detail(request, pk):
+    artwork = get_object_or_404(artwork_queryset(), pk=pk)
+    existing_bid = None
+    if request.user.is_authenticated:
+        existing_bid = Bid.objects.filter(artwork=artwork, bidder=request.user).first()
+
+    return render(
+        request,
+        'marketplace/artwork_detail.html',
+        {
+            'artwork': artwork,
+            'existing_bid': existing_bid,
+        },
+    )
+
+
+def seller_detail(request, pk):
+    seller = get_object_or_404(
+        Seller.objects.select_related('user').prefetch_related('artworks__images'),
+        pk=pk,
+    )
+    artworks = seller.artworks.annotate(
+        accepted_bid_count=Count(
+            'bids',
+            filter=Q(bids__status=Bid.BidStatus.ACCEPTED),
+        )
+    )
+    return render(
+        request,
+        'marketplace/seller_detail.html',
+        {'seller': seller, 'artworks': artworks},
+    )
+
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('marketplace:home')
+
+    form = RegisterForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        user = form.save()
+        login(request, user)
+        messages.success(request, 'Your account was created successfully.')
+        return redirect('marketplace:home')
+
+    return render(request, 'marketplace/register.html', {'form': form})
+
+
+@login_required
+def profile(request):
+    user_profile = get_or_create_profile(request.user)
+    form = ProfileForm(request.POST or None, request.FILES or None, instance=user_profile)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('marketplace:profile')
+        messages.error(request, 'Profile update failed. Please check the fields below.')
+
+    return render(request, 'marketplace/profile.html', {'form': form})
+
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def submit_bid(request, pk):
+    artwork = get_object_or_404(artwork_queryset(), pk=pk)
+    if artwork.is_sold:
+        messages.error(request, 'This artwork has already been sold.')
+        return redirect('marketplace:artwork_detail', pk=artwork.pk)
+
+    existing_bid = Bid.objects.filter(artwork=artwork, bidder=request.user).first()
+    form = BidForm(request.POST or None, instance=existing_bid)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            bid = form.save(commit=False)
+            bid.artwork = artwork
+            bid.bidder = request.user
+            bid.status = Bid.BidStatus.PENDING
+            bid.save()
+            messages.success(request, 'Your bid was submitted successfully.')
+            return redirect('marketplace:artwork_detail', pk=artwork.pk)
+        messages.error(request, 'Bid submission failed. Please check the fields below.')
+
+    return render(
+        request,
+        'marketplace/bid_form.html',
+        {
+            'artwork': artwork,
+            'form': form,
+            'existing_bid': existing_bid,
+        },
+    )
+
+
+@login_required
+def bid_list(request):
+    bids = (
+        Bid.objects.filter(bidder=request.user)
+        .select_related('artwork', 'artwork__seller', 'artwork__seller__user')
+        .order_by('-created_at')
+    )
+    return render(request, 'marketplace/bid_list.html', {'bids': bids})
+
+
+def finalization_session_key(bid):
+    return f'finalization_bid_{bid.pk}'
+
+
+def get_finalization_data(request, bid):
+    return request.session.get(finalization_session_key(bid), {})
+
+
+def save_finalization_data(request, bid, data):
+    request.session[finalization_session_key(bid)] = data
+    request.session.modified = True
+
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def finalize_bid(request, pk, step='contact'):
+    bid = get_object_or_404(
+        Bid.objects.select_related('artwork', 'artwork__seller'),
+        pk=pk,
+        bidder=request.user,
+    )
+    if bid.status not in [Bid.BidStatus.ACCEPTED, Bid.BidStatus.CONTINGENT]:
+        messages.error(request, 'Only accepted or contingent bids can be finalized.')
+        return redirect('marketplace:bid_list')
+
+    if hasattr(bid, 'finalization') and bid.finalization.finalized_at:
+        return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='confirmation')
+
+    if step not in ['contact', 'payment', 'review', 'confirmation']:
+        return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='contact')
+
+    data = get_finalization_data(request, bid)
+
+    if step == 'contact':
+        form = FinalizationContactForm(request.POST or None, initial=data.get('contact'))
+        if request.method == 'POST' and form.is_valid():
+            data['contact'] = form.cleaned_data
+            save_finalization_data(request, bid, data)
+            return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='payment')
+        return render(request, 'marketplace/finalize_contact.html', {'bid': bid, 'form': form})
+
+    if step == 'payment':
+        if 'contact' not in data:
+            return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='contact')
+        form = FinalizationPaymentForm(request.POST or None, initial=data.get('payment'))
+        if request.method == 'POST' and form.is_valid():
+            data['payment'] = form.cleaned_data
+            save_finalization_data(request, bid, data)
+            return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='review')
+        return render(request, 'marketplace/finalize_payment.html', {'bid': bid, 'form': form})
+
+    if step == 'review':
+        if 'contact' not in data:
+            return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='contact')
+        if 'payment' not in data:
+            return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='payment')
+        if request.method == 'POST':
+            contact = data['contact']
+            payment = data['payment']
+            address = (
+                f"{contact['street_name']}, {contact['city']} "
+                f"{contact['postal_code']}, {contact['country']}"
+            )
+            finalization, _ = BidFinalization.objects.update_or_create(
+                bid=bid,
+                defaults={
+                    'address': address,
+                    'street_name': contact['street_name'],
+                    'city': contact['city'],
+                    'postal_code': contact['postal_code'],
+                    'country': contact['country'],
+                    'national_id': contact['national_id'],
+                    'payment_method': payment['payment_method'],
+                    'payment_info': payment['payment_method'].replace('_', ' ').title(),
+                    'cardholder_name': payment.get('cardholder_name', ''),
+                    'credit_card_number': payment.get('credit_card_number', ''),
+                    'expiry_date': payment.get('expiry_date', ''),
+                    'cvc': payment.get('cvc', ''),
+                    'bank_account': payment.get('bank_account', ''),
+                    'sending_bank': payment.get('sending_bank', ''),
+                    'routing_number': payment.get('routing_number', ''),
+                    'account_number': payment.get('account_number', ''),
+                },
+            )
+            finalization.mark_finalized()
+            request.session.pop(finalization_session_key(bid), None)
+            messages.success(request, 'Your bid was finalized successfully.')
+            return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='confirmation')
+
+        return render(
+            request,
+            'marketplace/finalize_review.html',
+            {
+                'bid': bid,
+                'contact': data['contact'],
+                'payment': data['payment'],
+            },
+        )
+
+    return render(request, 'marketplace/finalize_confirmation.html', {'bid': bid})

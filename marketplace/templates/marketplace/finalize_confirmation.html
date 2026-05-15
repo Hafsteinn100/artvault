@@ -1,0 +1,11 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Bid Finalized | ArtVault{% endblock %}
+
+{% block content %}
+  <section class="review-panel">
+    <h1 class="page-title">Bid finalized</h1>
+    <p>Your bid for <strong>{{ bid.artwork.title }}</strong> was successfully finalized.</p>
+    <a class="button" href="{% url 'marketplace:home' %}">Return home</a>
+  </section>
+{% endblock %}

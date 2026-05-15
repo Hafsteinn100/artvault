@@ -1,0 +1,25 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Log In | ArtVault{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">Log In</h1>
+  <form class="form-panel" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <p>
+      {{ form.username.label_tag }}
+      {{ form.username }}
+      {{ form.username.errors }}
+    </p>
+    <p>
+      {{ form.password.label_tag }}
+      {{ form.password }}
+      {{ form.password.errors }}
+    </p>
+    {% if next %}
+      <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+    <button type="submit">Log in</button>
+  </form>
+{% endblock %}

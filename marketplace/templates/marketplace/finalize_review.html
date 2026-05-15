@@ -1,0 +1,37 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Review Bid Finalization | ArtVault{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">Review</h1>
+  <p class="lead">{{ bid.artwork.title }} · ${{ bid.price }}</p>
+
+  <section class="review-panel">
+    <h2>Contact information</h2>
+    <p><strong>Street:</strong> {{ contact.street_name }}</p>
+    <p><strong>City:</strong> {{ contact.city }}</p>
+    <p><strong>Postal code:</strong> {{ contact.postal_code }}</p>
+    <p><strong>Country:</strong> {{ contact.country }}</p>
+    <p><strong>National id:</strong> {{ contact.national_id }}</p>
+
+    <h2>Payment</h2>
+    <p><strong>Method:</strong> {{ payment.payment_method }}</p>
+    {% if payment.payment_method == 'credit_card' %}
+      <p><strong>Cardholder:</strong> {{ payment.cardholder_name }}</p>
+      <p><strong>Card number:</strong> {{ payment.credit_card_number }}</p>
+      <p><strong>Expiry:</strong> {{ payment.expiry_date }}</p>
+    {% elif payment.payment_method == 'bank_transfer' %}
+      <p><strong>Bank account:</strong> {{ payment.bank_account }}</p>
+    {% elif payment.payment_method == 'wire_transfer' %}
+      <p><strong>Sending bank:</strong> {{ payment.sending_bank }}</p>
+      <p><strong>Routing number:</strong> {{ payment.routing_number }}</p>
+      <p><strong>Account number:</strong> {{ payment.account_number }}</p>
+    {% endif %}
+  </section>
+
+  <form method="post" class="wizard-nav">
+    {% csrf_token %}
+    <a class="button secondary" href="{% url 'marketplace:finalize_bid_step' bid.pk 'payment' %}">Back</a>
+    <button type="submit">Confirm bid</button>
+  </form>
+{% endblock %}
