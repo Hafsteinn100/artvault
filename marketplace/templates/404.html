@@ -1,0 +1,11 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Not Found | ArtVault{% endblock %}
+
+{% block content %}
+  <section class="review-panel">
+    <h1 class="page-title">Page not found</h1>
+    <p>The artwork, seller, or page you requested could not be found.</p>
+    <a class="button" href="{% url 'marketplace:home' %}">Return home</a>
+  </section>
+{% endblock %}

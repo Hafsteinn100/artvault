@@ -1,0 +1,45 @@
+{% extends 'marketplace/base.html' %}
+{% load static %}
+
+{% block title %}ArtVault{% endblock %}
+
+{% block hero %}
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <h1>Discover extraordinary art</h1>
+        <p>Browse original works, submit bids, and finalize accepted offers through ArtVault.</p>
+        <p><a class="button" href="{% url 'marketplace:artwork_list' %}">Explore collection</a></p>
+      </div>
+      <img src="{% static 'marketplace/coverimg2verklegt2.webp' %}" alt="Featured artwork">
+    </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <h2>Latest Pieces</h2>
+  <p class="lead">Fresh works recently added by ArtVault sellers.</p>
+
+  <div class="grid">
+    {% for artwork in latest_artworks %}
+      <article class="card">
+        {% if artwork.thumbnail %}
+          <img class="art-thumb" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}">
+        {% else %}
+          <img class="art-thumb" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
+        {% endif %}
+        <div class="card-body">
+          <p class="badge {% if artwork.is_sold %}sold{% else %}available{% endif %}">
+            {% if artwork.is_sold %}Sold{% else %}Available{% endif %}
+          </p>
+          <h3>{{ artwork.title }}</h3>
+          <p>{{ artwork.medium }} · {{ artwork.style }}</p>
+          <p><strong>${{ artwork.starting_bid_price }}</strong></p>
+          <a class="button secondary" href="{% url 'marketplace:artwork_detail' artwork.pk %}">View details</a>
+        </div>
+      </article>
+    {% empty %}
+      <p>No artworks have been added yet. Run the seed command after migrations to add demo data.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

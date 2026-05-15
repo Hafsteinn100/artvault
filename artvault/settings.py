@@ -41,7 +41,10 @@ DEBUG = env_bool('DJANGO_DEBUG', True)
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+    for host in os.getenv(
+        'DJANGO_ALLOWED_HOSTS',
+        'localhost,127.0.0.1,[::1],testserver',
+    ).split(',')
     if host.strip()
 ]
 
@@ -109,7 +112,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': os.getenv('SQLITE_NAME', BASE_DIR / 'db.sqlite3'),
         }
     }
 
@@ -152,3 +155,7 @@ STATIC_URL = 'static/'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_URL = 'marketplace:login'
+LOGIN_REDIRECT_URL = 'marketplace:home'
+LOGOUT_REDIRECT_URL = 'marketplace:home'

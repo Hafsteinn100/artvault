@@ -11,16 +11,18 @@
 .auth {
     padding: 120px 0 60px;
     background: var(--cream);
-    min-height: 80vh;
+    min-height: 90vh;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
 }
 
 /* 3. Style the inner card (formerly .profile-inner) */
 .auth-container {
-    width: min(600px, calc(100% - 40px));
+    width: clamp(520px, 50vw, 1000px);
+    min-height: 620px;
     background: #fff;
-    padding: 40px;
+    padding: clamp(40px, 5vw, 56px);
     border-radius: 12px;
     border: 1px solid #EDE5DB;
     box-shadow: 0 4px 12px rgba(59, 31, 14, 0.05);
@@ -36,8 +38,8 @@
 
 /* 5. Style the form groups (formerly .detail-item) */
 .form-group {
-    margin-bottom: 20px;
-    padding: 15px;
+    margin-bottom: 24px;
+    padding: 20px;
     background: var(--soft-gray);
     border-radius: 8px;
 }
@@ -54,9 +56,20 @@
 /* 6. Style the input fields */
 .form-group input {
     width: 100%;
-    padding: 8px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+@media (max-width: 700px) {
+    .auth {
+        padding-top: 172px;
+    }
+
+    .auth-container {
+        width: min(100% - 2rem, 700px);
+        min-height: auto;
+    }
 }
 
 /* 7. Style buttons to match your site */

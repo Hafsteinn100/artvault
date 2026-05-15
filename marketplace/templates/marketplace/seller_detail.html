@@ -1,0 +1,49 @@
+{% extends 'marketplace/base.html' %}
+{% load static %}
+
+{% block title %}{{ seller.name }} | ArtVault{% endblock %}
+
+{% block content %}
+  <section class="seller-head">
+    {% if seller.cover %}
+      <img class="seller-cover" src="{{ seller.cover.url }}" alt="{{ seller.name }}">
+    {% endif %}
+    <div class="meta-row">
+      {% if seller.logo %}
+        <img class="seller-logo" src="{{ seller.logo.url }}" alt="{{ seller.name }}">
+      {% else %}
+        <img class="seller-logo" src="{% static 'marketplace/profile.png' %}" alt="{{ seller.name }}">
+      {% endif %}
+      <div>
+        <h1 class="page-title">{{ seller.name }}</h1>
+        <p>{{ seller.seller_type }}</p>
+      </div>
+    </div>
+
+    {% if seller.seller_type == 'Gallery' %}
+      <p><strong>Address:</strong> {{ seller.gallery_address }}</p>
+    {% endif %}
+    <p>{{ seller.bio|default:'No seller bio has been added yet.' }}</p>
+  </section>
+
+  <h2>Listed artworks</h2>
+  <div class="grid">
+    {% for artwork in artworks %}
+      <article class="card">
+        <a href="{% url 'marketplace:artwork_detail' artwork.pk %}">
+          {% if artwork.thumbnail %}
+            <img class="art-thumb" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.title }}">
+          {% else %}
+            <img class="art-thumb" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
+          {% endif %}
+        </a>
+        <div class="card-body">
+          <h3><a href="{% url 'marketplace:artwork_detail' artwork.pk %}">{{ artwork.title }}</a></h3>
+          <p>{{ artwork.medium }} · ${{ artwork.starting_bid_price }}</p>
+        </div>
+      </article>
+    {% empty %}
+      <p>This seller has not listed any artworks yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
