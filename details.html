@@ -67,6 +67,10 @@
         </div>
         <div class="details-content">
           <h1 id="selected-artwork-title">Spring Canopy</h1>
+          <p id="selected-artwork-description">
+            Red Rock Landscape Photograph
+          </p>
+          <p class="details-price">from $100</p>
         </div>
       </section>
     </main>
@@ -105,15 +109,52 @@
       const selectedTitle = detailsParams.get("title");
       const detailsImage = document.getElementById("selected-artwork-image");
       const detailsTitle = document.getElementById("selected-artwork-title");
+      const detailsDescription = document.getElementById(
+        "selected-artwork-description"
+      );
+      const artworkDetails = [
+        {
+          image: "medium-oil.jpg",
+          title: "Abstract Oil Painting",
+          name: "Bloom Study",
+        },
+        {
+          image: "medium-watercolor.jpg",
+          title: "Blue Watercolor Painting",
+          name: "Quiet Interior",
+        },
+        {
+          image: "medium-sculpture.jpg",
+          title: "Sculpture Artwork",
+          name: "Sculpture Artwork",
+        },
+        {
+          image: "medium-photography.jpg",
+          title: "Red Rock Landscape Photograph",
+          name: "Spring Canopy",
+        },
+        {
+          image: "medium-digital.jpg",
+          title: "Colorful Digital Geometric Artwork",
+          name: "Prism Field",
+        },
+      ];
+      const selectedArtwork = artworkDetails.find((artwork) => {
+        return artwork.image === selectedImage || artwork.title === selectedTitle;
+      });
+      const artworkName = selectedArtwork?.name || selectedTitle || "Spring Canopy";
+      const artworkDescription =
+        selectedArtwork?.title ||
+        selectedTitle ||
+        "Red Rock Landscape Photograph";
 
       if (selectedImage) {
         detailsImage.src = selectedImage;
       }
 
-      if (selectedTitle) {
-        detailsImage.alt = selectedTitle;
-        detailsTitle.textContent = selectedTitle;
-      }
+      detailsImage.alt = artworkDescription;
+      detailsTitle.textContent = artworkName;
+      detailsDescription.textContent = artworkDescription;
     </script>
   </body>
 </html>
