@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - ArtVault</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="mybids.css" />
+    <script src="index.js" defer></script>
+
+    <style>
+      .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        margin-bottom: 10px;
+        border: 2px solid #ccc;
+      }
+    </style>
+  </head>
+
+  <body class="profile-page">
+    <header class="site-header">
+      <nav class="top-nav" aria-label="Main navigation">
+        <a class="brand" href="index.html">ArtVault</a>
+
+        <div class="nav-actions">
+            <div class="primary-links">
+                <a href="index_search.html">Browse art</a>
+                <a href="#">My bids</a>
+            </div>
+
+            <form class="search-form" action="index_search.html" method="get">
+              <label class="visually-hidden" for="search-input">
+                  Search ArtVault
+              </label>
+
+              <input
+                  id="search-input"
+                  type="search"
+                  name="q"
+                  placeholder="Hinted search text"
+              >
+
+              <button class="search-button" type="submit" aria-label="Search">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="11" cy="11" r="7"></circle>
+                      <path d="m16.5 16.5 4 4"></path>
+                  </svg>
+              </button>
+            </form>
+
+            <a class="profile-button" href="profile.html" aria-label="Profile">
+              <span id="homepage-username"></span>
+              <img
+                  id="homepage-profile"
+                  src="profile.png"
+                  alt="Profile"
+              >
+            </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="auth">
+        <div class="auth-container">
+            <h1>My Bids</h1>
+
+            <div class="artwork-grid">
+
+            <article class="art-card">
+                <div class="art-image-wrap">
+                <img src="medium-oil.jpg" alt="Abstract oil painting" />
+                </div>
+
+                <div class="art-card-body">
+                <p class="medium">Oil on canvas</p>
+                <h3>Bloom Study</h3>
+                <p class="price">Your Bid: $120</p>
+                </div>
+            </article>
+
+            <article class="art-card">
+                <div class="art-image-wrap">
+                <img src="medium-watercolor.jpg" alt="Blue watercolor painting" />
+                </div>
+
+                <div class="art-card-body">
+                <p class="medium">Watercolor</p>
+                <h3>Quiet Interior</h3>
+                <p class="price">Your Bid: $95</p>
+                </div>
+            </article>
+
+            <article class="art-card">
+                <div class="art-image-wrap">
+                <img src="medium-photography.jpg" alt="Landscape photograph" />
+                </div>
+
+                <div class="art-card-body">
+                <p class="medium">Photography</p>
+                <h3>Spring Canopy</h3>
+                <p class="price">Your Bid: $140</p>
+                </div>
+            </article>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <h3>About</h3>
+          <p>
+            ArtVault connects collectors with original works from artists and
+            trusted sellers around the world.
+          </p>
+        </div>
+        <div>
+          <h3>Quick Links</h3>
+          <a href="index_search.html">Browse</a>
+          <a href="#">My Bids</a>
+          <a href="profile.html">Profile</a>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>hello@artvault.com</p>
+          <div class="social-icons" aria-label="Social links">
+            <a class="instagram-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a class="social-icon-link" href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+            <a class="social-icon-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          </div>
+        </div>
+      </div>
+      <p class="copyright">&copy; 2026 ArtVault. All rights reserved.</p>
+    </footer>
+
+    <script src="profile.js"></script>
+  </body>
+</html>
