@@ -1,0 +1,58 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Finalize Bid Payment | ArtVault{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">Finalize Bid</h1>
+  <p class="lead">{{ bid.artwork.title }} · ${{ bid.price }}</p>
+
+  <form class="form-panel" method="post">
+    {% csrf_token %}
+    <h2>Payment</h2>
+    {{ form.non_field_errors }}
+    <p>
+      {{ form.payment_method.label_tag }}
+      {{ form.payment_method }}
+      {{ form.payment_method.errors }}
+    </p>
+
+    <div data-payment-section="credit_card">
+      <h3>Credit card</h3>
+      <p>{{ form.cardholder_name.label_tag }} {{ form.cardholder_name }} {{ form.cardholder_name.errors }}</p>
+      <p>{{ form.credit_card_number.label_tag }} {{ form.credit_card_number }} {{ form.credit_card_number.errors }}</p>
+      <p>{{ form.expiry_date.label_tag }} {{ form.expiry_date }} {{ form.expiry_date.errors }}</p>
+      <p>{{ form.cvc.label_tag }} {{ form.cvc }} {{ form.cvc.errors }}</p>
+    </div>
+
+    <div data-payment-section="bank_transfer">
+      <h3>Bank transfer</h3>
+      <p>{{ form.bank_account.label_tag }} {{ form.bank_account }} {{ form.bank_account.errors }}</p>
+    </div>
+
+    <div data-payment-section="wire_transfer">
+      <h3>Wire transfer</h3>
+      <p>{{ form.sending_bank.label_tag }} {{ form.sending_bank }} {{ form.sending_bank.errors }}</p>
+      <p>{{ form.routing_number.label_tag }} {{ form.routing_number }} {{ form.routing_number.errors }}</p>
+      <p>{{ form.account_number.label_tag }} {{ form.account_number }} {{ form.account_number.errors }}</p>
+    </div>
+
+    <div class="wizard-nav">
+      <a class="button secondary" href="{% url 'marketplace:finalize_bid_step' bid.pk 'contact' %}">Back</a>
+      <button type="submit">Review</button>
+    </div>
+  </form>
+
+  <script>
+    const paymentSelect = document.getElementById('id_payment_method');
+    const paymentSections = document.querySelectorAll('[data-payment-section]');
+
+    function syncPaymentSections() {
+      paymentSections.forEach((section) => {
+        section.hidden = section.dataset.paymentSection !== paymentSelect.value;
+      });
+    }
+
+    paymentSelect.addEventListener('change', syncPaymentSections);
+    syncPaymentSections();
+  </script>
+{% endblock %}

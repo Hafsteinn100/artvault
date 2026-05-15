@@ -1,0 +1,61 @@
+{% extends 'marketplace/base.html' %}
+{% load static %}
+
+{% block title %}{{ artwork.title }} | ArtVault{% endblock %}
+
+{% block content %}
+  <div class="detail-shell">
+    <section>
+      <div class="gallery">
+        {% for image in artwork.images.all %}
+          <img src="{{ image.image.url }}" alt="{{ image.alt_text|default:artwork.title }}">
+        {% empty %}
+          <img src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
+        {% endfor %}
+      </div>
+    </section>
+
+    <section>
+      <p class="badge {% if artwork.is_sold %}sold{% else %}available{% endif %}">
+        {% if artwork.is_sold %}Sold{% else %}Available{% endif %}
+      </p>
+      <h1 class="page-title">{{ artwork.title }}</h1>
+      <p class="lead">{{ artwork.medium }} · {{ artwork.style }}</p>
+      <p><strong>Starting bid:</strong> ${{ artwork.starting_bid_price }}</p>
+      <p><strong>Listing date:</strong> {{ artwork.listing_date|date:'F j, Y' }}</p>
+      <p><strong>Dimensions:</strong> {{ artwork.dimensions }}</p>
+      <p><strong>Year:</strong> {{ artwork.year }}</p>
+      <p><strong>Edition:</strong> {{ artwork.edition|default:'Original' }}</p>
+      <p><strong>Provenance:</strong> {{ artwork.provenance|default:'No provenance supplied.' }}</p>
+
+      <hr>
+      <h2>Seller</h2>
+      <div class="meta-row">
+        {% if artwork.seller.logo %}
+          <img class="seller-logo" src="{{ artwork.seller.logo.url }}" alt="{{ artwork.seller.name }}">
+        {% else %}
+          <img class="seller-logo" src="{% static 'marketplace/profile.png' %}" alt="{{ artwork.seller.name }}">
+        {% endif %}
+        <div>
+          <p><strong>{{ artwork.seller.name }}</strong></p>
+          <p>{{ artwork.seller.seller_type }}</p>
+          <a href="{% url 'marketplace:seller_detail' artwork.seller.pk %}">View seller profile</a>
+        </div>
+      </div>
+
+      <hr>
+      {% if artwork.is_sold %}
+        <p class="badge sold">Bidding is closed for this artwork.</p>
+      {% else %}
+        <div class="actions">
+          {% if existing_bid %}
+            <a class="button" href="{% url 'marketplace:submit_bid' artwork.pk %}">Resubmit a bid</a>
+            <span>Current status: <strong>{{ existing_bid.status }}</strong></span>
+          {% else %}
+            <a class="button" href="{% url 'marketplace:submit_bid' artwork.pk %}">Submit a bid</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </section>
+  </div>
+{% endblock %}

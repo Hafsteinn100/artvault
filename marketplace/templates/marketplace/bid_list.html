@@ -1,0 +1,44 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}My Bids | ArtVault{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">My Bids</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Artwork</th>
+        <th>Date of bid</th>
+        <th>Expiration</th>
+        <th>Status</th>
+        <th>Seller</th>
+        <th>Bid price</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bid in bids %}
+        <tr>
+          <td><a href="{% url 'marketplace:artwork_detail' bid.artwork.pk %}">{{ bid.artwork.title }}</a></td>
+          <td>{{ bid.created_at|date:'Y-m-d H:i' }}</td>
+          <td>{{ bid.expiration|date:'Y-m-d H:i' }}</td>
+          <td>{{ bid.status }}</td>
+          <td>{{ bid.artwork.seller.name }}</td>
+          <td>${{ bid.price }}</td>
+          <td>
+            {% if bid.status == 'Accepted' or bid.status == 'Contingent' %}
+              <a class="button secondary" href="{% url 'marketplace:finalize_bid' bid.pk %}">Finalize</a>
+            {% else %}
+              <span class="muted">Not available</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="7">You have not submitted any bids yet.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

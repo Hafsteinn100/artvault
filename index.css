@@ -11,7 +11,8 @@
     --soft-gray: #F0EDEB;
     --search-brown: rgb(36, 21, 0);
     --footer-brown: #2A1509;
-    --page-max: 1800px;
+    --page-max: 1400px;
+    --section-pad: 2rem;
     --gutter: clamp(28px, 5vw, 100px);
     --hero-height: clamp(640px, 80vh, 920px);
 }
@@ -37,8 +38,11 @@ body {
 .section-inner,
 .footer-inner,
 .copyright {
-    width: min(var(--page-max), calc(100% - var(--gutter) * 2));
+    width: 100%;
+    max-width: var(--page-max);
     margin: 0 auto;
+    padding-right: var(--section-pad);
+    padding-left: var(--section-pad);
 }
 
 /* Navbar */
@@ -222,7 +226,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: clamp(150px, 21vh, 210px) clamp(24px, 4vw, 64px) clamp(64px, 8vh, 92px) max(var(--gutter), calc((100vw - var(--page-max)) / 2));
+    padding: clamp(150px, 21vh, 210px) clamp(24px, 4vw, 64px) clamp(64px, 8vh, 92px) max(var(--section-pad), calc((100vw - var(--page-max)) / 2 + var(--section-pad)));
     color: #fff;
 }
 
@@ -310,7 +314,7 @@ body {
     gap: clamp(18px, 2vw, 30px);
 }
 
-.artwork-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.artwork-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
 
 .art-card {
     overflow: hidden;
@@ -375,8 +379,9 @@ body {
 .medium-row {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-evenly;
     gap: clamp(22px, 4vw, 46px);
+    width: 100%;
 }
 
 .medium-item {
@@ -468,8 +473,9 @@ body {
 
 .footer-inner {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr;
-    gap: clamp(28px, 4vw, 48px);
+    grid-template-columns: minmax(280px, 2fr) repeat(2, minmax(180px, 1fr));
+    gap: clamp(36px, 6vw, 96px);
+    justify-content: space-between;
 }
 
 .site-footer h3 {
@@ -536,7 +542,6 @@ body {
     .cover { grid-template-columns: 1fr; }
     .hero-copy { padding-top: 190px; }
 
-    .artwork-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .footer-inner { grid-template-columns: 1fr; }
 }
 
@@ -550,7 +555,7 @@ body {
 
     .hero-copy h1 { font-size: 36px; }
     .hero-copy p { font-size: 16px; }
-    .artwork-grid { grid-template-columns: 1fr; }
+    .artwork-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
 
     .latest-section,
     .medium-section,

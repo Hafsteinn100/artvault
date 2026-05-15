@@ -1,0 +1,27 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Profile | ArtVault{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">Profile</h1>
+  <form class="form-panel" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% if form.instance.profile_image %}
+      <img class="profile-preview" src="{{ form.instance.profile_image.url }}" alt="{{ form.instance.name }}">
+    {% endif %}
+
+    <p>
+      {{ form.name.label_tag }}
+      {{ form.name }}
+      {{ form.name.errors }}
+    </p>
+    <p>
+      {{ form.profile_image.label_tag }}
+      {{ form.profile_image }}
+      {{ form.profile_image.errors }}
+    </p>
+    <button type="submit">Update profile</button>
+  </form>
+{% endblock %}
