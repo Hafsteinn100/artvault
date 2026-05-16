@@ -1,10 +1,125 @@
+const BID_STORAGE_KEY = "artvaultBids";
 const bidsView = document.getElementById("bids-view");
 const finalizeView = document.getElementById("finalize-view");
 const finalizeTitle = document.getElementById("finalize-title");
 const finalizeSubtitle = document.getElementById("finalize-subtitle");
 const finalizeForm = document.getElementById("finalize-form");
+const bidsTableBody = document.getElementById("bids-table-body");
 const finalizeSteps = ["contact", "payment", "review", "confirmation"];
 let currentStep = 0;
+
+const defaultBids = [
+  {
+    id: "default-bloom-study",
+    artworkTitle: "Bloom Study",
+    artworkUrl: "details.html?img=medium-oil.jpg&title=Abstract%20Oil%20Painting",
+    createdAt: "2026-05-03T14:20:00",
+    expiration: "2026-05-24T18:00",
+    status: "Pending",
+    seller: "Mira Vale",
+    price: 1250,
+  },
+  {
+    id: "default-quiet-interior",
+    artworkTitle: "Quiet Interior",
+    artworkUrl: "details.html?img=medium-watercolor.jpg&title=Blue%20Watercolor%20Painting",
+    createdAt: "2026-05-05T10:45:00",
+    expiration: "2026-05-28T12:00",
+    status: "Accepted",
+    seller: "Theo Rowan",
+    price: 720,
+  },
+  {
+    id: "default-spring-canopy",
+    artworkTitle: "Spring Canopy",
+    artworkUrl: "details.html?img=medium-photography.jpg&title=Red%20Rock%20Landscape%20Photograph",
+    createdAt: "2026-05-08T16:15:00",
+    expiration: "2026-05-26T09:30",
+    status: "Rejected",
+    seller: "Niko Stone",
+    price: 940,
+  },
+  {
+    id: "default-prism-field",
+    artworkTitle: "Prism Field",
+    artworkUrl: "details.html?img=medium-digital.jpg&title=Colorful%20Digital%20Geometric%20Artwork",
+    createdAt: "2026-05-10T11:05:00",
+    expiration: "2026-05-30T17:00",
+    status: "Contingent",
+    seller: "Iris Calder",
+    price: 510,
+  },
+];
+
+function storedBids() {
+  try {
+    return JSON.parse(localStorage.getItem(BID_STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function currency(value) {
+  return `$${Number(value).toLocaleString("en-US")}`;
+}
+
+function formatDate(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
+function statusClass(status) {
+  return status.toLowerCase();
+}
+
+function canFinalize(status) {
+  return status === "Accepted" || status === "Contingent";
+}
+
+function renderBidRow(bid) {
+  const row = document.createElement("tr");
+  const action = canFinalize(bid.status)
+    ? `<button class="text-action finalize-trigger" type="button" data-bid="${bid.artworkTitle}" data-price="${currency(bid.price)}">Finalize</button>`
+    : '<span class="muted">Not available</span>';
+
+  row.innerHTML = `
+    <td><a href="${bid.artworkUrl}">${bid.artworkTitle}</a></td>
+    <td>${formatDate(bid.createdAt)}</td>
+    <td>${formatDate(bid.expiration)}</td>
+    <td><span class="status ${statusClass(bid.status)}">${bid.status}</span></td>
+    <td>${bid.seller}</td>
+    <td>${currency(bid.price)}</td>
+    <td>${action}</td>
+  `;
+  return row;
+}
+
+function allBids() {
+  const submitted = storedBids();
+  const submittedTitles = new Set(submitted.map((bid) => bid.artworkTitle));
+  return [
+    ...submitted,
+    ...defaultBids.filter((bid) => !submittedTitles.has(bid.artworkTitle)),
+  ];
+}
+
+function attachFinalizeButtons() {
+  document.querySelectorAll(".finalize-trigger").forEach((button) => {
+    button.addEventListener("click", () => openFinalization(button));
+  });
+}
+
+function renderBids() {
+  bidsTableBody.replaceChildren(...allBids().map(renderBidRow));
+  attachFinalizeButtons();
+}
 
 function selectedPaymentLabel(value) {
   return {
@@ -82,10 +197,6 @@ function openFinalization(button) {
   showStep(0);
 }
 
-document.querySelectorAll(".finalize-trigger").forEach((button) => {
-  button.addEventListener("click", () => openFinalization(button));
-});
-
 document.getElementById("back-to-bids").addEventListener("click", () => {
   finalizeView.hidden = true;
   bidsView.hidden = false;
@@ -113,3 +224,5 @@ document.getElementById("payment-method").addEventListener("change", (event) => 
     section.hidden = section.dataset.payment !== event.target.value;
   });
 });
+
+renderBids();

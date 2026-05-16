@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" href="details.css" />
     <script src="index.js?v=8" defer></script>
+    <script src="details.js" defer></script>
   </head>
 
   <body class="details-page">
@@ -70,7 +71,23 @@
           <p id="selected-artwork-description">
             Red Rock Landscape Photograph
           </p>
-          <p class="details-price">from $100</p>
+          <p id="selected-artwork-seller" class="details-seller">Seller: Niko Stone</p>
+          <p id="selected-artwork-price" class="details-price">Current bid: $900</p>
+
+          <form id="bid-form" class="bid-panel">
+            <h2>Submit a bid</h2>
+            <p id="bid-rule" class="bid-rule">Your bid must be higher than the current bid.</p>
+            <label>
+              Bid price
+              <input id="bid-price" name="bidPrice" type="number" min="1" step="1" required>
+            </label>
+            <label>
+              Expiration date
+              <input id="bid-expiration" name="bidExpiration" type="datetime-local" required>
+            </label>
+            <button class="bid-submit" type="submit">Submit bid</button>
+            <p id="bid-message" class="bid-message" role="status"></p>
+          </form>
         </div>
       </section>
     </main>
@@ -103,58 +120,5 @@
       <p class="copyright">&copy; 2026 ArtVault. All rights reserved.</p>
     </footer>
 
-    <script>
-      const detailsParams = new URLSearchParams(window.location.search);
-      const selectedImage = detailsParams.get("img");
-      const selectedTitle = detailsParams.get("title");
-      const detailsImage = document.getElementById("selected-artwork-image");
-      const detailsTitle = document.getElementById("selected-artwork-title");
-      const detailsDescription = document.getElementById(
-        "selected-artwork-description"
-      );
-      const artworkDetails = [
-        {
-          image: "medium-oil.jpg",
-          title: "Abstract Oil Painting",
-          name: "Bloom Study",
-        },
-        {
-          image: "medium-watercolor.jpg",
-          title: "Blue Watercolor Painting",
-          name: "Quiet Interior",
-        },
-        {
-          image: "medium-sculpture.jpg",
-          title: "Sculpture Artwork",
-          name: "Sculpture Artwork",
-        },
-        {
-          image: "medium-photography.jpg",
-          title: "Red Rock Landscape Photograph",
-          name: "Spring Canopy",
-        },
-        {
-          image: "medium-digital.jpg",
-          title: "Colorful Digital Geometric Artwork",
-          name: "Prism Field",
-        },
-      ];
-      const selectedArtwork = artworkDetails.find((artwork) => {
-        return artwork.image === selectedImage || artwork.title === selectedTitle;
-      });
-      const artworkName = selectedArtwork?.name || selectedTitle || "Spring Canopy";
-      const artworkDescription =
-        selectedArtwork?.title ||
-        selectedTitle ||
-        "Red Rock Landscape Photograph";
-
-      if (selectedImage) {
-        detailsImage.src = selectedImage;
-      }
-
-      detailsImage.alt = artworkDescription;
-      detailsTitle.textContent = artworkName;
-      detailsDescription.textContent = artworkDescription;
-    </script>
   </body>
 </html>

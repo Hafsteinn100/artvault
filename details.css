@@ -56,6 +56,80 @@
     font-weight: 800;
 }
 
+.details-seller {
+    color: var(--brown);
+    font-weight: 800;
+}
+
+.bid-panel {
+    max-width: 520px;
+    margin-top: 28px;
+    padding: 22px;
+    border: 1px solid #EDE5DB;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(59, 31, 14, 0.05);
+}
+
+.bid-panel h2 {
+    margin: 0 0 10px;
+    color: var(--brown);
+    font-size: 1.35rem;
+}
+
+.bid-rule {
+    margin-bottom: 18px;
+}
+
+.bid-panel label {
+    display: block;
+    margin-top: 16px;
+    color: var(--brown);
+    font-weight: 800;
+}
+
+.bid-panel input {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 7px;
+    padding: 10px 12px;
+    border: 1px solid #D8CBBD;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--brown);
+    font: inherit;
+}
+
+.bid-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin-top: 18px;
+    padding: 10px 16px;
+    border: 1px solid var(--brown);
+    border-radius: 8px;
+    background: var(--brown);
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.bid-message {
+    min-height: 24px;
+    margin: 14px 0 0;
+    font-weight: 800;
+}
+
+.bid-message.success {
+    color: #2f6d43;
+}
+
+.bid-message.error {
+    color: #9d2f2f;
+}
+
 @media (max-width: 980px) {
     .details-shell {
         grid-template-columns: 1fr;
