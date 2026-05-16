@@ -535,6 +535,76 @@ function setupBrowseMasonry() {
     window.addEventListener("resize", resize);
 }
 
+function createSocialModal() {
+    const modal = document.createElement("div");
+    modal.className = "social-modal";
+    modal.hidden = true;
+    modal.innerHTML = `
+        <div class="social-modal-backdrop" data-social-modal-close></div>
+        <section
+            class="social-modal-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="social-modal-title"
+        >
+            <button
+                class="social-modal-close"
+                type="button"
+                aria-label="Close social media message"
+                data-social-modal-close
+            >
+                &times;
+            </button>
+            <div class="social-modal-icons" aria-hidden="true">
+                <i class="fa-brands fa-instagram"></i>
+                <i class="fa-brands fa-x-twitter"></i>
+                <i class="fa-brands fa-facebook"></i>
+            </div>
+            <h2 id="social-modal-title">Our social media will be launching soon!</h2>
+            <p>Stay tuned.</p>
+        </section>
+    `;
+    document.body.append(modal);
+    return modal;
+}
+
+function setupSocialModal() {
+    const socialLinks = document.querySelectorAll(
+        ".social-icons .instagram-link, .social-icons .social-icon-link",
+    );
+
+    if (!socialLinks.length) return;
+
+    const modal = createSocialModal();
+    const closeButton = modal.querySelector(".social-modal-close");
+
+    const openModal = (event) => {
+        event.preventDefault();
+        modal.hidden = false;
+        document.body.classList.add("is-social-modal-open");
+        closeButton.focus();
+    };
+
+    const closeModal = () => {
+        modal.hidden = true;
+        document.body.classList.remove("is-social-modal-open");
+    };
+
+    socialLinks.forEach((link) => {
+        link.addEventListener("click", openModal);
+    });
+
+    modal.querySelectorAll("[data-social-modal-close]").forEach((element) => {
+        element.addEventListener("click", closeModal);
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !modal.hidden) {
+            closeModal();
+        }
+    });
+}
+
 moveNavbar();
 loadNavbarProfile();
 fillSearchBox();
@@ -542,5 +612,6 @@ loadSellerPage();
 setupSellerLinks();
 setupArtworkSearch();
 setupBrowseMasonry();
+setupSocialModal();
 
 window.addEventListener("scroll", moveNavbar, { passive: true });
