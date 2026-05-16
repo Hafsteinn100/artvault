@@ -49,14 +49,6 @@
 
         <button type="submit">Update Profile</button>
       </form>
-
-      <p class="muted" style="margin-top: 20px;">
-        Logged in as <strong>{{ request.user.username }}</strong>.
-        <form method="post" action="{% url 'marketplace:logout' %}" style="display: inline;">
-          {% csrf_token %}
-          <button class="link-button" type="submit">Log out</button>
-        </form>
-      </p>
     </div>
   </main>
 {% endblock %}

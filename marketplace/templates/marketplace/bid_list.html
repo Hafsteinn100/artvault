@@ -6,7 +6,7 @@
 {% block body_class %}profile-page{% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'mybids.css' %}" />
+  <link rel="stylesheet" href="{% static 'mybids.css' %}?v=3" />
 {% endblock %}
 
 {% block content %}
@@ -46,10 +46,12 @@
                       <span class="status {{ bid.status|lower }}">{{ bid.status }}</span>
                     </td>
                     <td>{{ bid.artwork.seller.name }}</td>
-                    <td>${{ bid.price }}</td>
+                    <td>${{ bid.price|floatformat:0 }}</td>
                     <td>
                       {% if bid.status == 'Accepted' or bid.status == 'Contingent' %}
-                        <a class="text-action" href="{% url 'marketplace:finalize_bid' bid.pk %}">Finalize</a>
+                        <form class="bid-action-form" action="{% url 'marketplace:finalize_bid' bid.pk %}" method="get">
+                          <button class="text-action finalize-trigger" type="submit">Finalize</button>
+                        </form>
                       {% else %}
                         <span class="muted">Not available</span>
                       {% endif %}

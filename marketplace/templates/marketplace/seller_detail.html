@@ -41,7 +41,7 @@
           </div>
           <div>
             <dt>Location</dt>
-            <dd>{{ seller.city|default:'—' }}</dd>
+            <dd>{{ seller.city|default:'-' }}</dd>
           </div>
           <div>
             <dt>Type</dt>
@@ -80,7 +80,7 @@
                 {% else %}
                   <img src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
                 {% endif %}
-                <span class="browse-price">${{ artwork.price }}</span>
+                <span class="browse-price">${{ artwork.price|floatformat:0 }}</span>
               </a>
             </article>
           {% empty %}

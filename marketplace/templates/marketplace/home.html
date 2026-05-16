@@ -37,26 +37,20 @@
             <div class="art-image-wrap">
               <a class="art-card-link" href="{% url 'marketplace:artwork_detail' artwork.pk %}" aria-label="View {{ artwork.title }} details">
                 <span class="new-tag">New</span>
-                <span class="medium-tag">{{ artwork.medium }}</span>
+                <span class="image-title-tag">{{ artwork.title }}</span>
                 {% if artwork.thumbnail %}
                   <img src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}" />
                 {% else %}
                   <img src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
                 {% endif %}
-                <span class="latest-price">${{ artwork.price }}</span>
+                <span class="latest-price">from ${{ artwork.price|floatformat:0 }}</span>
               </a>
               <a class="latest-seller" href="{% url 'marketplace:seller_detail' artwork.seller.pk %}" aria-label="View seller page for {{ artwork.seller.name }}">
                 <span class="latest-seller-name">{{ artwork.seller.name }}</span>
                 <span class="latest-seller-avatar" aria-hidden="true"></span>
               </a>
             </div>
-            <a class="art-card-link" href="{% url 'marketplace:artwork_detail' artwork.pk %}">
-              <div class="art-card-body">
-                <p class="medium">{{ artwork.medium }}</p>
-                <h3>{{ artwork.title }}</h3>
-                <p class="price">from ${{ artwork.price }}</p>
-              </div>
-            </a>
+            <p class="art-type-label">{{ artwork.medium }}{% if artwork.style %} &middot; {{ artwork.style }}{% endif %}</p>
           </article>
         {% empty %}
           <p>No artworks have been added yet. Run the seed command after migrations to add demo data.</p>

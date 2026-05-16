@@ -6,47 +6,7 @@
 {% block body_class %}details-page{% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'details.css' %}?v=2" />
-  <style>
-    .details-shell {
-      grid-template-columns: minmax(0, 1fr) minmax(260px, 460px);
-      width: min(1180px, calc(100% - 40px));
-      margin: 0 auto;
-    }
-
-    .details-image-panel {
-      display: flex;
-      justify-content: center;
-      margin-left: 0;
-      min-width: 0;
-    }
-
-    .details-image-panel .details-artwork-image {
-      width: auto;
-      max-width: 100%;
-      height: auto;
-      max-height: min(72vh, 760px);
-      object-fit: contain;
-      background: transparent;
-    }
-
-    @media (max-width: 980px) {
-      .details-shell {
-        width: min(760px, calc(100% - 32px));
-      }
-    }
-
-    @media (max-width: 700px) {
-      .details-image-panel {
-        margin-left: 0;
-        margin-right: 0;
-      }
-
-      .details-image-panel .details-artwork-image {
-        max-height: 62vh;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="{% static 'details.css' %}?v=3" />
 {% endblock %}
 
 {% block content %}
@@ -59,56 +19,35 @@
           <img class="details-artwork-image" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
         {% endif %}
       </div>
+
       <div class="details-content">
         <h1>{{ artwork.title }}</h1>
-        <p>{{ artwork.medium }}{% if artwork.style %} · {{ artwork.style }}{% endif %}</p>
-        <p class="details-price">from ${{ artwork.price }}</p>
-
-        <dl class="details-meta">
-          <div><dt>Dimensions</dt><dd>{{ artwork.dimensions }}</dd></div>
-          <div><dt>Year</dt><dd>{{ artwork.year }}</dd></div>
-          <div><dt>Edition</dt><dd>{{ artwork.edition|default:'Original' }}</dd></div>
-          <div><dt>Listed</dt><dd>{{ artwork.listing_date|date:'F j, Y' }}</dd></div>
-        </dl>
+        <p>{{ artwork.medium }}{% if artwork.style %} &middot; {{ artwork.style }}{% endif %}</p>
+        <p class="details-seller">Seller: {{ artwork.seller.name }}</p>
+        <p class="details-price">Current bid: ${{ artwork.price|floatformat:0 }}</p>
 
         {% if artwork.provenance %}
           <p class="details-provenance">{{ artwork.provenance }}</p>
         {% endif %}
 
-        <div class="details-seller-row">
-          {% if artwork.seller.logo %}
-            <img class="details-seller-avatar" src="{{ artwork.seller.logo.url }}" alt="{{ artwork.seller.name }}" />
-          {% else %}
-            <img class="details-seller-avatar" src="{% static 'marketplace/profile.png' %}" alt="{{ artwork.seller.name }}" />
-          {% endif %}
-          <div>
-            <p class="details-seller-name">{{ artwork.seller.name }}</p>
-            <p class="details-seller-type">{{ artwork.seller.seller_type }}</p>
-            <a href="{% url 'marketplace:seller_detail' artwork.seller.pk %}">View seller profile</a>
-          </div>
-        </div>
-
-        <div class="details-actions">
-          {% if artwork.is_sold %}
-            <span class="details-status sold">Sold</span>
-          {% elif request.user.is_authenticated %}
-            {% if existing_bid %}
-              <a class="button" href="{% url 'marketplace:submit_bid' artwork.pk %}">Update bid</a>
-              <span class="details-status">Your bid: ${{ existing_bid.price }} · {{ existing_bid.status }}</span>
-            {% else %}
-              <a class="button" href="{% url 'marketplace:submit_bid' artwork.pk %}">Submit a bid</a>
-            {% endif %}
-            <form action="{% url 'marketplace:toggle_favorite' artwork.pk %}" method="post" class="details-favorite-form">
-              {% csrf_token %}
-              <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-              <button class="favorite-button {% if is_favorite %}is-favorite{% endif %}" type="submit">
-                {% if is_favorite %}♥ Saved{% else %}♡ Save{% endif %}
-              </button>
-            </form>
-          {% else %}
-            <a class="button" href="{% url 'marketplace:login' %}?next={{ request.get_full_path }}">Log in to bid</a>
-          {% endif %}
-        </div>
+        {% if artwork.is_sold %}
+          <section class="bid-panel">
+            <h2>Submit a bid</h2>
+            <p class="bid-rule">This artwork has already been sold.</p>
+          </section>
+        {% else %}
+          {% include 'marketplace/includes/bid_panel.html' %}
+          <form action="{% url 'marketplace:toggle_favorite' artwork.pk %}" method="post" class="details-favorite-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+            <button class="bid-submit secondary-action {% if is_favorite %}is-favorite{% endif %}" type="submit">
+              {% if is_favorite %}&hearts; Saved{% else %}&#9825; Save{% endif %}
+            </button>
+          </form>
+        {% endif %}
+        <p class="bid-message">
+          <a href="{% url 'marketplace:seller_detail' artwork.seller.pk %}">View seller profile</a>
+        </p>
       </div>
     </section>
   </main>

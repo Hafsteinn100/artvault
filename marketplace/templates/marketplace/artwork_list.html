@@ -66,7 +66,7 @@
                   {% else %}
                     <img src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
                   {% endif %}
-                  <span class="browse-price">from ${{ artwork.price }}</span>
+                  <span class="browse-price">from ${{ artwork.price|floatformat:0 }}</span>
                 </a>
                 <a class="browse-seller" href="{% url 'marketplace:seller_detail' artwork.seller.pk %}" aria-label="View seller page for {{ artwork.seller.name }}">
                   <span class="seller-name">{{ artwork.seller.name }}</span>

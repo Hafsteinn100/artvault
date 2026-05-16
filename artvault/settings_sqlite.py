@@ -11,3 +11,6 @@ DATABASES = {
 }
 
 MEDIA_ROOT = os.getenv('MEDIA_ROOT', BASE_DIR / 'media')  # noqa: F405
+
+# Keep local demo flows from writing wizard state into SQLite sessions.
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'

@@ -3,11 +3,12 @@
   {% if has_contact %}
     <a class="step-link {% if current_step == 'payment' %}is-current{% endif %}" href="{% url 'marketplace:finalize_bid_step' bid.pk 'payment' %}">Payment</a>
   {% else %}
-    <span class="step-link is-disabled">Payment</span>
+    <span class="step-link disabled">Payment</span>
   {% endif %}
   {% if has_payment %}
     <a class="step-link {% if current_step == 'review' %}is-current{% endif %}" href="{% url 'marketplace:finalize_bid_step' bid.pk 'review' %}">Review</a>
   {% else %}
-    <span class="step-link is-disabled">Review</span>
+    <span class="step-link disabled">Review</span>
   {% endif %}
+  <span class="step-link {% if current_step == 'confirmation' %}is-current{% else %}disabled{% endif %}">Confirmation</span>
 </nav>

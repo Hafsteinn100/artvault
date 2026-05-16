@@ -104,6 +104,14 @@
     font: inherit;
 }
 
+.bid-panel .errorlist {
+    margin: 8px 0 0;
+    padding: 0;
+    color: #9d2f2f;
+    font-weight: 800;
+    list-style: none;
+}
+
 .bid-submit {
     display: inline-flex;
     align-items: center;
@@ -118,6 +126,28 @@
     font: inherit;
     font-weight: 800;
     cursor: pointer;
+}
+
+.details-favorite-form {
+    display: inline-flex;
+    margin: 10px 0 0;
+}
+
+.bid-submit.secondary-action {
+    background: #fff;
+    color: var(--brown);
+}
+
+.bid-submit.secondary-action.is-favorite {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: var(--brown);
+}
+
+.bid-message a {
+    color: var(--brown);
+    font-weight: 800;
+    text-decoration: none;
 }
 
 .bid-message {

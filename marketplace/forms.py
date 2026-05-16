@@ -31,13 +31,32 @@ class ProfileForm(forms.ModelForm):
 
 class BidForm(forms.ModelForm):
     expiration = forms.DateTimeField(
-        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        label='Expiration date',
+        widget=forms.DateTimeInput(
+            attrs={
+                'id': 'bid-expiration',
+                'type': 'datetime-local',
+            },
+            format='%Y-%m-%dT%H:%M',
+        ),
         input_formats=['%Y-%m-%dT%H:%M'],
     )
 
     class Meta:
         model = Bid
         fields = ['price', 'expiration']
+        labels = {
+            'price': 'Bid price',
+        }
+        widgets = {
+            'price': forms.NumberInput(
+                attrs={
+                    'id': 'bid-price',
+                    'min': '1',
+                    'step': '1',
+                }
+            ),
+        }
 
     def clean_expiration(self):
         expiration = self.cleaned_data['expiration']

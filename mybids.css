@@ -109,6 +109,10 @@
   font-weight: 800;
 }
 
+.bid-action-form {
+  margin: 0;
+}
+
 .status {
   display: inline-flex;
   align-items: center;
@@ -218,6 +222,14 @@
   display: block;
   color: #3b1f0e;
   font-weight: 800;
+}
+
+#finalize-form .errorlist {
+  margin: 8px 0 0;
+  padding: 0;
+  color: #9d2f2f;
+  font-weight: 800;
+  list-style: none;
 }
 
 #finalize-form input,

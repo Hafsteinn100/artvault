@@ -1,0 +1,28 @@
+<form id="bid-form" class="bid-panel" action="{% url 'marketplace:submit_bid' artwork.pk %}" method="post">
+  {% csrf_token %}
+  <h2>Submit a bid</h2>
+  {% if existing_bid %}
+    <p id="bid-rule" class="bid-rule">Your bid: ${{ existing_bid.price|floatformat:0 }} &middot; {{ existing_bid.status }}</p>
+  {% else %}
+    <p id="bid-rule" class="bid-rule">Your bid must be higher than the current bid.</p>
+  {% endif %}
+
+  {{ form.non_field_errors }}
+
+  <label for="{{ form.price.id_for_label }}">
+    Bid price
+    {{ form.price }}
+  </label>
+  {{ form.price.errors }}
+
+  <label for="{{ form.expiration.id_for_label }}">
+    Expiration date
+    {{ form.expiration }}
+  </label>
+  {{ form.expiration.errors }}
+
+  <button class="bid-submit" type="submit">{% if existing_bid %}Update bid{% else %}Submit bid{% endif %}</button>
+  <p id="bid-message" class="bid-message{% if form.errors %} error{% endif %}" role="status">
+    {% if form.errors %}Please fix the highlighted fields.{% endif %}
+  </p>
+</form>

@@ -1,42 +1,36 @@
 {% extends 'marketplace/base.html' %}
 {% load static %}
 
-{% block title %}Submit Bid | ArtVault{% endblock %}
+{% block title %}{% if existing_bid %}Update Bid{% else %}Submit Bid{% endif %} | ArtVault{% endblock %}
+
+{% block body_class %}details-page{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'details.css' %}?v=3" />
+{% endblock %}
 
 {% block content %}
-  <h1 class="page-title">{% if existing_bid %}Resubmit Bid{% else %}Submit Bid{% endif %}</h1>
-
-  <div class="detail-shell">
-    <section>
+  <main class="details-main">
+    <section class="details-shell">
+      <div class="details-image-panel">
       {% if artwork.thumbnail %}
-        <img class="art-thumb" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.title }}">
+          <img class="details-artwork-image" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}" />
       {% else %}
-        <img class="art-thumb" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
+          <img class="details-artwork-image" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
       {% endif %}
-    </section>
+      </div>
 
-    <section>
-      <h2>{{ artwork.title }}</h2>
-      <p>Starting bid: <strong>${{ artwork.starting_bid_price }}</strong></p>
-      {% if existing_bid %}
-        <p>Current bid status: <strong>{{ existing_bid.status }}</strong></p>
-      {% endif %}
+      <div class="details-content">
+        <h1>{{ artwork.title }}</h1>
+        <p>{{ artwork.medium }}{% if artwork.style %} &middot; {{ artwork.style }}{% endif %}</p>
+        <p class="details-seller">Seller: {{ artwork.seller.name }}</p>
+        <p class="details-price">Current bid: ${{ artwork.price|floatformat:0 }}</p>
 
-      <form method="post">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <p>
-          {{ form.price.label_tag }}
-          {{ form.price }}
-          {{ form.price.errors }}
+        {% include 'marketplace/includes/bid_panel.html' %}
+        <p class="bid-message">
+          <a href="{% url 'marketplace:artwork_detail' artwork.pk %}">Back to artwork details</a>
         </p>
-        <p>
-          {{ form.expiration.label_tag }}
-          {{ form.expiration }}
-          {{ form.expiration.errors }}
-        </p>
-        <button type="submit">Submit bid</button>
-      </form>
+      </div>
     </section>
-  </div>
+  </main>
 {% endblock %}

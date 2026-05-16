@@ -1,7 +1,7 @@
 from decimal import Decimal, InvalidOperation
 
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
@@ -22,6 +22,26 @@ from .models import Artwork, Bid, BidFinalization, Favorite, Profile, Seller
 
 FINALIZATION_STEPS = ['contact', 'payment', 'review', 'confirmation']
 FINALIZATION_SESSION_PREFIX = 'finalization_bid_'
+DEMO_USERNAME = 'demo_collector'
+
+
+def demo_user():
+    User = get_user_model()
+    demo = User.objects.filter(username=DEMO_USERNAME).first()
+    if demo:
+        return demo
+
+    bidder_id = Bid.objects.order_by('-created_at').values_list('bidder_id', flat=True).first()
+    if bidder_id:
+        return User.objects.filter(pk=bidder_id).first()
+
+    return User.objects.first()
+
+
+def acting_user(request):
+    if request.user.is_authenticated:
+        return request.user
+    return demo_user()
 
 
 def get_or_create_profile(user):
@@ -66,7 +86,7 @@ def redirect_after_toggle(request, fallback):
 def current_seller(user):
     try:
         return user.seller
-    except Seller.DoesNotExist:
+    except (AttributeError, Seller.DoesNotExist):
         return None
 
 
@@ -151,8 +171,9 @@ def artwork_list(request):
 def artwork_detail(request, pk):
     artwork = get_object_or_404(artwork_queryset(), pk=pk)
     existing_bid = None
-    if request.user.is_authenticated:
-        existing_bid = Bid.objects.filter(artwork=artwork, bidder=request.user).first()
+    user = acting_user(request)
+    if user:
+        existing_bid = Bid.objects.filter(artwork=artwork, bidder=user).first()
 
     return render(
         request,
@@ -160,9 +181,9 @@ def artwork_detail(request, pk):
         {
             'artwork': artwork,
             'existing_bid': existing_bid,
+            'form': BidForm(instance=existing_bid),
             'is_favorite': (
-                request.user.is_authenticated
-                and Favorite.objects.filter(artwork=artwork, user=request.user).exists()
+                user is not None and Favorite.objects.filter(artwork=artwork, user=user).exists()
             ),
         },
     )
@@ -200,9 +221,15 @@ def register(request):
     return render(request, 'marketplace/register.html', {'form': form})
 
 
-@login_required
 def profile(request):
-    user_profile = get_or_create_profile(request.user)
+    user = acting_user(request)
+    if user is None:
+        form = ProfileForm(request.POST or None)
+        return render(request, 'marketplace/profile.html', {'form': form})
+
+    user_profile = Profile.objects.filter(user=user).first()
+    if request.method == 'POST' and user_profile is None:
+        user_profile = get_or_create_profile(user)
     form = ProfileForm(request.POST or None, request.FILES or None, instance=user_profile)
 
     if request.method == 'POST':
@@ -215,25 +242,29 @@ def profile(request):
     return render(request, 'marketplace/profile.html', {'form': form})
 
 
-@login_required
 @require_http_methods(['GET', 'POST'])
 def submit_bid(request, pk):
     artwork = get_object_or_404(artwork_queryset(), pk=pk)
+    user = acting_user(request)
+    if user is None:
+        messages.error(request, 'Demo bidding is not available until sample users are loaded.')
+        return redirect('marketplace:artwork_detail', pk=artwork.pk)
+
     if artwork.is_sold:
         messages.error(request, 'This artwork has already been sold.')
         return redirect('marketplace:artwork_detail', pk=artwork.pk)
-    if current_seller(request.user) == artwork.seller:
+    if current_seller(user) == artwork.seller:
         messages.error(request, 'Sellers cannot bid on their own artwork.')
         return redirect('marketplace:artwork_detail', pk=artwork.pk)
 
-    existing_bid = Bid.objects.filter(artwork=artwork, bidder=request.user).first()
-    form = BidForm(request.POST or None, instance=existing_bid)
+    existing_bid = Bid.objects.filter(artwork=artwork, bidder=user).first()
+    form = BidForm(request.POST if request.method == 'POST' else None, instance=existing_bid)
 
     if request.method == 'POST':
         if form.is_valid():
             bid = form.save(commit=False)
             bid.artwork = artwork
-            bid.bidder = request.user
+            bid.bidder = user
             bid.status = Bid.BidStatus.PENDING
             bid.save()
             messages.success(request, 'Your bid was submitted successfully.')
@@ -251,13 +282,14 @@ def submit_bid(request, pk):
     )
 
 
-@login_required
 def bid_list(request):
-    bids = (
-        Bid.objects.filter(bidder=request.user)
-        .select_related('artwork', 'artwork__seller', 'artwork__seller__user')
-        .order_by('-created_at')
-    )
+    bids = Bid.objects.select_related(
+        'artwork',
+        'artwork__seller',
+        'artwork__seller__user',
+    ).order_by('-created_at')
+    if request.user.is_authenticated:
+        bids = bids.filter(bidder=request.user)
     return render(request, 'marketplace/bid_list.html', {'bids': bids})
 
 
@@ -323,10 +355,20 @@ def update_seller_bid_status(request, pk):
     return redirect_after_toggle(request, 'marketplace:seller_bid_list')
 
 
-@login_required
 def favorite_list(request):
+    user = acting_user(request)
+    if user is None:
+        return render(
+            request,
+            'marketplace/favorite_list.html',
+            {
+                'artworks': [],
+                'favorite_artwork_ids': [],
+            },
+        )
+
     favorites = (
-        Favorite.objects.filter(user=request.user)
+        Favorite.objects.filter(user=user)
         .select_related('artwork', 'artwork__seller', 'artwork__seller__user')
         .prefetch_related('artwork__images')
     )
@@ -341,13 +383,17 @@ def favorite_list(request):
     )
 
 
-@login_required
 @require_POST
 def toggle_favorite(request, pk):
     artwork = get_object_or_404(Artwork, pk=pk)
+    user = acting_user(request)
+    if user is None:
+        messages.error(request, 'Demo favorites are not available until sample users are loaded.')
+        return redirect_after_toggle(request, 'marketplace:artwork_list')
+
     favorite, created = Favorite.objects.get_or_create(
         artwork=artwork,
-        user=request.user,
+        user=user,
     )
     if created:
         messages.success(request, f'{artwork.title} was added to your favorites.')
@@ -425,14 +471,12 @@ def active_finalization_redirect(request):
     return None
 
 
-@login_required
 @require_http_methods(['GET', 'POST'])
 def finalize_bid(request, pk, step='contact'):
-    bid = get_object_or_404(
-        Bid.objects.select_related('artwork', 'artwork__seller'),
-        pk=pk,
-        bidder=request.user,
-    )
+    bids = Bid.objects.select_related('artwork', 'artwork__seller')
+    if request.user.is_authenticated:
+        bids = bids.filter(bidder=request.user)
+    bid = get_object_or_404(bids, pk=pk)
     if bid.status not in [Bid.BidStatus.ACCEPTED, Bid.BidStatus.CONTINGENT]:
         messages.error(request, 'Only accepted or contingent bids can be finalized.')
         return redirect('marketplace:bid_list')
@@ -447,7 +491,7 @@ def finalize_bid(request, pk, step='contact'):
     data = get_finalization_data(request, bid)
 
     if step == 'confirmation':
-        if is_finalized:
+        if is_finalized or data.get('confirmed'):
             return render(
                 request,
                 'marketplace/finalize_confirmation.html',
@@ -461,7 +505,10 @@ def finalize_bid(request, pk, step='contact'):
         return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='contact')
 
     if step == 'contact':
-        form = FinalizationContactForm(request.POST or None, initial=data.get('contact'))
+        form = FinalizationContactForm(
+            request.POST if request.method == 'POST' else None,
+            initial=data.get('contact'),
+        )
         if request.method == 'POST' and form.is_valid():
             data['contact'] = form.cleaned_data
             save_finalization_data(request, bid, data)
@@ -475,7 +522,10 @@ def finalize_bid(request, pk, step='contact'):
     if step == 'payment':
         if 'contact' not in data:
             return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='contact')
-        form = FinalizationPaymentForm(request.POST or None, initial=data.get('payment'))
+        form = FinalizationPaymentForm(
+            request.POST if request.method == 'POST' else None,
+            initial=data.get('payment'),
+        )
         if request.method == 'POST' and form.is_valid():
             data['payment'] = form.cleaned_data
             save_finalization_data(request, bid, data)
@@ -494,33 +544,37 @@ def finalize_bid(request, pk, step='contact'):
         if request.method == 'POST':
             contact = data['contact']
             payment = data['payment']
-            address = (
-                f"{contact['street_name']}, {contact['city']} "
-                f"{contact['postal_code']}, {contact['country']}"
-            )
-            finalization, _ = BidFinalization.objects.update_or_create(
-                bid=bid,
-                defaults={
-                    'address': address,
-                    'street_name': contact['street_name'],
-                    'city': contact['city'],
-                    'postal_code': contact['postal_code'],
-                    'country': contact['country'],
-                    'national_id': contact['national_id'],
-                    'payment_method': payment['payment_method'],
-                    'payment_info': payment['payment_method'].replace('_', ' ').title(),
-                    'cardholder_name': payment.get('cardholder_name', ''),
-                    'credit_card_number': payment.get('credit_card_number', ''),
-                    'expiry_date': payment.get('expiry_date', ''),
-                    'cvc': payment.get('cvc', ''),
-                    'bank_account': payment.get('bank_account', ''),
-                    'sending_bank': payment.get('sending_bank', ''),
-                    'routing_number': payment.get('routing_number', ''),
-                    'account_number': payment.get('account_number', ''),
-                },
-            )
-            finalization.mark_finalized()
-            request.session.pop(finalization_session_key(bid), None)
+            if request.user.is_authenticated:
+                address = (
+                    f"{contact['street_name']}, {contact['city']} "
+                    f"{contact['postal_code']}, {contact['country']}"
+                )
+                finalization, _ = BidFinalization.objects.update_or_create(
+                    bid=bid,
+                    defaults={
+                        'address': address,
+                        'street_name': contact['street_name'],
+                        'city': contact['city'],
+                        'postal_code': contact['postal_code'],
+                        'country': contact['country'],
+                        'national_id': contact['national_id'],
+                        'payment_method': payment['payment_method'],
+                        'payment_info': payment['payment_method'].replace('_', ' ').title(),
+                        'cardholder_name': payment.get('cardholder_name', ''),
+                        'credit_card_number': payment.get('credit_card_number', ''),
+                        'expiry_date': payment.get('expiry_date', ''),
+                        'cvc': payment.get('cvc', ''),
+                        'bank_account': payment.get('bank_account', ''),
+                        'sending_bank': payment.get('sending_bank', ''),
+                        'routing_number': payment.get('routing_number', ''),
+                        'account_number': payment.get('account_number', ''),
+                    },
+                )
+                finalization.mark_finalized()
+                request.session.pop(finalization_session_key(bid), None)
+            else:
+                data['confirmed'] = True
+                save_finalization_data(request, bid, data)
             messages.success(request, 'Your bid was finalized successfully.')
             return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='confirmation')
 

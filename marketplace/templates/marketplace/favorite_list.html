@@ -16,7 +16,7 @@
           {% else %}
             <img class="art-thumb" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
           {% endif %}
-          <span class="browse-price">${{ artwork.starting_bid_price }}</span>
+          <span class="browse-price">${{ artwork.starting_bid_price|floatformat:0 }}</span>
           <span class="browse-seller">
             <span class="seller-name">{{ artwork.seller.name }}</span>
             <span class="seller-avatar" aria-hidden="true"></span>
@@ -41,7 +41,7 @@
           <h2>{{ artwork.title }}</h2>
           <p>{{ artwork.medium }} &middot; {{ artwork.style }}</p>
           <p>{{ artwork.dimensions }}</p>
-          <p><strong>Starting bid: ${{ artwork.starting_bid_price }}</strong></p>
+          <p><strong>Starting bid: ${{ artwork.starting_bid_price|floatformat:0 }}</strong></p>
           <a class="button secondary" href="{% url 'marketplace:artwork_detail' artwork.pk %}">View details</a>
         </div>
       </article>

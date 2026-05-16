@@ -1,58 +1,80 @@
 {% extends 'marketplace/base.html' %}
+{% load static %}
 
 {% block title %}Finalize Bid Payment | ArtVault{% endblock %}
 
+{% block body_class %}profile-page{% if finalization_locked %} finalizing-bid{% endif %}{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'mybids.css' %}?v=3" />
+{% endblock %}
+
 {% block content %}
-  <h1 class="page-title">Finalize Bid</h1>
-  <p class="lead">{{ bid.artwork.title }} &middot; ${{ bid.price }}</p>
-  {% include 'marketplace/includes/finalize_steps.html' %}
+  <main class="auth">
+    <div class="auth-container">
+      <section id="finalize-view" class="finalize-view">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">Finalize bid</p>
+            <h1>Finalize Bid</h1>
+            <p class="muted">{{ bid.artwork.title }} &middot; ${{ bid.price|floatformat:0 }}</p>
+          </div>
+        </div>
 
-  <form class="form-panel" method="post">
-    {% csrf_token %}
-    <h2>Payment</h2>
-    {{ form.non_field_errors }}
-    <p>
-      {{ form.payment_method.label_tag }}
-      {{ form.payment_method }}
-      {{ form.payment_method.errors }}
-    </p>
+        {% include 'marketplace/includes/finalize_steps.html' %}
 
-    <div data-payment-section="credit_card">
-      <h3>Credit card</h3>
-      <p>{{ form.cardholder_name.label_tag }} {{ form.cardholder_name }} {{ form.cardholder_name.errors }}</p>
-      <p>{{ form.credit_card_number.label_tag }} {{ form.credit_card_number }} {{ form.credit_card_number.errors }}</p>
-      <p>{{ form.expiry_date.label_tag }} {{ form.expiry_date }} {{ form.expiry_date.errors }}</p>
-      <p>{{ form.cvc.label_tag }} {{ form.cvc }} {{ form.cvc.errors }}</p>
+        <form id="finalize-form" method="post">
+          {% csrf_token %}
+          <section class="wizard-step" data-step="payment">
+            <h2>Payment</h2>
+            {{ form.non_field_errors }}
+            <label>
+              Payment option
+              {{ form.payment_method }}
+              {{ form.payment_method.errors }}
+            </label>
+
+            <div class="payment-section" data-payment="credit_card">
+              <div class="form-grid">
+                <label>Cardholder name {{ form.cardholder_name }} {{ form.cardholder_name.errors }}</label>
+                <label>Credit card number {{ form.credit_card_number }} {{ form.credit_card_number.errors }}</label>
+                <label>Expiry date {{ form.expiry_date }} {{ form.expiry_date.errors }}</label>
+                <label>CVC {{ form.cvc }} {{ form.cvc.errors }}</label>
+              </div>
+            </div>
+
+            <div class="payment-section" data-payment="bank_transfer" hidden>
+              <label>Bank account {{ form.bank_account }} {{ form.bank_account.errors }}</label>
+            </div>
+
+            <div class="payment-section" data-payment="wire_transfer" hidden>
+              <div class="form-grid">
+                <label>Name of sending bank {{ form.sending_bank }} {{ form.sending_bank.errors }}</label>
+                <label>Routing number {{ form.routing_number }} {{ form.routing_number.errors }}</label>
+                <label>Account number {{ form.account_number }} {{ form.account_number.errors }}</label>
+              </div>
+            </div>
+          </section>
+
+          <div class="wizard-actions">
+            <a class="secondary-button" href="{% url 'marketplace:finalize_bid_step' bid.pk 'contact' %}">Back</a>
+            <button class="primary-button" type="submit">Review</button>
+          </div>
+        </form>
+      </section>
     </div>
-
-    <div data-payment-section="bank_transfer">
-      <h3>Bank transfer</h3>
-      <p>{{ form.bank_account.label_tag }} {{ form.bank_account }} {{ form.bank_account.errors }}</p>
-    </div>
-
-    <div data-payment-section="wire_transfer">
-      <h3>Wire transfer</h3>
-      <p>{{ form.sending_bank.label_tag }} {{ form.sending_bank }} {{ form.sending_bank.errors }}</p>
-      <p>{{ form.routing_number.label_tag }} {{ form.routing_number }} {{ form.routing_number.errors }}</p>
-      <p>{{ form.account_number.label_tag }} {{ form.account_number }} {{ form.account_number.errors }}</p>
-    </div>
-
-    <div class="wizard-nav">
-      <a class="button secondary" href="{% url 'marketplace:finalize_bid_step' bid.pk 'contact' %}">Back</a>
-      <button type="submit">Review</button>
-    </div>
-  </form>
+  </main>
 
   <script>
     const paymentSelect = document.getElementById('id_payment_method');
-    const paymentSections = document.querySelectorAll('[data-payment-section]');
+    const paymentSections = document.querySelectorAll('[data-payment]');
 
     function syncPaymentSections() {
       if (!paymentSelect.value) {
         paymentSelect.value = 'credit_card';
       }
       paymentSections.forEach((section) => {
-        section.hidden = section.dataset.paymentSection !== paymentSelect.value;
+        section.hidden = section.dataset.payment !== paymentSelect.value;
       });
     }
 

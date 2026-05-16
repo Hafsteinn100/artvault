@@ -1,25 +1,47 @@
 {% extends 'marketplace/base.html' %}
+{% load static %}
 
 {% block title %}Finalize Bid Contact | ArtVault{% endblock %}
 
-{% block content %}
-  <h1 class="page-title">Finalize Bid</h1>
-  <p class="lead">{{ bid.artwork.title }} &middot; ${{ bid.price }}</p>
-  {% include 'marketplace/includes/finalize_steps.html' %}
+{% block body_class %}profile-page{% if finalization_locked %} finalizing-bid{% endif %}{% endblock %}
 
-  <form class="form-panel" method="post">
-    {% csrf_token %}
-    <h2>Contact information</h2>
-    {{ form.non_field_errors }}
-    {% for field in form %}
-      <p>
-        {{ field.label_tag }}
-        {{ field }}
-        {{ field.errors }}
-      </p>
-    {% endfor %}
-    <div class="wizard-nav">
-      <button type="submit">Continue to payment</button>
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'mybids.css' %}?v=3" />
+{% endblock %}
+
+{% block content %}
+  <main class="auth">
+    <div class="auth-container">
+      <section id="finalize-view" class="finalize-view">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">Finalize bid</p>
+            <h1>Finalize Bid</h1>
+            <p class="muted">{{ bid.artwork.title }} &middot; ${{ bid.price|floatformat:0 }}</p>
+          </div>
+        </div>
+
+        {% include 'marketplace/includes/finalize_steps.html' %}
+
+        <form id="finalize-form" method="post">
+          {% csrf_token %}
+          <section class="wizard-step" data-step="contact">
+            <h2>Contact information</h2>
+            {{ form.non_field_errors }}
+            <div class="form-grid">
+              <label>Street name {{ form.street_name }} {{ form.street_name.errors }}</label>
+              <label>City {{ form.city }} {{ form.city.errors }}</label>
+              <label>Postal code {{ form.postal_code }} {{ form.postal_code.errors }}</label>
+              <label>Country {{ form.country }} {{ form.country.errors }}</label>
+              <label>National id {{ form.national_id }} {{ form.national_id.errors }}</label>
+            </div>
+          </section>
+
+          <div class="wizard-actions">
+            <button class="primary-button" type="submit">Continue</button>
+          </div>
+        </form>
+      </section>
     </div>
-  </form>
+  </main>
 {% endblock %}
