@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST, require_http_methods
 
@@ -223,23 +224,44 @@ def register(request):
 
 def profile(request):
     user = acting_user(request)
+    saved_artworks = []
     if user is None:
         form = ProfileForm(request.POST or None)
-        return render(request, 'marketplace/profile.html', {'form': form})
+        return render(
+            request,
+            'marketplace/profile.html',
+            {
+                'form': form,
+                'saved_artworks': saved_artworks,
+            },
+        )
 
     user_profile = Profile.objects.filter(user=user).first()
     if request.method == 'POST' and user_profile is None:
         user_profile = get_or_create_profile(user)
     form = ProfileForm(request.POST or None, request.FILES or None, instance=user_profile)
+    saved_artworks = (
+        Artwork.objects.filter(favorites__user=user)
+        .select_related('seller', 'seller__user')
+        .prefetch_related('images')
+        .order_by('-favorites__created_at')
+    )
 
     if request.method == 'POST':
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully.')
-            return redirect('marketplace:profile')
+            return redirect(f'{reverse("marketplace:profile")}?updated=1')
         messages.error(request, 'Profile update failed. Please check the fields below.')
 
-    return render(request, 'marketplace/profile.html', {'form': form})
+    return render(
+        request,
+        'marketplace/profile.html',
+        {
+            'form': form,
+            'saved_artworks': saved_artworks,
+        },
+    )
 
 
 @require_http_methods(['GET', 'POST'])
