@@ -242,6 +242,9 @@ input[type='submit'] {
 
 .browse-grid .card {
   width: 100%;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
 .browse-grid.is-masonry-ready .card {
@@ -258,11 +261,40 @@ input[type='submit'] {
 
 .browse-image-wrap {
   position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.browse-title-tag {
+  position: absolute;
+  top: 12px;
+  z-index: 1;
+  line-height: 1.15;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.72);
+  pointer-events: none;
+}
+
+.browse-title-tag {
+  right: 12px;
+  max-width: 58%;
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.browse-type-label {
+  margin: 7px 0 0;
+  color: #746c65;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
 }
 
 .favorite-form {
   position: absolute;
-  top: 8px;
+  top: 38px;
   right: 8px;
   z-index: 2;
 }
@@ -326,8 +358,10 @@ input[type='submit'] {
   bottom: 8px;
   z-index: 1;
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
   gap: 5px;
+  width: max-content;
   max-width: 72%;
   pointer-events: none;
   opacity: 0;
@@ -344,6 +378,7 @@ input[type='submit'] {
 }
 
 .seller-name {
+  order: 1;
   min-width: 0;
   padding: 4px 7px;
   overflow: hidden;
@@ -359,12 +394,13 @@ input[type='submit'] {
 }
 
 .seller-avatar {
+  order: 2;
   width: 28px;
   height: 28px;
   flex: 0 0 28px;
-  border: 2px solid rgba(255, 255, 255, 0.92);
+  border: 2px solid rgba(32, 25, 20, 0.72);
   border-radius: 50%;
-  background: var(--soft);
+  background: var(--soft) url("profile.png") center / cover no-repeat;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
 }
 
