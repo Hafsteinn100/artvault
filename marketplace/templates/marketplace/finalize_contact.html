@@ -4,7 +4,8 @@
 
 {% block content %}
   <h1 class="page-title">Finalize Bid</h1>
-  <p class="lead">{{ bid.artwork.title }} · ${{ bid.price }}</p>
+  <p class="lead">{{ bid.artwork.title }} &middot; ${{ bid.price }}</p>
+  {% include 'marketplace/includes/finalize_steps.html' %}
 
   <form class="form-panel" method="post">
     {% csrf_token %}

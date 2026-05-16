@@ -159,3 +159,63 @@ class MarketplaceFlowTests(TestCase):
                 payment_method='bank_transfer',
             ).exists()
         )
+
+    def test_confirmation_requires_completed_finalization(self):
+        bid = Bid.objects.create(
+            artwork=self.oil,
+            bidder=self.collector,
+            price='1300.00',
+            expiration=timezone.now() + timedelta(days=7),
+            status=Bid.BidStatus.ACCEPTED,
+        )
+        self.client.login(username='collector', password='artvault123')
+
+        response = self.client.get(
+            reverse('marketplace:finalize_bid_step', args=[bid.pk, 'confirmation'])
+        )
+
+        self.assertRedirects(
+            response,
+            reverse('marketplace:finalize_bid_step', args=[bid.pk, 'contact']),
+        )
+
+    def test_review_shows_payment_label_and_credit_card_details(self):
+        bid = Bid.objects.create(
+            artwork=self.oil,
+            bidder=self.collector,
+            price='1300.00',
+            expiration=timezone.now() + timedelta(days=7),
+            status=Bid.BidStatus.CONTINGENT,
+        )
+        self.client.login(username='collector', password='artvault123')
+
+        self.client.post(
+            reverse('marketplace:finalize_bid_step', args=[bid.pk, 'contact']),
+            {
+                'street_name': 'Main Street 1',
+                'city': 'Reykjavik',
+                'postal_code': '101',
+                'country': 'Iceland',
+                'national_id': '010190-1234',
+            },
+        )
+        self.client.post(
+            reverse('marketplace:finalize_bid_step', args=[bid.pk, 'payment']),
+            {
+                'payment_method': 'credit_card',
+                'cardholder_name': 'Marta Collector',
+                'credit_card_number': '4242 4242 4242 4242',
+                'expiry_date': '12/28',
+                'cvc': '123',
+            },
+        )
+        response = self.client.get(
+            reverse('marketplace:finalize_bid_step', args=[bid.pk, 'review'])
+        )
+
+        self.assertContains(response, 'Credit card')
+        self.assertContains(response, '4242 4242 4242 4242')
+        self.assertContains(response, '123')
+        self.assertContains(response, 'Contact')
+        self.assertContains(response, 'Payment')
+        self.assertContains(response, 'Review')

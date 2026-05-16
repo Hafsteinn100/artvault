@@ -30,7 +30,7 @@
               aria-label="Remove {{ artwork.title }} from favorites"
               title="Remove from favorites"
             >
-              ♥
+              &hearts;
             </button>
           </form>
         </div>
@@ -39,7 +39,7 @@
             {% if artwork.is_sold %}Sold{% else %}Available{% endif %}
           </p>
           <h2>{{ artwork.title }}</h2>
-          <p>{{ artwork.medium }} Â· {{ artwork.style }}</p>
+          <p>{{ artwork.medium }} &middot; {{ artwork.style }}</p>
           <p>{{ artwork.dimensions }}</p>
           <p><strong>Starting bid: ${{ artwork.starting_bid_price }}</strong></p>
           <a class="button secondary" href="{% url 'marketplace:artwork_detail' artwork.pk %}">View details</a>

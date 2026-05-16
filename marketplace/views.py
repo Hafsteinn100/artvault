@@ -293,6 +293,17 @@ def save_finalization_data(request, bid, data):
     request.session.modified = True
 
 
+def finalization_context(bid, step, data, **extra):
+    context = {
+        'bid': bid,
+        'current_step': step,
+        'has_contact': 'contact' in data,
+        'has_payment': 'payment' in data,
+    }
+    context.update(extra)
+    return context
+
+
 @login_required
 @require_http_methods(['GET', 'POST'])
 def finalize_bid(request, pk, step='contact'):
@@ -305,7 +316,8 @@ def finalize_bid(request, pk, step='contact'):
         messages.error(request, 'Only accepted or contingent bids can be finalized.')
         return redirect('marketplace:bid_list')
 
-    if hasattr(bid, 'finalization') and bid.finalization.finalized_at:
+    is_finalized = hasattr(bid, 'finalization') and bid.finalization.finalized_at
+    if is_finalized and step != 'confirmation':
         return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='confirmation')
 
     if step not in ['contact', 'payment', 'review', 'confirmation']:
@@ -313,13 +325,31 @@ def finalize_bid(request, pk, step='contact'):
 
     data = get_finalization_data(request, bid)
 
+    if step == 'confirmation':
+        if is_finalized:
+            return render(
+                request,
+                'marketplace/finalize_confirmation.html',
+                finalization_context(bid, step, data),
+            )
+        messages.error(request, 'Please review and confirm the bid before viewing confirmation.')
+        if 'payment' in data:
+            return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='review')
+        if 'contact' in data:
+            return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='payment')
+        return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='contact')
+
     if step == 'contact':
         form = FinalizationContactForm(request.POST or None, initial=data.get('contact'))
         if request.method == 'POST' and form.is_valid():
             data['contact'] = form.cleaned_data
             save_finalization_data(request, bid, data)
             return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='payment')
-        return render(request, 'marketplace/finalize_contact.html', {'bid': bid, 'form': form})
+        return render(
+            request,
+            'marketplace/finalize_contact.html',
+            finalization_context(bid, step, data, form=form),
+        )
 
     if step == 'payment':
         if 'contact' not in data:
@@ -329,7 +359,11 @@ def finalize_bid(request, pk, step='contact'):
             data['payment'] = form.cleaned_data
             save_finalization_data(request, bid, data)
             return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='review')
-        return render(request, 'marketplace/finalize_payment.html', {'bid': bid, 'form': form})
+        return render(
+            request,
+            'marketplace/finalize_payment.html',
+            finalization_context(bid, step, data, form=form),
+        )
 
     if step == 'review':
         if 'contact' not in data:
@@ -372,11 +406,14 @@ def finalize_bid(request, pk, step='contact'):
         return render(
             request,
             'marketplace/finalize_review.html',
-            {
-                'bid': bid,
-                'contact': data['contact'],
-                'payment': data['payment'],
-            },
+            finalization_context(
+                bid,
+                step,
+                data,
+                contact=data['contact'],
+                payment=data['payment'],
+                payment_method_label=dict(FinalizationPaymentForm.PAYMENT_CHOICES)[
+                    data['payment']['payment_method']
+                ],
+            ),
         )
-
-    return render(request, 'marketplace/finalize_confirmation.html', {'bid': bid})
