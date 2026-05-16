@@ -62,7 +62,7 @@
                 <a href="{% url 'marketplace:artwork_detail' artwork.pk %}">
                   <span class="browse-title-tag">{{ artwork.title }}</span>
                   {% if artwork.thumbnail %}
-                    <img src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}" />
+                    <img src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}" onerror="this.onerror=null;this.src='{% static 'marketplace/medium-oil.jpg' %}'" />
                   {% else %}
                     <img src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
                   {% endif %}

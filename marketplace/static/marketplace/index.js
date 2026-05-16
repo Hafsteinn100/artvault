@@ -64,7 +64,7 @@ const sellerPages = {
             },
             {
                 title: "Oil Paint Study",
-                img: "../oilpaint1.jpeg",
+                img: "/media/artwork_images/oilpaint1.jpeg",
                 alt: "Oil paint study",
                 price: "$1,050",
             },
@@ -139,7 +139,7 @@ const sellerPages = {
             },
             {
                 title: "Digital Artwork Study",
-                img: "../digitalart1.jpeg",
+                img: "/media/artwork_images/digitalart1.jpeg",
                 alt: "Digital artwork study",
                 price: "$750",
             },
@@ -164,7 +164,7 @@ const sellerPages = {
             },
             {
                 title: "Oil Paint Study",
-                img: "../oilpaint1.jpeg",
+                img: "/media/artwork_images/oilpaint1.jpeg",
                 alt: "Oil paint study",
                 price: "$1,050",
             },
