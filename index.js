@@ -34,6 +34,66 @@ const artworks = [
         medium: "digital",
         aliases: ["Prism Field", "Digital"],
     },
+    {
+        title: "Golden Abstract Painting",
+        image: "colorful-abstract-painting.jpg",
+        medium: "oil",
+        aliases: ["Abstract", "Mira Vale"],
+        alt: "Golden abstract painting",
+        price: "$1,300",
+        sellerName: "Mira Vale",
+        sellerSlug: "mira-vale",
+    },
+    {
+        title: "Pine Ridge Study",
+        image: "painting (1).jpg",
+        medium: "watercolor",
+        aliases: ["Landscape", "Theo Rowan"],
+        alt: "Pine ridge study",
+        price: "$620",
+        sellerName: "Theo Rowan",
+        sellerSlug: "theo-rowan",
+    },
+    {
+        title: "Blue River Pattern",
+        image: "painting(2).jpg",
+        medium: "digital",
+        aliases: ["Pattern", "Iris Calder"],
+        alt: "Blue river pattern",
+        price: "$820",
+        sellerName: "Iris Calder",
+        sellerSlug: "iris-calder",
+    },
+    {
+        title: "Hill Pasture Study",
+        image: "painting(3).jpg",
+        medium: "oil",
+        aliases: ["Landscape", "Lena Hart"],
+        alt: "Hill pasture study",
+        price: "$950",
+        sellerName: "Lena Hart",
+        sellerSlug: "lena-hart",
+    },
+    {
+        title: "Cloud Veil Abstract",
+        image: "paintingclowds.jpg",
+        medium: "oil",
+        aliases: ["Clouds", "Sam Elvar"],
+        alt: "Cloud veil abstract",
+        price: "$1,400",
+        sellerName: "Sam Elvar",
+        sellerSlug: "sam-elvar",
+    },
+    {
+        title: "Flower Orbit Study",
+        image: "paintingflower.jpg",
+        medium: "oil",
+        aliases: ["Flower", "Mira Vale"],
+        alt: "Flower orbit study",
+        price: "$780",
+        sellerName: "Mira Vale",
+        sellerSlug: "mira-vale",
+    },
 ];
 
 let lastScroll = window.scrollY;
@@ -414,6 +474,34 @@ function setupArtworkSearch() {
     });
 }
 
+function createBrowseArtworkCard(artwork) {
+    const article = document.createElement("article");
+    const detailsParams = new URLSearchParams({
+        img: artwork.image,
+        title: artwork.title,
+    });
+    article.className = "search-result-card";
+    article.innerHTML = `
+        <a href="details.html?${detailsParams}">
+            <span class="browse-title-tag">${artwork.title}</span>
+            <img src="${artwork.image}" alt="${artwork.alt}" />
+            <span class="browse-price">from ${artwork.price}</span>
+        </a>
+        <a class="browse-seller" href="seller.html?seller=${artwork.sellerSlug}" aria-label="View seller page for ${artwork.sellerName}">
+            <span class="seller-name">${artwork.sellerName}</span>
+            <span class="seller-avatar" aria-hidden="true"></span>
+        </a>
+        <p class="browse-type-label">${artwork.medium[0].toUpperCase()}${artwork.medium.slice(1)}</p>
+    `;
+    return article;
+}
+
+function renderBrowseAdditions() {
+    const grid = document.querySelector(".search-browse-strip");
+    if (!grid) return;
+    grid.append(...artworks.filter((artwork) => artwork.price).map(createBrowseArtworkCard));
+}
+
 function createSellerArtworkCard(artwork) {
     const article = document.createElement("article");
     article.className = "search-result-card";
@@ -609,6 +697,7 @@ moveNavbar();
 loadNavbarProfile();
 fillSearchBox();
 loadSellerPage();
+renderBrowseAdditions();
 setupSellerLinks();
 setupArtworkSearch();
 setupBrowseMasonry();
