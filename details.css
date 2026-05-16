@@ -23,14 +23,18 @@
 }
 
 .details-image-panel {
+    display: flex;
+    justify-content: center;
     margin-left: 20px;
 }
 
 .details-image-panel img {
-    width: 100%;
-    height: clamp(360px, 70vh, 720px);
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: min(72vh, 760px);
     display: block;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 16px 34px rgba(59, 31, 14, 0.14);
 }
@@ -147,6 +151,6 @@
     }
 
     .details-image-panel img {
-        height: clamp(320px, 58vh, 560px);
+        max-height: 62vh;
     }
 }

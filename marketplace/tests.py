@@ -311,6 +311,69 @@ class MarketplaceFlowTests(TestCase):
             reverse('marketplace:finalize_bid_step', args=[bid.pk, 'contact']),
         )
 
+    def test_home_redirects_to_unfinished_finalization(self):
+        bid = Bid.objects.create(
+            artwork=self.oil,
+            bidder=self.collector,
+            price='1300.00',
+            expiration=timezone.now() + timedelta(days=7),
+            status=Bid.BidStatus.ACCEPTED,
+        )
+        self.client.login(username='collector', password='artvault123')
+        session = self.client.session
+        session[f'finalization_bid_{bid.pk}'] = {
+            'contact': {
+                'street_name': 'Main Street 1',
+                'city': 'Reykjavik',
+                'postal_code': '101',
+                'country': 'Iceland',
+                'national_id': '010190-1234',
+            }
+        }
+        session.save()
+
+        response = self.client.get(reverse('marketplace:home'))
+
+        self.assertRedirects(
+            response,
+            reverse('marketplace:finalize_bid_step', args=[bid.pk, 'payment']),
+            fetch_redirect_response=False,
+        )
+
+    def test_finalize_pages_hide_home_link_until_confirmation(self):
+        bid = Bid.objects.create(
+            artwork=self.oil,
+            bidder=self.collector,
+            price='1300.00',
+            expiration=timezone.now() + timedelta(days=7),
+            status=Bid.BidStatus.ACCEPTED,
+        )
+        self.client.login(username='collector', password='artvault123')
+
+        response = self.client.get(reverse('marketplace:finalize_bid', args=[bid.pk]))
+
+        self.assertContains(response, 'Finalize Bid')
+        self.assertNotContains(response, f'href="{reverse("marketplace:home")}"')
+
+        BidFinalization.objects.create(
+            bid=bid,
+            address='Main Street 1, Reykjavik 101, Iceland',
+            street_name='Main Street 1',
+            city='Reykjavik',
+            postal_code='101',
+            country='Iceland',
+            national_id='010190-1234',
+            payment_method=BidFinalization.PaymentMethod.BANK_TRANSFER,
+            payment_info='Bank Transfer',
+            finalized_at=timezone.now(),
+        )
+
+        response = self.client.get(
+            reverse('marketplace:finalize_bid_step', args=[bid.pk, 'confirmation'])
+        )
+
+        self.assertContains(response, f'href="{reverse("marketplace:home")}"')
+
     def test_review_shows_payment_label_and_credit_card_details(self):
         bid = Bid.objects.create(
             artwork=self.oil,

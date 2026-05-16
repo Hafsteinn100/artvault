@@ -6,7 +6,47 @@
 {% block body_class %}details-page{% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'details.css' %}" />
+  <link rel="stylesheet" href="{% static 'details.css' %}?v=2" />
+  <style>
+    .details-shell {
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 460px);
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .details-image-panel {
+      display: flex;
+      justify-content: center;
+      margin-left: 0;
+      min-width: 0;
+    }
+
+    .details-image-panel .details-artwork-image {
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: min(72vh, 760px);
+      object-fit: contain;
+      background: transparent;
+    }
+
+    @media (max-width: 980px) {
+      .details-shell {
+        width: min(760px, calc(100% - 32px));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .details-image-panel {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      .details-image-panel .details-artwork-image {
+        max-height: 62vh;
+      }
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
@@ -14,9 +54,9 @@
     <section class="details-shell">
       <div class="details-image-panel">
         {% if artwork.thumbnail %}
-          <img src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}" />
+          <img class="details-artwork-image" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}" />
         {% else %}
-          <img src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
+          <img class="details-artwork-image" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
         {% endif %}
       </div>
       <div class="details-content">

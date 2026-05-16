@@ -17,50 +17,56 @@
   <body class="{% block body_class %}{% endblock %}">
     <header class="site-header">
       <nav class="top-nav" aria-label="Main navigation">
-        <a class="brand" href="{% url 'marketplace:home' %}">ArtVault</a>
+        {% if finalization_locked %}
+          <span class="brand">ArtVault</span>
+        {% else %}
+          <a class="brand" href="{% url 'marketplace:home' %}">ArtVault</a>
+        {% endif %}
 
-        <div class="nav-actions">
-          <div class="primary-links">
-            <a href="{% url 'marketplace:artwork_list' %}">Browse art</a>
-            {% if request.user.is_authenticated %}
-              <a href="{% url 'marketplace:bid_list' %}">My bids</a>
-              {% if request.user.seller %}
-                <a href="{% url 'marketplace:seller_bid_list' %}">Seller bids</a>
+        {% if not finalization_locked %}
+          <div class="nav-actions">
+            <div class="primary-links">
+              <a href="{% url 'marketplace:artwork_list' %}">Browse art</a>
+              {% if request.user.is_authenticated %}
+                <a href="{% url 'marketplace:bid_list' %}">My bids</a>
+                {% if request.user.seller %}
+                  <a href="{% url 'marketplace:seller_bid_list' %}">Seller bids</a>
+                {% endif %}
+              {% else %}
+                <a href="{% url 'marketplace:login' %}">Log in</a>
               {% endif %}
+            </div>
+
+            <form class="search-form" action="{% url 'marketplace:artwork_list' %}" method="get">
+              <label class="visually-hidden" for="search-input">Search ArtVault</label>
+              <input
+                id="search-input"
+                type="search"
+                name="q"
+                placeholder="Search with text"
+                value="{{ request.GET.q|default:'' }}"
+              />
+              <button class="search-button" type="submit" aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <path d="m16.5 16.5 4 4"></path>
+                </svg>
+              </button>
+            </form>
+
+            {% if request.user.is_authenticated %}
+              <a class="profile-button" href="{% url 'marketplace:profile' %}" aria-label="Profile">
+                <span id="homepage-username">{{ request.user.get_username }}</span>
+                <img id="homepage-profile" src="{% static 'marketplace/profile.png' %}" alt="Profile" />
+              </a>
             {% else %}
-              <a href="{% url 'marketplace:login' %}">Log in</a>
+              <a class="profile-button" href="{% url 'marketplace:register' %}" aria-label="Register">
+                <span id="homepage-username">Register</span>
+                <img id="homepage-profile" src="{% static 'marketplace/profile.png' %}" alt="Profile" />
+              </a>
             {% endif %}
           </div>
-
-          <form class="search-form" action="{% url 'marketplace:artwork_list' %}" method="get">
-            <label class="visually-hidden" for="search-input">Search ArtVault</label>
-            <input
-              id="search-input"
-              type="search"
-              name="q"
-              placeholder="Hinted search text"
-              value="{{ request.GET.q|default:'' }}"
-            />
-            <button class="search-button" type="submit" aria-label="Search">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="11" cy="11" r="7"></circle>
-                <path d="m16.5 16.5 4 4"></path>
-              </svg>
-            </button>
-          </form>
-
-          {% if request.user.is_authenticated %}
-            <a class="profile-button" href="{% url 'marketplace:profile' %}" aria-label="Profile">
-              <span id="homepage-username">{{ request.user.get_username }}</span>
-              <img id="homepage-profile" src="{% static 'marketplace/profile.png' %}" alt="Profile" />
-            </a>
-          {% else %}
-            <a class="profile-button" href="{% url 'marketplace:register' %}" aria-label="Register">
-              <span id="homepage-username">Register</span>
-              <img id="homepage-profile" src="{% static 'marketplace/profile.png' %}" alt="Profile" />
-            </a>
-          {% endif %}
-        </div>
+        {% endif %}
       </nav>
     </header>
 
@@ -76,38 +82,40 @@
 
     {% block content %}{% endblock %}
 
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <div>
-          <h3>About</h3>
-          <p>
-            ArtVault connects collectors with original works from artists and
-            trusted sellers around the world.
-          </p>
-        </div>
-        <div>
-          <h3>Quick Links</h3>
-          <a href="{% url 'marketplace:artwork_list' %}">Browse</a>
-          {% if request.user.is_authenticated %}
-            <a href="{% url 'marketplace:bid_list' %}">My Bids</a>
-            <a href="{% url 'marketplace:profile' %}">Profile</a>
-          {% else %}
-            <a href="{% url 'marketplace:login' %}">Log in</a>
-            <a href="{% url 'marketplace:register' %}">Register</a>
-          {% endif %}
-        </div>
-        <div>
-          <h3>Contact</h3>
-          <p>hello@artvault.com</p>
-          <div class="social-icons" aria-label="Social links">
-            <a class="instagram-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a class="social-icon-link" href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
-            <a class="social-icon-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+    {% if not finalization_locked %}
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <div>
+            <h3>About</h3>
+            <p>
+              ArtVault connects collectors with original works from artists and
+              trusted sellers around the world.
+            </p>
+          </div>
+          <div>
+            <h3>Quick Links</h3>
+            <a href="{% url 'marketplace:artwork_list' %}">Browse</a>
+            {% if request.user.is_authenticated %}
+              <a href="{% url 'marketplace:bid_list' %}">My Bids</a>
+              <a href="{% url 'marketplace:profile' %}">Profile</a>
+            {% else %}
+              <a href="{% url 'marketplace:login' %}">Log in</a>
+              <a href="{% url 'marketplace:register' %}">Register</a>
+            {% endif %}
+          </div>
+          <div>
+            <h3>Contact</h3>
+            <p>hello@artvault.com</p>
+            <div class="social-icons" aria-label="Social links">
+              <a class="instagram-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a class="social-icon-link" href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+              <a class="social-icon-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+            </div>
           </div>
         </div>
-      </div>
-      <p class="copyright">&copy; 2026 ArtVault. All rights reserved.</p>
-    </footer>
+        <p class="copyright">&copy; 2026 ArtVault. All rights reserved.</p>
+      </footer>
+    {% endif %}
 
     {% block extra_js %}{% endblock %}
   </body>

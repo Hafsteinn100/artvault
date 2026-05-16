@@ -20,6 +20,9 @@ from .forms import (
 )
 from .models import Artwork, Bid, BidFinalization, Favorite, Profile, Seller
 
+FINALIZATION_STEPS = ['contact', 'payment', 'review', 'confirmation']
+FINALIZATION_SESSION_PREFIX = 'finalization_bid_'
+
 
 def get_or_create_profile(user):
     return Profile.objects.get_or_create(
@@ -68,6 +71,10 @@ def current_seller(user):
 
 
 def home(request):
+    active_finalization = active_finalization_redirect(request)
+    if active_finalization:
+        return active_finalization
+
     latest_artworks = artwork_queryset().order_by('-created_at')[:4]
     return render(
         request,
@@ -351,7 +358,7 @@ def toggle_favorite(request, pk):
 
 
 def finalization_session_key(bid):
-    return f'finalization_bid_{bid.pk}'
+    return f'{FINALIZATION_SESSION_PREFIX}{bid.pk}'
 
 
 def get_finalization_data(request, bid):
@@ -367,11 +374,55 @@ def finalization_context(bid, step, data, **extra):
     context = {
         'bid': bid,
         'current_step': step,
+        'finalization_locked': step != 'confirmation',
         'has_contact': 'contact' in data,
         'has_payment': 'payment' in data,
     }
     context.update(extra)
     return context
+
+
+def next_finalization_step(data):
+    if 'payment' in data:
+        return 'review'
+    if 'contact' in data:
+        return 'payment'
+    return 'contact'
+
+
+def active_finalization_redirect(request):
+    if not request.user.is_authenticated:
+        return None
+
+    for key, data in request.session.items():
+        if not key.startswith(FINALIZATION_SESSION_PREFIX):
+            continue
+        try:
+            bid_pk = int(key.removeprefix(FINALIZATION_SESSION_PREFIX))
+        except ValueError:
+            continue
+
+        bid = (
+            Bid.objects.filter(
+                pk=bid_pk,
+                bidder=request.user,
+                status__in=[Bid.BidStatus.ACCEPTED, Bid.BidStatus.CONTINGENT],
+            )
+            .select_related('finalization')
+            .first()
+        )
+        if not bid:
+            continue
+        if hasattr(bid, 'finalization') and bid.finalization.finalized_at:
+            continue
+
+        return redirect(
+            'marketplace:finalize_bid_step',
+            pk=bid.pk,
+            step=next_finalization_step(data),
+        )
+
+    return None
 
 
 @login_required
@@ -390,7 +441,7 @@ def finalize_bid(request, pk, step='contact'):
     if is_finalized and step != 'confirmation':
         return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='confirmation')
 
-    if step not in ['contact', 'payment', 'review', 'confirmation']:
+    if step not in FINALIZATION_STEPS:
         return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='contact')
 
     data = get_finalization_data(request, bid)

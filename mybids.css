@@ -6,6 +6,15 @@
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.24);
 }
 
+.finalizing-bid .site-header .nav-actions,
+.finalizing-bid .site-footer {
+  display: none;
+}
+
+.brand:not([href]) {
+  cursor: default;
+}
+
 .auth {
   min-height: 90vh;
   padding: 120px 0 60px;
@@ -205,14 +214,14 @@
   gap: 18px;
 }
 
-label {
+#finalize-form label {
   display: block;
   color: #3b1f0e;
   font-weight: 800;
 }
 
-input,
-select {
+#finalize-form input,
+#finalize-form select {
   width: 100%;
   min-height: 44px;
   margin-top: 7px;

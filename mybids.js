@@ -5,6 +5,8 @@ const finalizeTitle = document.getElementById("finalize-title");
 const finalizeSubtitle = document.getElementById("finalize-subtitle");
 const finalizeForm = document.getElementById("finalize-form");
 const bidsTableBody = document.getElementById("bids-table-body");
+const brandLink = document.querySelector(".brand");
+const brandHref = brandLink?.getAttribute("href");
 const finalizeSteps = ["contact", "payment", "review", "confirmation"];
 let currentStep = 0;
 
@@ -164,6 +166,21 @@ function renderReview() {
   `;
 }
 
+function syncNavigationLock() {
+  const isFinalizing = !finalizeView.hidden;
+  const isComplete = finalizeSteps[currentStep] === "confirmation";
+  const isLocked = isFinalizing && !isComplete;
+
+  document.body.classList.toggle("finalizing-bid", isLocked);
+  if (!brandLink) return;
+
+  if (isLocked) {
+    brandLink.removeAttribute("href");
+  } else if (brandHref) {
+    brandLink.setAttribute("href", brandHref);
+  }
+}
+
 function showStep(index) {
   currentStep = Math.max(0, Math.min(index, finalizeSteps.length - 1));
 
@@ -187,6 +204,8 @@ function showStep(index) {
   if (finalizeSteps[currentStep] === "review") {
     renderReview();
   }
+
+  syncNavigationLock();
 }
 
 function openFinalization(button) {
@@ -200,6 +219,7 @@ function openFinalization(button) {
 document.getElementById("back-to-bids").addEventListener("click", () => {
   finalizeView.hidden = true;
   bidsView.hidden = false;
+  syncNavigationLock();
 });
 
 document.getElementById("prev-step").addEventListener("click", () => {
@@ -226,3 +246,4 @@ document.getElementById("payment-method").addEventListener("change", (event) => 
 });
 
 renderBids();
+syncNavigationLock();

@@ -359,7 +359,7 @@ function artworkMatchesSearch(artwork, searchText) {
     if (!normalizedSearch) return true;
 
     const searchWords = normalizedSearch.split(/\s+/);
-    const searchableNames = [artwork.title, ...artwork.aliases].map((name) =>
+    const searchableNames = [artwork.title, artwork.medium, ...artwork.aliases].map((name) =>
         normalizeSearchText(name)
     );
 
@@ -388,11 +388,14 @@ function getArtworkFromCard(card) {
     const url = new URL(link.href);
     const title = url.searchParams.get("title");
     const image = url.searchParams.get("img");
+    const medium = normalizeSearchText(
+        card.querySelector(".browse-type-label")?.textContent || ""
+    );
 
     return artworks.find((artwork) => artwork.title === title) || {
         title,
         image,
-        medium: "",
+        medium,
         aliases: [card.querySelector("img")?.alt || ""],
     };
 }
