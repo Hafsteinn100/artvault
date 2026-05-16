@@ -665,89 +665,10 @@ function setupSocialModal() {
     });
 }
 
-function setupThemeToggle() {
-    const button = document.getElementById("theme-toggle");
-    if (!button) return;
-
-    const updateLabel = () => {
-        const isDark = document.documentElement.classList.contains("theme-dark");
-        button.setAttribute(
-            "aria-label",
-            isDark ? "Switch to light mode" : "Switch to dark mode",
-        );
-    };
-
-    updateLabel();
-
-    button.addEventListener("click", () => {
-        const next = document.documentElement.classList.contains("theme-dark")
-            ? "light"
-            : "dark";
-        document.documentElement.classList.toggle("theme-dark", next === "dark");
-        localStorage.setItem("artvault-theme", next);
-        updateLabel();
-    });
-}
-
-function showToast(message) {
-    let container = document.querySelector(".toast-container");
-    if (!container) {
-        container = document.createElement("div");
-        container.className = "toast-container";
-        document.body.append(container);
-    }
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.textContent = message;
-    container.append(toast);
-    requestAnimationFrame(() => toast.classList.add("is-visible"));
-    setTimeout(() => {
-        toast.classList.remove("is-visible");
-        setTimeout(() => toast.remove(), 260);
-    }, 2400);
-}
-
-function setupFavoriteButton() {
-    const form = document.getElementById("favorite-form");
-    if (!form) return;
-
-    const button = form.querySelector(".favorite-banner-button");
-    const tokenInput = form.querySelector('input[name="csrfmiddlewaretoken"]');
-    if (!button || !tokenInput) return;
-
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        try {
-            const response = await fetch(form.action, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": tokenInput.value,
-                    "X-Requested-With": "XMLHttpRequest",
-                    "Accept": "application/json",
-                },
-            });
-            if (!response.ok) throw new Error("Request failed");
-            const data = await response.json();
-            button.classList.toggle("is-favorite", data.is_favorite);
-            const label = data.is_favorite ? "Remove from favorites" : "Add to favorites";
-            button.setAttribute("aria-label", label);
-            button.setAttribute("title", label);
-            showToast(
-                data.message ||
-                    (data.is_favorite ? "Added to favorites!" : "Removed from favorites."),
-            );
-        } catch (error) {
-            form.submit();
-        }
-    });
-}
-
 moveNavbar();
 fillSearchBox();
 setupBrowseMasonry();
 setupSocialModal();
-setupThemeToggle();
-setupFavoriteButton();
 // Disabled for the Django version (server provides the data):
 //   loadNavbarProfile, loadSellerPage, setupSellerLinks, setupArtworkSearch
 

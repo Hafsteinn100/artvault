@@ -57,30 +57,6 @@
           <button class="link-button" type="submit">Log out</button>
         </form>
       </p>
-
-      <section class="profile-favorites">
-        <h2>Favorites</h2>
-        {% if favorite_artworks %}
-          <div class="profile-favorites-grid">
-            {% for artwork in favorite_artworks %}
-              <a class="profile-favorite-card" href="{% url 'marketplace:artwork_detail' artwork.pk %}">
-                {% if artwork.thumbnail %}
-                  <img src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}" />
-                {% else %}
-                  <img src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
-                {% endif %}
-                <div class="profile-favorite-body">
-                  <h3>{{ artwork.title }}</h3>
-                  <p>{{ artwork.medium }}</p>
-                  <p class="profile-favorite-price">${{ artwork.price }}</p>
-                </div>
-              </a>
-            {% endfor %}
-          </div>
-        {% else %}
-          <p class="muted">You haven't saved any artworks yet. Click the banner icon on a details page to add one.</p>
-        {% endif %}
-      </section>
     </div>
   </main>
 {% endblock %}

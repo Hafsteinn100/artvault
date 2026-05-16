@@ -5,19 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}ArtVault{% endblock %}</title>
-    <script>
-      // Apply saved theme before paint to avoid flash.
-      if (localStorage.getItem('artvault-theme') === 'dark') {
-        document.documentElement.classList.add('theme-dark');
-      }
-    </script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link rel="stylesheet" href="{% static 'index.css' %}" />
     {% block extra_css %}{% endblock %}
-    <script src="{% static 'marketplace/index.js' %}?v=10" defer></script>
+    <script src="{% static 'marketplace/index.js' %}?v=9" defer></script>
     {% block extra_head %}{% endblock %}
   </head>
   <body class="{% block body_class %}{% endblock %}">
@@ -32,10 +26,6 @@
         {% if not finalization_locked %}
           <div class="nav-actions">
             <div class="primary-links">
-              <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode">
-                <i class="fa-solid fa-sun theme-icon theme-icon-sun" aria-hidden="true"></i>
-                <i class="fa-solid fa-moon theme-icon theme-icon-moon" aria-hidden="true"></i>
-              </button>
               <a href="{% url 'marketplace:artwork_list' %}">Browse art</a>
               {% if request.user.is_authenticated %}
                 <a href="{% url 'marketplace:bid_list' %}">My bids</a>

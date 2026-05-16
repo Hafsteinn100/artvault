@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Count, Q
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST, require_http_methods
@@ -213,18 +212,7 @@ def profile(request):
             return redirect('marketplace:profile')
         messages.error(request, 'Profile update failed. Please check the fields below.')
 
-    favorites = (
-        Favorite.objects.filter(user=request.user)
-        .select_related('artwork', 'artwork__seller', 'artwork__seller__user')
-        .prefetch_related('artwork__images')
-    )
-    favorite_artworks = [favorite.artwork for favorite in favorites]
-
-    return render(
-        request,
-        'marketplace/profile.html',
-        {'form': form, 'favorite_artworks': favorite_artworks},
-    )
+    return render(request, 'marketplace/profile.html', {'form': form})
 
 
 @login_required
@@ -361,23 +349,10 @@ def toggle_favorite(request, pk):
         artwork=artwork,
         user=request.user,
     )
-    if not created:
-        favorite.delete()
-    is_favorite = created
-
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        return JsonResponse({
-            'is_favorite': is_favorite,
-            'title': artwork.title,
-            'message': (
-                f'Added to favorites!' if is_favorite
-                else f'Removed from favorites.'
-            ),
-        })
-
-    if is_favorite:
+    if created:
         messages.success(request, f'{artwork.title} was added to your favorites.')
     else:
+        favorite.delete()
         messages.success(request, f'{artwork.title} was removed from your favorites.')
     return redirect_after_toggle(request, 'marketplace:artwork_list')
 
