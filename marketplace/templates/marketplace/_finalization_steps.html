@@ -1,0 +1,16 @@
+{% if finalization_steps %}
+  <nav class="wizard-steps" aria-label="Bid finalization steps">
+    {% for wizard_step in finalization_steps %}
+      {% if wizard_step.is_enabled %}
+        <a
+          class="wizard-step {% if wizard_step.is_current %}is-current{% endif %} {% if wizard_step.is_completed %}is-complete{% endif %}"
+          href="{{ wizard_step.url }}"
+        >
+          {{ wizard_step.label }}
+        </a>
+      {% else %}
+        <span class="wizard-step is-disabled">{{ wizard_step.label }}</span>
+      {% endif %}
+    {% endfor %}
+  </nav>
+{% endif %}

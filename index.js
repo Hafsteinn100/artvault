@@ -3,6 +3,159 @@ const pageSearchInput = document.querySelector("#page-search-input");
 
 let lastScroll = window.scrollY;
 
+const sellerPages = {
+    "mira-vale": {
+        name: "Mira Vale",
+        bio: "Contemporary painter and curator based in Reykjavik, listing original oil, watercolor, and mixed media works for collectors.",
+        about: "Mira works with layered pigments, quiet architectural forms, and warm earth tones. Each listing includes condition details, shipping notes, and bid windows before purchase finalization.",
+        listings: "12",
+        sales: "48",
+        rating: "4.9",
+        cover: "coverimg2verklegt2.webp",
+        coverAlt: "Framed artwork displayed above an orange sofa",
+        avatar: "profile.png",
+        artworks: [
+            {
+                title: "Abstract Oil Painting",
+                img: "medium-oil.jpg",
+                alt: "Abstract oil painting",
+                price: "$1,200",
+            },
+            {
+                title: "Green Gallery Study",
+                img: "pexels-minan1398-813269.jpg",
+                alt: "Green gallery study",
+                price: "$1,100",
+            },
+            {
+                title: "Oil Paint Study",
+                img: "../oilpaint1.jpeg",
+                alt: "Oil paint study",
+                price: "$1,050",
+            },
+        ],
+    },
+    "theo-rowan": {
+        name: "Theo Rowan",
+        bio: "Watercolor artist focused on atmospheric studies, soft city scenes, and calm interior pieces.",
+        about: "Theo's listings lean toward gentle color, layered washes, and compact works that fit easily into private collections.",
+        listings: "8",
+        sales: "31",
+        rating: "4.8",
+        cover: "medium-watercolor.jpg",
+        coverAlt: "Blue watercolor painting",
+        avatar: "profile.png",
+        artworks: [
+            {
+                title: "Blue Watercolor Painting",
+                img: "medium-watercolor.jpg",
+                alt: "Blue watercolor painting",
+                price: "$650",
+            },
+            {
+                title: "Urban Collection Study",
+                img: "pexels-ricky-kwong-113005840-35589498.jpg",
+                alt: "Urban collection study",
+                price: "$1,150",
+            },
+        ],
+    },
+    "lena-hart": {
+        name: "Lena Hart",
+        bio: "Gallery seller specializing in sculpture, landscape studies, and tactile contemporary pieces.",
+        about: "Lena presents selected works from studio visits and gallery consignments, with emphasis on material quality and provenance.",
+        listings: "10",
+        sales: "27",
+        rating: "4.7",
+        cover: "medium-sculpture.jpg",
+        coverAlt: "Sculpture artwork",
+        avatar: "profile.png",
+        artworks: [
+            {
+                title: "Sculpture Artwork",
+                img: "medium-sculpture.jpg",
+                alt: "Sculpture artwork",
+                price: "$2,400",
+            },
+            {
+                title: "Landscape Collection Study",
+                img: "pexels-sarmat-batagov-776392502-35072454.jpg",
+                alt: "Landscape collection study",
+                price: "$1,200",
+            },
+        ],
+    },
+    "niko-stone": {
+        name: "Niko Stone",
+        bio: "Photographer and digital seller listing landscape photographs, studies, and editioned visual work.",
+        about: "Niko's work centers on color, distance, and outdoor light, with listings prepared for collectors looking for bold wall pieces.",
+        listings: "9",
+        sales: "36",
+        rating: "4.9",
+        cover: "medium-photography.jpg",
+        coverAlt: "Red rock landscape photograph",
+        avatar: "profile.png",
+        artworks: [
+            {
+                title: "Red Rock Landscape Photograph",
+                img: "medium-photography.jpg",
+                alt: "Red rock landscape photograph",
+                price: "$900",
+            },
+            {
+                title: "Digital Artwork Study",
+                img: "../digitalart1.jpeg",
+                alt: "Digital artwork study",
+                price: "$750",
+            },
+        ],
+    },
+    "iris-calder": {
+        name: "Iris Calder",
+        bio: "Digital artist building vivid geometric works and painterly studies for contemporary collectors.",
+        about: "Iris mixes digital composition with bold color systems, offering accessible pieces and higher-value edition studies.",
+        listings: "11",
+        sales: "44",
+        rating: "4.9",
+        cover: "medium-digital.jpg",
+        coverAlt: "Colorful digital geometric artwork",
+        avatar: "profile.png",
+        artworks: [
+            {
+                title: "Colorful Digital Geometric Artwork",
+                img: "medium-digital.jpg",
+                alt: "Colorful digital geometric artwork",
+                price: "$480",
+            },
+            {
+                title: "Oil Paint Study",
+                img: "../oilpaint1.jpeg",
+                alt: "Oil paint study",
+                price: "$1,050",
+            },
+        ],
+    },
+    "sam-elvar": {
+        name: "Sam Elvar",
+        bio: "Collector-seller with featured gallery works and warm residential display pieces.",
+        about: "Sam lists selected works from private collections, focusing on pieces that are already framed or display-ready.",
+        listings: "6",
+        sales: "19",
+        rating: "4.6",
+        cover: "coverimg2verklegt2.webp",
+        coverAlt: "Framed artwork displayed above an orange sofa",
+        avatar: "profile.png",
+        artworks: [
+            {
+                title: "Featured Gallery Artwork",
+                img: "coverimg2verklegt2.webp",
+                alt: "Featured gallery artwork",
+                price: "$700",
+            },
+        ],
+    },
+};
+
 function moveNavbar() {
     if (!header) return;
 
@@ -49,6 +202,121 @@ function fillSearchBox() {
 
     if (searchText) {
         pageSearchInput.value = searchText;
+    }
+}
+
+function sellerSlug(name) {
+    return name
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+}
+
+function sellerPageUrl(name) {
+    return `seller.html?seller=${encodeURIComponent(sellerSlug(name))}`;
+}
+
+function setupSellerLinks() {
+    const sellerChips = document.querySelectorAll(".browse-seller, .latest-seller");
+
+    sellerChips.forEach((chip) => {
+        if (chip.classList.contains("browse-seller")) {
+            const artworkLink = chip.closest("a");
+            const resultCard = artworkLink ? artworkLink.closest(".search-result-card") : null;
+
+            if (artworkLink && resultCard && chip.parentElement === artworkLink) {
+                artworkLink.after(chip);
+            }
+        }
+
+        const nameElement = chip.querySelector(".seller-name, .latest-seller-name");
+        if (!nameElement) return;
+
+        const sellerName = nameElement.textContent.trim();
+        if (!sellerName) return;
+
+        chip.setAttribute("role", "link");
+        chip.setAttribute("tabindex", "0");
+        chip.setAttribute("aria-label", `View seller page for ${sellerName}`);
+
+        const openSeller = (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            window.location.href = sellerPageUrl(sellerName);
+        };
+
+        chip.addEventListener("click", openSeller);
+        chip.addEventListener("keydown", (event) => {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            openSeller(event);
+        });
+    });
+}
+
+function createSellerArtworkCard(artwork) {
+    const article = document.createElement("article");
+    article.className = "search-result-card";
+
+    const link = document.createElement("a");
+    const detailsParams = new URLSearchParams({
+        img: artwork.img,
+        title: artwork.title,
+    });
+    link.href = `details.html?${detailsParams.toString()}`;
+
+    const image = document.createElement("img");
+    image.src = artwork.img;
+    image.alt = artwork.alt;
+
+    const price = document.createElement("span");
+    price.className = "browse-price";
+    price.textContent = artwork.price;
+
+    link.append(image, price);
+    article.append(link);
+
+    return article;
+}
+
+function loadSellerPage() {
+    if (!document.body.classList.contains("seller-page")) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const selectedSeller = params.get("seller") || "mira-vale";
+    const seller = sellerPages[selectedSeller] || sellerPages["mira-vale"];
+
+    document.title = `${seller.name} - ArtVault`;
+
+    const cover = document.querySelector(".seller-cover");
+    const avatar = document.querySelector(".seller-avatar-large");
+    const name = document.getElementById("seller-name");
+    const bio = document.getElementById("seller-bio");
+    const about = document.getElementById("seller-about-text");
+    const listings = document.getElementById("seller-listing-count");
+    const sales = document.getElementById("seller-sales-count");
+    const rating = document.getElementById("seller-rating");
+    const grid = document.getElementById("seller-art-grid");
+
+    if (cover) {
+        cover.src = seller.cover;
+        cover.alt = seller.coverAlt;
+    }
+
+    if (avatar) {
+        avatar.src = seller.avatar;
+        avatar.alt = seller.name;
+    }
+
+    if (name) name.textContent = seller.name;
+    if (bio) bio.textContent = seller.bio;
+    if (about) about.textContent = seller.about;
+    if (listings) listings.textContent = seller.listings;
+    if (sales) sales.textContent = seller.sales;
+    if (rating) rating.textContent = seller.rating;
+
+    if (grid) {
+        grid.replaceChildren(...seller.artworks.map(createSellerArtworkCard));
     }
 }
 
@@ -105,6 +373,8 @@ function setupBrowseMasonry() {
 moveNavbar();
 loadNavbarProfile();
 fillSearchBox();
+setupSellerLinks();
+loadSellerPage();
 setupBrowseMasonry();
 
 window.addEventListener("scroll", moveNavbar, { passive: true });

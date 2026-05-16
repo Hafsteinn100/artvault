@@ -16,6 +16,9 @@
           {% if request.user.is_authenticated %}
             <a href="{% url 'marketplace:favorite_list' %}">Favorites</a>
             <a href="{% url 'marketplace:bid_list' %}">My bids</a>
+            {% if request.user.seller %}
+              <a href="{% url 'marketplace:seller_bid_list' %}">Seller bids</a>
+            {% endif %}
             <a href="{% url 'marketplace:profile' %}">Profile</a>
             <form action="{% url 'marketplace:logout' %}" method="post">
               {% csrf_token %}

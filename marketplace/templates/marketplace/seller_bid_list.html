@@ -1,0 +1,62 @@
+{% extends 'marketplace/base.html' %}
+
+{% block title %}Seller Bids | ArtVault{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">Seller Bids</h1>
+
+  {% if seller %}
+    <p class="lead">Review bids submitted for artworks listed by {{ seller.name }}.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Artwork</th>
+          <th>Bidder</th>
+          <th>Date of bid</th>
+          <th>Expiration</th>
+          <th>Bid price</th>
+          <th>Status</th>
+          <th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bid in bids %}
+          <tr>
+            <td><a href="{% url 'marketplace:artwork_detail' bid.artwork.pk %}">{{ bid.artwork.title }}</a></td>
+            <td>{% firstof bid.bidder.profile.name bid.bidder.username %}</td>
+            <td>{{ bid.created_at|date:'Y-m-d H:i' }}</td>
+            <td>{{ bid.expiration|date:'Y-m-d H:i' }}</td>
+            <td>${{ bid.price }}</td>
+            <td>{{ bid.status }}</td>
+            <td>
+              {% if bid.finalization.finalized_at %}
+                <span class="muted">Finalized</span>
+              {% else %}
+                <form class="inline-form" action="{% url 'marketplace:update_seller_bid_status' bid.pk %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                  <select name="status" aria-label="Status for {{ bid.artwork.title }}">
+                    {% for status_value, status_label in bid_status_choices %}
+                      <option value="{{ status_value }}" {% if bid.status == status_value %}selected{% endif %}>{{ status_label }}</option>
+                    {% endfor %}
+                  </select>
+                  <button type="submit">Save</button>
+                </form>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7">No bids have been submitted for your artworks yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <section class="empty-panel">
+      <h2>No seller profile</h2>
+      <p class="lead">This page is available to accounts connected to an ArtVault seller.</p>
+    </section>
+  {% endif %}
+{% endblock %}

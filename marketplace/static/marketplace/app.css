@@ -371,11 +371,44 @@ input[type='submit'] {
 .meta-row,
 .actions,
 .pagination,
-.wizard-nav {
+.wizard-nav,
+.wizard-steps,
+.inline-form {
   display: flex;
   gap: 12px;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.wizard-steps {
+  margin: 18px 0 24px;
+}
+
+.wizard-step {
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: white;
+  color: var(--accent-dark);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.wizard-step.is-current {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
+}
+
+.wizard-step.is-disabled {
+  color: var(--muted);
+  opacity: 0.62;
+}
+
+.inline-form select {
+  width: auto;
+  min-width: 140px;
 }
 
 .badge {

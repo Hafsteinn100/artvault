@@ -404,9 +404,16 @@ body {
     align-items: center;
     gap: 5px;
     max-width: 72%;
+    cursor: pointer;
+    text-decoration: none;
     opacity: 0;
     transform: translateY(4px);
     transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.latest-seller:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 3px;
 }
 
 .art-image-wrap:hover .medium-tag,

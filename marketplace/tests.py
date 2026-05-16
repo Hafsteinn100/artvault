@@ -60,6 +60,12 @@ class MarketplaceFlowTests(TestCase):
         self.assertContains(response, 'Red Bloom')
         self.assertNotContains(response, 'Blue Valley')
 
+    def test_home_shows_latest_database_artworks(self):
+        response = self.client.get(reverse('marketplace:home'))
+
+        self.assertContains(response, 'Red Bloom')
+        self.assertContains(response, 'Blue Valley')
+
     def test_submit_bid_requires_login(self):
         response = self.client.get(reverse('marketplace:submit_bid', args=[self.oil.pk]))
 
@@ -85,6 +91,19 @@ class MarketplaceFlowTests(TestCase):
                 status=Bid.BidStatus.PENDING,
             ).exists()
         )
+
+    def test_seller_cannot_bid_on_own_artwork(self):
+        self.client.login(username='seller', password='artvault123')
+        response = self.client.post(
+            reverse('marketplace:submit_bid', args=[self.oil.pk]),
+            {
+                'price': '1300.00',
+                'expiration': (timezone.now() + timedelta(days=5)).strftime('%Y-%m-%dT%H:%M'),
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Bid.objects.filter(artwork=self.oil, bidder=self.seller_user).exists())
 
     def test_logged_in_user_can_add_and_remove_favorite(self):
         self.client.login(username='collector', password='artvault123')
@@ -121,6 +140,102 @@ class MarketplaceFlowTests(TestCase):
 
         self.assertContains(response, 'Blue Valley')
         self.assertNotContains(response, 'Red Bloom')
+
+    def test_seller_can_see_bids_for_their_artworks(self):
+        Bid.objects.create(
+            artwork=self.photo,
+            bidder=self.collector,
+            price='950.00',
+            expiration=timezone.now() + timedelta(days=7),
+        )
+        self.client.login(username='seller', password='artvault123')
+
+        response = self.client.get(reverse('marketplace:seller_bid_list'))
+
+        self.assertContains(response, 'Blue Valley')
+        self.assertContains(response, 'Marta Collector')
+
+    def test_seller_can_accept_bid_and_reject_competing_bids(self):
+        other_buyer = User.objects.create_user(
+            username='other_buyer',
+            email='other@example.com',
+            password='artvault123',
+        )
+        Profile.objects.create(user=other_buyer, name='Other Buyer')
+        accepted_bid = Bid.objects.create(
+            artwork=self.photo,
+            bidder=self.collector,
+            price='950.00',
+            expiration=timezone.now() + timedelta(days=7),
+        )
+        competing_bid = Bid.objects.create(
+            artwork=self.photo,
+            bidder=other_buyer,
+            price='980.00',
+            expiration=timezone.now() + timedelta(days=8),
+        )
+        self.client.login(username='seller', password='artvault123')
+
+        response = self.client.post(
+            reverse('marketplace:update_seller_bid_status', args=[accepted_bid.pk]),
+            {'status': Bid.BidStatus.ACCEPTED},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        accepted_bid.refresh_from_db()
+        competing_bid.refresh_from_db()
+        self.assertEqual(accepted_bid.status, Bid.BidStatus.ACCEPTED)
+        self.assertEqual(competing_bid.status, Bid.BidStatus.REJECTED)
+        self.assertTrue(self.photo.is_sold)
+
+    def test_buyer_cannot_update_seller_bid_status(self):
+        bid = Bid.objects.create(
+            artwork=self.photo,
+            bidder=self.collector,
+            price='950.00',
+            expiration=timezone.now() + timedelta(days=7),
+        )
+        self.client.login(username='collector', password='artvault123')
+
+        response = self.client.post(
+            reverse('marketplace:update_seller_bid_status', args=[bid.pk]),
+            {'status': Bid.BidStatus.ACCEPTED},
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_seller_cannot_accept_second_bid_for_sold_artwork(self):
+        other_buyer = User.objects.create_user(
+            username='other_buyer',
+            email='other@example.com',
+            password='artvault123',
+        )
+        Profile.objects.create(user=other_buyer, name='Other Buyer')
+        existing_accepted_bid = Bid.objects.create(
+            artwork=self.photo,
+            bidder=self.collector,
+            price='950.00',
+            expiration=timezone.now() + timedelta(days=7),
+            status=Bid.BidStatus.ACCEPTED,
+        )
+        competing_bid = Bid.objects.create(
+            artwork=self.photo,
+            bidder=other_buyer,
+            price='980.00',
+            expiration=timezone.now() + timedelta(days=8),
+        )
+        self.client.login(username='seller', password='artvault123')
+
+        response = self.client.post(
+            reverse('marketplace:update_seller_bid_status', args=[competing_bid.pk]),
+            {'status': Bid.BidStatus.ACCEPTED},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        existing_accepted_bid.refresh_from_db()
+        competing_bid.refresh_from_db()
+        self.assertEqual(existing_accepted_bid.status, Bid.BidStatus.ACCEPTED)
+        self.assertEqual(competing_bid.status, Bid.BidStatus.PENDING)
 
     def test_finalize_accepted_bid(self):
         bid = Bid.objects.create(
@@ -159,3 +274,20 @@ class MarketplaceFlowTests(TestCase):
                 payment_method='bank_transfer',
             ).exists()
         )
+
+    def test_finalize_contact_page_exposes_step_navigation(self):
+        bid = Bid.objects.create(
+            artwork=self.oil,
+            bidder=self.collector,
+            price='1300.00',
+            expiration=timezone.now() + timedelta(days=7),
+            status=Bid.BidStatus.ACCEPTED,
+        )
+        self.client.login(username='collector', password='artvault123')
+
+        response = self.client.get(reverse('marketplace:finalize_bid', args=[bid.pk]))
+
+        self.assertContains(response, 'Bid finalization steps')
+        self.assertContains(response, 'Contact')
+        self.assertContains(response, 'Payment')
+        self.assertContains(response, 'Review')

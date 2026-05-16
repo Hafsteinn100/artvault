@@ -15,6 +15,12 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('favorites/', views.favorite_list, name='favorite_list'),
     path('bids/', views.bid_list, name='bid_list'),
+    path('seller/bids/', views.seller_bid_list, name='seller_bid_list'),
+    path(
+        'seller/bids/<int:pk>/status/',
+        views.update_seller_bid_status,
+        name='update_seller_bid_status',
+    ),
     path('bids/<int:pk>/finalize/', views.finalize_bid, name='finalize_bid'),
     path(
         'bids/<int:pk>/finalize/<str:step>/',

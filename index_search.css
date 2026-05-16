@@ -151,6 +151,7 @@
 }
 
 .search-result-card {
+    position: relative;
     width: 100%;
     overflow: hidden;
     background: #FCFAF6;
@@ -205,14 +206,21 @@
     align-items: center;
     gap: 5px;
     max-width: 72%;
-    pointer-events: none;
+    cursor: pointer;
+    pointer-events: auto;
+    text-decoration: none;
     opacity: 0;
     transform: translateY(4px);
     transition: opacity 160ms ease, transform 160ms ease;
 }
 
-.search-result-card a:hover .browse-seller,
-.search-result-card a:focus-visible .browse-seller {
+.browse-seller:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 3px;
+}
+
+.search-result-card:hover .browse-seller,
+.search-result-card:focus-within .browse-seller {
     opacity: 1;
     transform: translateY(0);
 }

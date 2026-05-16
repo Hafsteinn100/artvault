@@ -6,6 +6,8 @@
   <h1 class="page-title">Review</h1>
   <p class="lead">{{ bid.artwork.title }} · ${{ bid.price }}</p>
 
+  {% include 'marketplace/_finalization_steps.html' %}
+
   <section class="review-panel">
     <h2>Contact information</h2>
     <p><strong>Street:</strong> {{ contact.street_name }}</p>

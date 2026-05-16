@@ -6,6 +6,8 @@
   <h1 class="page-title">Finalize Bid</h1>
   <p class="lead">{{ bid.artwork.title }} · ${{ bid.price }}</p>
 
+  {% include 'marketplace/_finalization_steps.html' %}
+
   <form class="form-panel" method="post">
     {% csrf_token %}
     <h2>Contact information</h2>

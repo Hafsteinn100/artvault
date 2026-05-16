@@ -4,19 +4,29 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db import transaction
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST, require_http_methods
 
 from .forms import (
     BidForm,
+    BidStatusForm,
     FinalizationContactForm,
     FinalizationPaymentForm,
     ProfileForm,
     RegisterForm,
 )
 from .models import Artwork, Bid, BidFinalization, Favorite, Profile, Seller
+
+
+FINALIZATION_STEPS = [
+    ('contact', 'Contact'),
+    ('payment', 'Payment'),
+    ('review', 'Review'),
+]
 
 
 def get_or_create_profile(user):
@@ -58,12 +68,43 @@ def redirect_after_toggle(request, fallback):
     return redirect(fallback)
 
 
+def current_seller(user):
+    try:
+        return user.seller
+    except Seller.DoesNotExist:
+        return None
+
+
+def finalization_context(bid, current_step, data):
+    enabled_steps = {'contact'}
+    completed_steps = []
+    if 'contact' in data:
+        enabled_steps.add('payment')
+        completed_steps.append('contact')
+    if 'contact' in data and 'payment' in data:
+        enabled_steps.add('review')
+        completed_steps.append('payment')
+
+    return {
+        'bid': bid,
+        'current_step': current_step,
+        'completed_steps': completed_steps,
+        'finalization_steps': [
+            {
+                'key': key,
+                'label': label,
+                'url': reverse('marketplace:finalize_bid_step', args=[bid.pk, key]),
+                'is_current': key == current_step,
+                'is_enabled': key in enabled_steps,
+                'is_completed': key in completed_steps,
+            }
+            for key, label in FINALIZATION_STEPS
+        ],
+    }
+
+
 def home(request):
-    latest_titles = ['Bloom Study', 'Quiet Interior', 'Spring Canopy', 'Prism Field']
-    latest_artworks = sorted(
-        artwork_queryset().filter(title__in=latest_titles),
-        key=lambda artwork: latest_titles.index(artwork.title),
-    )
+    latest_artworks = artwork_queryset().order_by('-created_at')[:4]
     return render(
         request,
         'marketplace/home.html',
@@ -210,6 +251,9 @@ def submit_bid(request, pk):
     if artwork.is_sold:
         messages.error(request, 'This artwork has already been sold.')
         return redirect('marketplace:artwork_detail', pk=artwork.pk)
+    if current_seller(request.user) == artwork.seller:
+        messages.error(request, 'Sellers cannot bid on their own artwork.')
+        return redirect('marketplace:artwork_detail', pk=artwork.pk)
 
     existing_bid = Bid.objects.filter(artwork=artwork, bidder=request.user).first()
     form = BidForm(request.POST or None, instance=existing_bid)
@@ -244,6 +288,68 @@ def bid_list(request):
         .order_by('-created_at')
     )
     return render(request, 'marketplace/bid_list.html', {'bids': bids})
+
+
+@login_required
+def seller_bid_list(request):
+    seller = current_seller(request.user)
+    bids = Bid.objects.none()
+    if seller is None:
+        messages.error(request, 'Only seller accounts can manage artwork bids.')
+    else:
+        bids = (
+            Bid.objects.filter(artwork__seller=seller)
+            .select_related('artwork', 'bidder', 'bidder__profile')
+            .order_by('-created_at')
+        )
+
+    return render(
+        request,
+        'marketplace/seller_bid_list.html',
+        {
+            'seller': seller,
+            'bids': bids,
+            'bid_status_choices': Bid.BidStatus.choices,
+        },
+    )
+
+
+@login_required
+@require_POST
+def update_seller_bid_status(request, pk):
+    bid = get_object_or_404(
+        Bid.objects.select_related('artwork', 'artwork__seller'),
+        pk=pk,
+        artwork__seller__user=request.user,
+    )
+    if hasattr(bid, 'finalization') and bid.finalization.finalized_at:
+        messages.error(request, 'Finalized bids can no longer be changed.')
+        return redirect_after_toggle(request, 'marketplace:seller_bid_list')
+
+    form = BidStatusForm(request.POST, instance=bid)
+    if form.is_valid():
+        new_status = form.cleaned_data['status']
+        if (
+            new_status == Bid.BidStatus.ACCEPTED
+            and Bid.objects.filter(
+                artwork=bid.artwork,
+                status=Bid.BidStatus.ACCEPTED,
+            ).exclude(pk=bid.pk).exists()
+        ):
+            messages.error(request, 'This artwork already has an accepted bid.')
+            return redirect_after_toggle(request, 'marketplace:seller_bid_list')
+
+        with transaction.atomic():
+            bid = form.save()
+            if bid.status == Bid.BidStatus.ACCEPTED:
+                Bid.objects.filter(artwork=bid.artwork).exclude(pk=bid.pk).update(
+                    status=Bid.BidStatus.REJECTED,
+                )
+        messages.success(request, f'Bid for {bid.artwork.title} was marked {bid.status}.')
+    else:
+        messages.error(request, 'Bid status could not be updated.')
+
+    return redirect_after_toggle(request, 'marketplace:seller_bid_list')
 
 
 @login_required
@@ -319,7 +425,9 @@ def finalize_bid(request, pk, step='contact'):
             data['contact'] = form.cleaned_data
             save_finalization_data(request, bid, data)
             return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='payment')
-        return render(request, 'marketplace/finalize_contact.html', {'bid': bid, 'form': form})
+        context = finalization_context(bid, step, data)
+        context['form'] = form
+        return render(request, 'marketplace/finalize_contact.html', context)
 
     if step == 'payment':
         if 'contact' not in data:
@@ -329,7 +437,9 @@ def finalize_bid(request, pk, step='contact'):
             data['payment'] = form.cleaned_data
             save_finalization_data(request, bid, data)
             return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='review')
-        return render(request, 'marketplace/finalize_payment.html', {'bid': bid, 'form': form})
+        context = finalization_context(bid, step, data)
+        context['form'] = form
+        return render(request, 'marketplace/finalize_payment.html', context)
 
     if step == 'review':
         if 'contact' not in data:
@@ -369,14 +479,13 @@ def finalize_bid(request, pk, step='contact'):
             messages.success(request, 'Your bid was finalized successfully.')
             return redirect('marketplace:finalize_bid_step', pk=bid.pk, step='confirmation')
 
-        return render(
-            request,
-            'marketplace/finalize_review.html',
+        context = finalization_context(bid, step, data)
+        context.update(
             {
-                'bid': bid,
                 'contact': data['contact'],
                 'payment': data['payment'],
-            },
+            }
         )
+        return render(request, 'marketplace/finalize_review.html', context)
 
     return render(request, 'marketplace/finalize_confirmation.html', {'bid': bid})

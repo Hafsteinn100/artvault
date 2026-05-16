@@ -46,6 +46,12 @@ class BidForm(forms.ModelForm):
         return expiration
 
 
+class BidStatusForm(forms.ModelForm):
+    class Meta:
+        model = Bid
+        fields = ['status']
+
+
 COUNTRY_CHOICES = [
     ('Iceland', 'Iceland'),
     ('Denmark', 'Denmark'),

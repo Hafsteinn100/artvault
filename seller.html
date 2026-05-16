@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seller - ArtVault</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="index_search.css" />
+    <link rel="stylesheet" href="seller.css" />
+    <script src="index.js?v=7" defer></script>
+  </head>
+  <body class="seller-page search-page">
+    <header class="site-header">
+      <nav class="top-nav" aria-label="Main navigation">
+        <a class="brand" href="index.html">ArtVault</a>
+
+        <div class="nav-actions">
+          <div class="primary-links">
+            <a href="index_search.html">Browse art</a>
+            <a href="#">My bids</a>
+          </div>
+
+          <form class="search-form" action="index_search.html" method="get">
+            <label class="visually-hidden" for="search-input"
+              >Search ArtVault</label
+            >
+            <input
+              id="search-input"
+              type="search"
+              name="q"
+              placeholder="Hinted search text"
+            />
+            <button class="search-button" type="submit" aria-label="Search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m16.5 16.5 4 4"></path>
+              </svg>
+            </button>
+          </form>
+
+          <a class="profile-button" href="profile.html" aria-label="Profile">
+            <span id="homepage-username"></span>
+            <img id="homepage-profile" src="profile.png" alt="Profile" />
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="seller-main">
+      <section class="seller-hero" aria-labelledby="seller-name">
+        <div class="seller-cover-wrap">
+          <img
+            class="seller-cover"
+            src="coverimg2verklegt2.webp"
+            alt="Framed artwork displayed above an orange sofa"
+          />
+        </div>
+
+        <div class="seller-profile">
+          <img class="seller-avatar-large" src="profile.png" alt="Mira Vale" />
+          <div class="seller-intro">
+            <p class="seller-kicker">Verified seller</p>
+            <h1 id="seller-name">Mira Vale</h1>
+            <p id="seller-bio">
+              Contemporary painter and curator based in Reykjavik, listing
+              original oil, watercolor, and mixed media works for collectors.
+            </p>
+          </div>
+          <dl class="seller-stats" aria-label="Seller stats">
+            <div>
+              <dt>Listings</dt>
+              <dd id="seller-listing-count">12</dd>
+            </div>
+            <div>
+              <dt>Sales</dt>
+              <dd id="seller-sales-count">48</dd>
+            </div>
+            <div>
+              <dt>Rating</dt>
+              <dd id="seller-rating">4.9</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="seller-content" aria-labelledby="seller-artworks">
+        <div class="seller-about">
+          <h2>About</h2>
+          <p id="seller-about-text">
+            Mira works with layered pigments, quiet architectural forms, and
+            warm earth tones. Each listing includes condition details, shipping
+            notes, and bid windows before purchase finalization.
+          </p>
+          <a class="seller-contact" href="mailto:hello@artvault.com">
+            Contact seller
+          </a>
+        </div>
+
+        <div class="seller-listings">
+          <div class="seller-section-heading">
+            <h2 id="seller-artworks">Listed artworks</h2>
+            <a href="index_search.html">Browse all</a>
+          </div>
+
+          <div class="seller-art-grid" id="seller-art-grid">
+            <article class="search-result-card">
+              <a
+                href="details.html?img=medium-oil.jpg&title=Abstract%20Oil%20Painting"
+              >
+                <img src="medium-oil.jpg" alt="Abstract oil painting" />
+                <span class="browse-price">$1,200</span>
+              </a>
+            </article>
+            <article class="search-result-card">
+              <a
+                href="details.html?img=pexels-minan1398-813269.jpg&title=Green%20Gallery%20Study"
+              >
+                <img src="pexels-minan1398-813269.jpg" alt="Green gallery study" />
+                <span class="browse-price">$1,100</span>
+              </a>
+            </article>
+            <article class="search-result-card">
+              <a
+                href="details.html?img=..%2Foilpaint1.jpeg&title=Oil%20Paint%20Study"
+              >
+                <img src="../oilpaint1.jpeg" alt="Oil paint study" />
+                <span class="browse-price">$1,050</span>
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <h3>About</h3>
+          <p>
+            ArtVault connects collectors with original works from artists and
+            trusted sellers around the world.
+          </p>
+        </div>
+        <div>
+          <h3>Quick Links</h3>
+          <a href="index_search.html">Browse</a>
+          <a href="#">My Bids</a>
+          <a href="profile.html">Profile</a>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>hello@artvault.com</p>
+          <div class="social-icons" aria-label="Social links">
+            <a class="instagram-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a class="social-icon-link" href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+            <a class="social-icon-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          </div>
+        </div>
+      </div>
+      <p class="copyright">&copy; 2026 ArtVault. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

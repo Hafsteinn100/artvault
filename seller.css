@@ -1,0 +1,226 @@
+.seller-page {
+    background: var(--cream);
+    color: var(--search-brown);
+}
+
+.seller-main {
+    min-height: 100vh;
+    padding-top: clamp(118px, 13vh, 150px);
+    background: var(--cream);
+}
+
+.seller-hero,
+.seller-content {
+    width: min(calc(100vw - 40px), 1400px);
+    margin: 0 auto;
+}
+
+.seller-hero {
+    overflow: hidden;
+    border: 1px solid #EDE5DB;
+    border-radius: 8px;
+    background: #FCFAF6;
+    box-shadow: 0 12px 28px rgba(59, 31, 14, 0.08);
+}
+
+.seller-cover-wrap {
+    height: clamp(260px, 36vw, 420px);
+    overflow: hidden;
+    background: var(--soft-gray);
+}
+
+.seller-cover {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+
+.seller-profile {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(18px, 3vw, 34px);
+    padding: clamp(22px, 3vw, 34px);
+}
+
+.seller-avatar-large {
+    width: clamp(96px, 10vw, 132px);
+    height: clamp(96px, 10vw, 132px);
+    display: block;
+    object-fit: cover;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 12px 28px rgba(59, 31, 14, 0.16);
+}
+
+.seller-kicker {
+    margin-bottom: 8px;
+    color: #746C65;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.seller-intro h1,
+.seller-about h2,
+.seller-section-heading h2 {
+    color: var(--brown);
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    line-height: 1.12;
+}
+
+.seller-intro h1 {
+    margin-bottom: 10px;
+    font-size: clamp(2.1rem, 4vw, 4rem);
+}
+
+.seller-intro p,
+.seller-about p {
+    max-width: 680px;
+    color: #6B5B4E;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.seller-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(76px, 1fr));
+    gap: 12px;
+}
+
+.seller-stats div {
+    min-width: 84px;
+    padding: 14px 12px;
+    border: 1px solid #EDE5DB;
+    border-radius: 8px;
+    background: var(--soft-gray);
+    text-align: center;
+}
+
+.seller-stats dt {
+    margin-bottom: 6px;
+    color: #746C65;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.seller-stats dd {
+    color: var(--brown);
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+.seller-content {
+    display: grid;
+    grid-template-columns: minmax(240px, 340px) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 48px);
+    padding: clamp(28px, 4vw, 50px) 0 clamp(50px, 7vw, 78px);
+}
+
+.seller-about {
+    align-self: start;
+    display: grid;
+    gap: 14px;
+    padding: 22px;
+    border: 1px solid #EDE5DB;
+    border-radius: 8px;
+    background: #FCFAF6;
+}
+
+.seller-about h2,
+.seller-section-heading h2 {
+    font-size: clamp(1.5rem, 2vw, 2rem);
+}
+
+.seller-contact {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 0 18px;
+    border-radius: 8px;
+    background: var(--brown);
+    color: #fff;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.seller-listings {
+    min-width: 0;
+}
+
+.seller-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.seller-section-heading a {
+    color: var(--brown);
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.seller-art-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: clamp(16px, 2vw, 24px);
+}
+
+.seller-art-grid .search-result-card img {
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+}
+
+@media (max-width: 980px) {
+    .seller-profile,
+    .seller-content {
+        grid-template-columns: 1fr;
+    }
+
+    .seller-profile {
+        justify-items: start;
+    }
+
+    .seller-stats {
+        width: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    .seller-main {
+        padding-top: 172px;
+    }
+
+    .seller-hero,
+    .seller-content {
+        width: 100%;
+    }
+
+    .seller-hero {
+        border-right: 0;
+        border-left: 0;
+        border-radius: 0;
+    }
+
+    .seller-content {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+
+    .seller-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .seller-stats {
+        grid-template-columns: 1fr;
+    }
+}
