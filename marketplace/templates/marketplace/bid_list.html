@@ -1,44 +1,68 @@
 {% extends 'marketplace/base.html' %}
+{% load static %}
 
-{% block title %}My Bids | ArtVault{% endblock %}
+{% block title %}My Bids - ArtVault{% endblock %}
+
+{% block body_class %}profile-page{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'mybids.css' %}" />
+{% endblock %}
 
 {% block content %}
-  <h1 class="page-title">My Bids</h1>
+  <main class="auth">
+    <div class="auth-container">
+      <section class="bids-view">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">Collector dashboard</p>
+            <h1>My Bids</h1>
+          </div>
+        </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Artwork</th>
-        <th>Date of bid</th>
-        <th>Expiration</th>
-        <th>Status</th>
-        <th>Seller</th>
-        <th>Bid price</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for bid in bids %}
-        <tr>
-          <td><a href="{% url 'marketplace:artwork_detail' bid.artwork.pk %}">{{ bid.artwork.title }}</a></td>
-          <td>{{ bid.created_at|date:'Y-m-d H:i' }}</td>
-          <td>{{ bid.expiration|date:'Y-m-d H:i' }}</td>
-          <td>{{ bid.status }}</td>
-          <td>{{ bid.artwork.seller.name }}</td>
-          <td>${{ bid.price }}</td>
-          <td>
-            {% if bid.status == 'Accepted' or bid.status == 'Contingent' %}
-              <a class="button secondary" href="{% url 'marketplace:finalize_bid' bid.pk %}">Finalize</a>
-            {% else %}
-              <span class="muted">Not available</span>
-            {% endif %}
-          </td>
-        </tr>
-      {% empty %}
-        <tr>
-          <td colspan="7">You have not submitted any bids yet.</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+        {% if bids %}
+          <div class="bids-table-wrap">
+            <table class="bids-table">
+              <thead>
+                <tr>
+                  <th>Artwork</th>
+                  <th>Date of bid</th>
+                  <th>Expiration</th>
+                  <th>Status</th>
+                  <th>Seller</th>
+                  <th>Bid price</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for bid in bids %}
+                  <tr>
+                    <td>
+                      <a href="{% url 'marketplace:artwork_detail' bid.artwork.pk %}">{{ bid.artwork.title }}</a>
+                    </td>
+                    <td>{{ bid.created_at|date:'Y-m-d H:i' }}</td>
+                    <td>{{ bid.expiration|date:'Y-m-d H:i' }}</td>
+                    <td>
+                      <span class="status {{ bid.status|lower }}">{{ bid.status }}</span>
+                    </td>
+                    <td>{{ bid.artwork.seller.name }}</td>
+                    <td>${{ bid.price }}</td>
+                    <td>
+                      {% if bid.status == 'Accepted' or bid.status == 'Contingent' %}
+                        <a class="text-action" href="{% url 'marketplace:finalize_bid' bid.pk %}">Finalize</a>
+                      {% else %}
+                        <span class="muted">Not available</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="muted">You haven't placed any bids yet. <a href="{% url 'marketplace:artwork_list' %}">Browse artworks</a> to get started.</p>
+        {% endif %}
+      </section>
+    </div>
+  </main>
 {% endblock %}

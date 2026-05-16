@@ -1,157 +1,97 @@
 {% extends 'marketplace/base.html' %}
 {% load static %}
 
-{% block title %}Artwork Catalogue | ArtVault{% endblock %}
+{% block title %}Browse art - ArtVault{% endblock %}
+
+{% block body_class %}search-page{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'index_search.css' %}" />
+{% endblock %}
 
 {% block content %}
-  <h1 class="page-title">Artwork Catalogue</h1>
+  <main class="search-results-page">
+    <section class="search-results-hero" aria-label="Artwork search">
+      <div class="section-inner search-results-inner">
+        <div class="search-results-heading">
+          <form class="search-form page-search-form" action="{% url 'marketplace:artwork_list' %}" method="get">
+            <label class="visually-hidden" for="page-search-input">Search ArtVault</label>
+            <input
+              id="page-search-input"
+              type="search"
+              name="q"
+              placeholder="Hinted search text"
+              value="{{ filters.q|default:'' }}"
+            />
+            {% if filters.medium %}<input type="hidden" name="medium" value="{{ filters.medium }}" />{% endif %}
+            <button class="search-button" type="submit" aria-label="Search">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m16.5 16.5 4 4"></path>
+              </svg>
+            </button>
+          </form>
+        </div>
 
-  <form class="filters" method="get">
-    <div>
-      <label for="q">Search title</label>
-      <input id="q" name="q" value="{{ filters.q }}" placeholder="Spring Canopy">
-    </div>
-    <div>
-      <label for="medium">Medium</label>
-      <select id="medium" name="medium">
-        <option value="">All mediums</option>
-        {% for option in mediums %}
-          <option value="{{ option }}" {% if filters.medium == option %}selected{% endif %}>{{ option }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div>
-      <label for="style">Style</label>
-      <select id="style" name="style">
-        <option value="">All styles</option>
-        {% for option in styles %}
-          <option value="{{ option }}" {% if filters.style == option %}selected{% endif %}>{{ option }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div>
-      <label for="min_price">Min price</label>
-      <input id="min_price" type="number" step="0.01" name="min_price" value="{{ filters.min_price }}">
-    </div>
-    <div>
-      <label for="max_price">Max price</label>
-      <input id="max_price" type="number" step="0.01" name="max_price" value="{{ filters.max_price }}">
-    </div>
-    <div>
-      <label for="order">Order</label>
-      <select id="order" name="order">
-        <option value="">Newest</option>
-        <option value="price" {% if filters.order == 'price' %}selected{% endif %}>Price low to high</option>
-        <option value="-price" {% if filters.order == '-price' %}selected{% endif %}>Price high to low</option>
-        <option value="title" {% if filters.order == 'title' %}selected{% endif %}>Title A to Z</option>
-        <option value="-title" {% if filters.order == '-title' %}selected{% endif %}>Title Z to A</option>
-      </select>
-    </div>
-    <button type="submit">Apply filters</button>
-  </form>
-
-  <div class="grid browse-grid">
-    {% for artwork in page_obj %}
-      <article class="card">
-        <div class="browse-image-wrap">
-          <span class="browse-title-tag">{{ artwork.title }}</span>
-          {% if artwork.thumbnail %}
-            <img class="art-thumb" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}">
-          {% else %}
-            <img class="art-thumb" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
-          {% endif %}
-          <span class="browse-price">from ${{ artwork.starting_bid_price }}</span>
-          <span class="browse-seller">
-            <span class="seller-name">{{ artwork.seller.name }}</span>
-            <span class="seller-avatar" aria-hidden="true"></span>
-          </span>
-          {% if request.user.is_authenticated %}
-            <form class="favorite-form" action="{% url 'marketplace:toggle_favorite' artwork.pk %}" method="post">
-              {% csrf_token %}
-              <input type="hidden" name="next" value="{{ request.get_full_path }}">
-              <button
-                class="favorite-button {% if artwork.pk in favorite_artwork_ids %}is-favorite{% endif %}"
-                type="submit"
-                aria-label="{% if artwork.pk in favorite_artwork_ids %}Remove {{ artwork.title }} from favorites{% else %}Add {{ artwork.title }} to favorites{% endif %}"
-                title="{% if artwork.pk in favorite_artwork_ids %}Remove from favorites{% else %}Add to favorites{% endif %}"
-              >
-                {% if artwork.pk in favorite_artwork_ids %}♥{% else %}♡{% endif %}
-              </button>
+        <div class="search-results-bottom">
+          <div class="filter-control">
+            <h2>Filters</h2>
+            <form class="filter-options" method="get" aria-label="Artwork filters">
+              {% if filters.q %}<input type="hidden" name="q" value="{{ filters.q }}" />{% endif %}
+              {% for medium_name in mediums %}
+                <label>
+                  <input
+                    type="radio"
+                    name="medium"
+                    value="{{ medium_name }}"
+                    onchange="this.form.submit()"
+                    {% if filters.medium == medium_name %}checked{% endif %}
+                  />
+                  {{ medium_name }}
+                </label>
+              {% endfor %}
+              {% if filters.medium %}
+                <a class="filter-clear" href="{% url 'marketplace:artwork_list' %}{% if filters.q %}?q={{ filters.q }}{% endif %}">Clear filter</a>
+              {% endif %}
             </form>
-          {% endif %}
+          </div>
+
+          <div class="search-browse-strip" aria-label="Artwork results">
+            {% for artwork in page_obj %}
+              <article class="search-result-card">
+                <a href="{% url 'marketplace:artwork_detail' artwork.pk %}">
+                  <span class="browse-title-tag">{{ artwork.title }}</span>
+                  {% if artwork.thumbnail %}
+                    <img src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}" />
+                  {% else %}
+                    <img src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
+                  {% endif %}
+                  <span class="browse-price">from ${{ artwork.price }}</span>
+                </a>
+                <a class="browse-seller" href="{% url 'marketplace:seller_detail' artwork.seller.pk %}" aria-label="View seller page for {{ artwork.seller.name }}">
+                  <span class="seller-name">{{ artwork.seller.name }}</span>
+                  <span class="seller-avatar" aria-hidden="true"></span>
+                </a>
+                <p class="browse-type-label">{{ artwork.medium }}</p>
+              </article>
+            {% empty %}
+              <p class="empty-results">No artworks match your filters.</p>
+            {% endfor %}
+          </div>
         </div>
-        <p class="browse-type-label">{{ artwork.medium }}</p>
-        <div class="card-body">
-          <p class="badge {% if artwork.is_sold %}sold{% else %}available{% endif %}">
-            {% if artwork.is_sold %}Sold{% else %}Available{% endif %}
-          </p>
-          <p>{{ artwork.dimensions }}</p>
-          <a class="button secondary" href="{% url 'marketplace:artwork_detail' artwork.pk %}">View details</a>
-        </div>
-      </article>
-    {% empty %}
-      <p>No artworks matched those filters.</p>
-    {% endfor %}
-  </div>
 
-  {% if page_obj.has_other_pages %}
-    <nav class="pagination" aria-label="Pagination">
-      {% if page_obj.has_previous %}
-        <a class="button secondary" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-      {% endif %}
-      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-      {% if page_obj.has_next %}
-        <a class="button secondary" href="?page={{ page_obj.next_page_number }}">Next</a>
-      {% endif %}
-    </nav>
-  {% endif %}
-
-  <script>
-    function resizeBrowseMasonry() {
-      const grid = document.querySelector('.browse-grid');
-      if (!grid) return;
-
-      const styles = getComputedStyle(grid);
-      const gap = parseFloat(styles.columnGap || styles.gap) || 20;
-      const minColumnWidth = parseFloat(styles.getPropertyValue('--masonry-column-min')) || 210;
-      const cards = Array.from(grid.querySelectorAll('.card'));
-      const gridWidth = grid.clientWidth;
-      const columnCount = Math.max(
-        1,
-        Math.floor((gridWidth + gap) / (minColumnWidth + gap)),
-      );
-      const columnWidth = (gridWidth - gap * (columnCount - 1)) / columnCount;
-      const columnHeights = Array(columnCount).fill(0);
-
-      cards.forEach((card) => {
-        card.style.width = `${columnWidth}px`;
-      });
-
-      cards.forEach((card) => {
-        const shortestColumnHeight = Math.min(...columnHeights);
-        const columnIndex = columnHeights.indexOf(shortestColumnHeight);
-        const x = columnIndex * (columnWidth + gap);
-        const y = shortestColumnHeight;
-
-        card.style.transform = `translate(${x}px, ${y}px)`;
-        columnHeights[columnIndex] = y + card.getBoundingClientRect().height + gap;
-      });
-
-      grid.style.height = `${Math.max(...columnHeights) - gap}px`;
-    }
-
-    const browseGrid = document.querySelector('.browse-grid');
-    if (browseGrid) {
-      browseGrid.classList.add('is-masonry-ready');
-    }
-
-    document.querySelectorAll('.browse-grid img').forEach((img) => {
-      if (img.complete) return;
-      img.addEventListener('load', resizeBrowseMasonry, { once: true });
-    });
-
-    resizeBrowseMasonry();
-    window.addEventListener('load', resizeBrowseMasonry);
-    window.addEventListener('resize', resizeBrowseMasonry);
-  </script>
+        {% if page_obj.paginator.num_pages > 1 %}
+          <nav class="pagination" aria-label="Results pagination">
+            {% if page_obj.has_previous %}
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if filters.q %}&q={{ filters.q }}{% endif %}{% if filters.medium %}&medium={{ filters.medium }}{% endif %}">Previous</a>
+            {% endif %}
+            <span class="page-info">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if filters.q %}&q={{ filters.q }}{% endif %}{% if filters.medium %}&medium={{ filters.medium }}{% endif %}">Next</a>
+            {% endif %}
+          </nav>
+        {% endif %}
+      </div>
+    </section>
+  </main>
 {% endblock %}

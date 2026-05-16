@@ -113,6 +113,19 @@ body {
     overflow: hidden;
 }
 
+.top-nav .search-form {
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    transition: background 160ms ease, border-color 160ms ease;
+}
+
+.top-nav .search-form:hover,
+.top-nav .search-form:focus-within {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.55);
+}
+
 .search-form input,
 .search-button {
     height: 100%;

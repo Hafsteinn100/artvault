@@ -5,43 +5,131 @@
 
 {% block hero %}
   <section class="hero">
-    <div class="hero-inner">
-      <div>
-        <h1>Discover extraordinary art</h1>
-        <p>Browse original works, submit bids, and finalize accepted offers through ArtVault.</p>
-        <p><a class="button" href="{% url 'marketplace:artwork_list' %}">Explore collection</a></p>
+    <div class="cover">
+      <div class="hero-copy">
+        <h1>Discover Extraordinary Art</h1>
+        <p>
+          Explore original works from emerging and established artists worldwide.
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="{% url 'marketplace:artwork_list' %}">Explore Collection</a>
+        </div>
       </div>
-      <img src="{% static 'marketplace/coverimg2verklegt2.webp' %}" alt="Featured artwork">
+      <div class="hero-media">
+        <video class="coverimage" autoplay muted loop playsinline>
+          <source src="{% static '15442550_3840_2160_30fps.mp4' %}" type="video/mp4" />
+        </video>
+      </div>
     </div>
   </section>
 {% endblock %}
 
 {% block content %}
-  <h2 class="latest-title">Latest Pieces</h2>
-  <p class="lead">Fresh works recently added by ArtVault sellers.</p>
+  <section class="latest-section">
+    <div class="section-inner">
+      <div class="section-heading">
+        <h2>Latest Pieces</h2>
+        <p>Fresh works recently added by ArtVault sellers.</p>
+      </div>
+      <div class="artwork-grid">
+        {% for artwork in latest_artworks %}
+          <article class="art-card">
+            <div class="art-image-wrap">
+              <a class="art-card-link" href="{% url 'marketplace:artwork_detail' artwork.pk %}" aria-label="View {{ artwork.title }} details">
+                <span class="new-tag">New</span>
+                <span class="medium-tag">{{ artwork.medium }}</span>
+                {% if artwork.thumbnail %}
+                  <img src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}" />
+                {% else %}
+                  <img src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}" />
+                {% endif %}
+                <span class="latest-price">${{ artwork.price }}</span>
+              </a>
+              <a class="latest-seller" href="{% url 'marketplace:seller_detail' artwork.seller.pk %}" aria-label="View seller page for {{ artwork.seller.name }}">
+                <span class="latest-seller-name">{{ artwork.seller.name }}</span>
+                <span class="latest-seller-avatar" aria-hidden="true"></span>
+              </a>
+            </div>
+            <a class="art-card-link" href="{% url 'marketplace:artwork_detail' artwork.pk %}">
+              <div class="art-card-body">
+                <p class="medium">{{ artwork.medium }}</p>
+                <h3>{{ artwork.title }}</h3>
+                <p class="price">from ${{ artwork.price }}</p>
+              </div>
+            </a>
+          </article>
+        {% empty %}
+          <p>No artworks have been added yet. Run the seed command after migrations to add demo data.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 
-  <div class="grid latest-grid">
-    {% for artwork in latest_artworks %}
-      <article class="card latest-card">
-        <a class="latest-card-link" href="{% url 'marketplace:artwork_detail' artwork.pk %}" aria-label="View {{ artwork.title }}">
-          <div class="latest-image-wrap">
-            <span class="latest-new-tag">New</span>
-            <span class="latest-medium-tag">{{ artwork.medium }}</span>
-            {% if artwork.thumbnail %}
-              <img class="art-thumb" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}">
-            {% else %}
-              <img class="art-thumb" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
-            {% endif %}
-            <span class="browse-price">${{ artwork.starting_bid_price }}</span>
-            <span class="browse-seller">
-              <span class="seller-name">{{ artwork.seller.name }}</span>
-              <span class="seller-avatar" aria-hidden="true"></span>
-            </span>
-          </div>
+  <section class="medium-section">
+    <div class="section-inner">
+      <h2>Browse by Medium</h2>
+      <div class="medium-row">
+        <a class="medium-item" href="{% url 'marketplace:artwork_list' %}?medium=Oil">
+          <img src="{% static 'marketplace/medium-oil.jpg' %}" alt="" />
+          <span>Oil</span>
         </a>
-      </article>
-    {% empty %}
-      <p>No artworks have been added yet. Run the seed command after migrations to add demo data.</p>
-    {% endfor %}
-  </div>
+        <a class="medium-item" href="{% url 'marketplace:artwork_list' %}?medium=Watercolor">
+          <img src="{% static 'marketplace/medium-watercolor.jpg' %}" alt="" />
+          <span>Watercolor</span>
+        </a>
+        <a class="medium-item" href="{% url 'marketplace:artwork_list' %}?medium=Sculpture">
+          <img src="{% static 'marketplace/medium-sculpture.jpg' %}" alt="" />
+          <span>Sculpture</span>
+        </a>
+        <a class="medium-item" href="{% url 'marketplace:artwork_list' %}?medium=Photography">
+          <img src="{% static 'marketplace/medium-photography.jpg' %}" alt="" />
+          <span>Photography</span>
+        </a>
+        <a class="medium-item" href="{% url 'marketplace:artwork_list' %}?medium=Digital">
+          <img src="{% static 'marketplace/medium-digital.jpg' %}" alt="" />
+          <span>Digital</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-section">
+    <div class="section-inner">
+      <h2>How It Works</h2>
+      <div class="how-grid">
+        <article class="how-card">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <h3>Discover</h3>
+          <p>Browse curated artworks from verified sellers</p>
+        </article>
+        <article class="how-card">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m14 5 5 5"></path>
+            <path d="m12 7 5 5"></path>
+            <path d="m3 21 7-7"></path>
+            <path d="m9 4 11 11"></path>
+          </svg>
+          <h3>Bid</h3>
+          <p>Place competitive bids on pieces you love</p>
+        </article>
+        <article class="how-card">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m21 8-9-5-9 5 9 5 9-5Z"></path>
+            <path d="M3 8v8l9 5 9-5V8"></path>
+            <path d="M12 13v8"></path>
+          </svg>
+          <h3>Collect</h3>
+          <p>Secure payment and access</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Ready to find your next masterpiece?</h2>
+    <a class="cta-button" href="{% url 'marketplace:artwork_list' %}">Browse Artworks</a>
+  </section>
 {% endblock %}

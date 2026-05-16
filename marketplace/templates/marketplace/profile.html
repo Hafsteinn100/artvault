@@ -1,27 +1,62 @@
 {% extends 'marketplace/base.html' %}
+{% load static %}
 
-{% block title %}Profile | ArtVault{% endblock %}
+{% block title %}Profile - ArtVault{% endblock %}
+
+{% block body_class %}profile-page{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'profile.css' %}" />
+  <style>
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin-bottom: 10px;
+      border: 2px solid #ccc;
+    }
+  </style>
+{% endblock %}
 
 {% block content %}
-  <h1 class="page-title">Profile</h1>
-  <form class="form-panel" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
+  <main class="auth">
+    <div class="auth-container">
+      <h1>Profile</h1>
 
-    {% if form.instance.profile_image %}
-      <img class="profile-preview" src="{{ form.instance.profile_image.url }}" alt="{{ form.instance.name }}">
-    {% endif %}
+      <form id="profile-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
 
-    <p>
-      {{ form.name.label_tag }}
-      {{ form.name }}
-      {{ form.name.errors }}
-    </p>
-    <p>
-      {{ form.profile_image.label_tag }}
-      {{ form.profile_image }}
-      {{ form.profile_image.errors }}
-    </p>
-    <button type="submit">Update profile</button>
-  </form>
+        <div class="form-group">
+          <label for="id_name">Name</label>
+          <input id="id_name" type="text" name="name" value="{{ form.name.value|default:'' }}" required />
+          {% if form.name.errors %}<p class="error">{{ form.name.errors|join:', ' }}</p>{% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="id_profile_image">Profile Image</label>
+
+          {% if form.instance.profile_image %}
+            <img id="profile-preview" src="{{ form.instance.profile_image.url }}" alt="Profile" class="profile-avatar" />
+          {% else %}
+            <img id="profile-preview" src="{% static 'marketplace/profile.png' %}" alt="Profile" class="profile-avatar" />
+          {% endif %}
+
+          <input id="id_profile_image" type="file" name="profile_image" accept="image/*" />
+          {% if form.profile_image.errors %}<p class="error">{{ form.profile_image.errors|join:', ' }}</p>{% endif %}
+        </div>
+
+        <button type="submit">Update Profile</button>
+      </form>
+
+      <p class="muted" style="margin-top: 20px;">
+        Logged in as <strong>{{ request.user.username }}</strong>.
+        <form method="post" action="{% url 'marketplace:logout' %}" style="display: inline;">
+          {% csrf_token %}
+          <button class="link-button" type="submit">Log out</button>
+        </form>
+      </p>
+    </div>
+  </main>
 {% endblock %}

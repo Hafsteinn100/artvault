@@ -153,6 +153,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Serve the prototype assets that already live at the repo root
+# (index.css, mp4, etc.) so we don't have to duplicate them into
+# marketplace/static/. App static dirs are still discovered and override
+# anything here when paths collide.
+STATICFILES_DIRS = [BASE_DIR]
+
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
