@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile - ArtVault</title>
+    <title>My Bids - ArtVault</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="profile.css" />
+    <link rel="stylesheet" href="mybids.css" />
     <script src="index.js?v=7" defer></script>
 
     <style>
@@ -68,39 +68,49 @@
     </header>
 
     <main class="auth">
-      <div class="auth-container">
-        <h1>Profile</h1>
+        <div class="auth-container">
+            <h1>My Bids</h1>
 
-        <form
-          id="profile-form"
-          action="#"
-          method="post"
-          enctype="multipart/form-data"
-        >
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input id="name" type="text" name="Name" value="Lisa" required />
-          </div>
+            <div class="artwork-grid">
 
-          <div class="form-group">
-            <label for="profile-image">Profile Image</label>
+            <article class="art-card">
+                <div class="art-image-wrap">
+                <img src="medium-oil.jpg" alt="Abstract oil painting" />
+                </div>
 
-            <img
-              id="profile-preview"
-              src="profile.png"
-              alt="Profile"
-              class="profile-avatar"
-            />
+                <div class="art-card-body">
+                <p class="medium">Oil on canvas</p>
+                <h3>Bloom Study</h3>
+                <p class="price">Your Bid: $120</p>
+                </div>
+            </article>
 
-            <input id="profile-image" type="file" accept="image/*" />
-          </div>
+            <article class="art-card">
+                <div class="art-image-wrap">
+                <img src="medium-watercolor.jpg" alt="Blue watercolor painting" />
+                </div>
 
-          <button type="submit">Update Profile</button>
-          <button type="button" id="reset-profile">Reset Profile</button>
-        </form>
+                <div class="art-card-body">
+                <p class="medium">Watercolor</p>
+                <h3>Quiet Interior</h3>
+                <p class="price">Your Bid: $95</p>
+                </div>
+            </article>
 
-        <div id="status-message" style="margin-top: 15px; display: none"></div>
-      </div>
+            <article class="art-card">
+                <div class="art-image-wrap">
+                <img src="medium-photography.jpg" alt="Landscape photograph" />
+                </div>
+
+                <div class="art-card-body">
+                <p class="medium">Photography</p>
+                <h3>Spring Canopy</h3>
+                <p class="price">Your Bid: $140</p>
+                </div>
+            </article>
+
+            </div>
+        </div>
     </main>
 
     <footer class="site-footer">
@@ -130,7 +140,5 @@
       </div>
       <p class="copyright">&copy; 2026 ArtVault. All rights reserved.</p>
     </footer>
-
-    <script src="profile.js"></script>
   </body>
 </html>
