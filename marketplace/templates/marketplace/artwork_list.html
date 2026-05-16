@@ -50,14 +50,35 @@
     <button type="submit">Apply filters</button>
   </form>
 
-  <div class="grid">
+  <div class="grid browse-grid">
     {% for artwork in page_obj %}
       <article class="card">
-        {% if artwork.thumbnail %}
-          <img class="art-thumb" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}">
-        {% else %}
-          <img class="art-thumb" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
-        {% endif %}
+        <div class="browse-image-wrap">
+          {% if artwork.thumbnail %}
+            <img class="art-thumb" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}">
+          {% else %}
+            <img class="art-thumb" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
+          {% endif %}
+          <span class="browse-price">${{ artwork.starting_bid_price }}</span>
+          <span class="browse-seller">
+            <span class="seller-name">{{ artwork.seller.name }}</span>
+            <span class="seller-avatar" aria-hidden="true"></span>
+          </span>
+          {% if request.user.is_authenticated %}
+            <form class="favorite-form" action="{% url 'marketplace:toggle_favorite' artwork.pk %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.get_full_path }}">
+              <button
+                class="favorite-button {% if artwork.pk in favorite_artwork_ids %}is-favorite{% endif %}"
+                type="submit"
+                aria-label="{% if artwork.pk in favorite_artwork_ids %}Remove {{ artwork.title }} from favorites{% else %}Add {{ artwork.title }} to favorites{% endif %}"
+                title="{% if artwork.pk in favorite_artwork_ids %}Remove from favorites{% else %}Add to favorites{% endif %}"
+              >
+                {% if artwork.pk in favorite_artwork_ids %}♥{% else %}♡{% endif %}
+              </button>
+            </form>
+          {% endif %}
+        </div>
         <div class="card-body">
           <p class="badge {% if artwork.is_sold %}sold{% else %}available{% endif %}">
             {% if artwork.is_sold %}Sold{% else %}Available{% endif %}
@@ -85,4 +106,53 @@
       {% endif %}
     </nav>
   {% endif %}
+
+  <script>
+    function resizeBrowseMasonry() {
+      const grid = document.querySelector('.browse-grid');
+      if (!grid) return;
+
+      const styles = getComputedStyle(grid);
+      const gap = parseFloat(styles.columnGap || styles.gap) || 20;
+      const minColumnWidth = parseFloat(styles.getPropertyValue('--masonry-column-min')) || 210;
+      const cards = Array.from(grid.querySelectorAll('.card'));
+      const gridWidth = grid.clientWidth;
+      const columnCount = Math.max(
+        1,
+        Math.floor((gridWidth + gap) / (minColumnWidth + gap)),
+      );
+      const columnWidth = (gridWidth - gap * (columnCount - 1)) / columnCount;
+      const columnHeights = Array(columnCount).fill(0);
+
+      cards.forEach((card) => {
+        card.style.width = `${columnWidth}px`;
+      });
+
+      cards.forEach((card) => {
+        const shortestColumnHeight = Math.min(...columnHeights);
+        const columnIndex = columnHeights.indexOf(shortestColumnHeight);
+        const x = columnIndex * (columnWidth + gap);
+        const y = shortestColumnHeight;
+
+        card.style.transform = `translate(${x}px, ${y}px)`;
+        columnHeights[columnIndex] = y + card.getBoundingClientRect().height + gap;
+      });
+
+      grid.style.height = `${Math.max(...columnHeights) - gap}px`;
+    }
+
+    const browseGrid = document.querySelector('.browse-grid');
+    if (browseGrid) {
+      browseGrid.classList.add('is-masonry-ready');
+    }
+
+    document.querySelectorAll('.browse-grid img').forEach((img) => {
+      if (img.complete) return;
+      img.addEventListener('load', resizeBrowseMasonry, { once: true });
+    });
+
+    resizeBrowseMasonry();
+    window.addEventListener('load', resizeBrowseMasonry);
+    window.addEventListener('resize', resizeBrowseMasonry);
+  </script>
 {% endblock %}

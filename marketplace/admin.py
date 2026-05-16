@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Artwork, ArtworkImage, Bid, BidFinalization, Profile, Seller
+from .models import Artwork, ArtworkImage, Bid, BidFinalization, Favorite, Profile, Seller
 
 
 class ArtworkImageInline(admin.TabularInline):
@@ -42,6 +42,12 @@ class ArtworkAdmin(admin.ModelAdmin):
 class ArtworkImageAdmin(admin.ModelAdmin):
     list_display = ('artwork', 'sort_order', 'created_at')
     search_fields = ('artwork__title', 'alt_text')
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('artwork', 'user', 'created_at')
+    search_fields = ('artwork__title', 'user__username', 'user__email')
 
 
 @admin.register(Bid)

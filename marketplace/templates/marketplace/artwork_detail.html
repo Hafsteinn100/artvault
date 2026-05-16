@@ -28,6 +28,19 @@
       <p><strong>Edition:</strong> {{ artwork.edition|default:'Original' }}</p>
       <p><strong>Provenance:</strong> {{ artwork.provenance|default:'No provenance supplied.' }}</p>
 
+      {% if request.user.is_authenticated %}
+        <form class="detail-favorite-form" action="{% url 'marketplace:toggle_favorite' artwork.pk %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button class="button secondary favorite-detail-button {% if is_favorite %}is-favorite{% endif %}" type="submit">
+            <span aria-hidden="true">{% if is_favorite %}♥{% else %}♡{% endif %}</span>
+            {% if is_favorite %}Remove from favorites{% else %}Add to favorites{% endif %}
+          </button>
+        </form>
+      {% else %}
+        <p><a href="{% url 'marketplace:login' %}?next={{ request.get_full_path }}">Log in to save this artwork to your favorites.</a></p>
+      {% endif %}
+
       <hr>
       <h2>Seller</h2>
       <div class="meta-row">

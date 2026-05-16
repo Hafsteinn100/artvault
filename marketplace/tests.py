@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Artwork, Bid, BidFinalization, Profile, Seller
+from .models import Artwork, Bid, BidFinalization, Favorite, Profile, Seller
 
 
 class MarketplaceFlowTests(TestCase):
@@ -85,6 +85,42 @@ class MarketplaceFlowTests(TestCase):
                 status=Bid.BidStatus.PENDING,
             ).exists()
         )
+
+    def test_logged_in_user_can_add_and_remove_favorite(self):
+        self.client.login(username='collector', password='artvault123')
+
+        add_response = self.client.post(
+            reverse('marketplace:toggle_favorite', args=[self.oil.pk]),
+        )
+
+        self.assertEqual(add_response.status_code, 302)
+        self.assertTrue(
+            Favorite.objects.filter(
+                artwork=self.oil,
+                user=self.collector,
+            ).exists()
+        )
+
+        remove_response = self.client.post(
+            reverse('marketplace:toggle_favorite', args=[self.oil.pk]),
+        )
+
+        self.assertEqual(remove_response.status_code, 302)
+        self.assertFalse(
+            Favorite.objects.filter(
+                artwork=self.oil,
+                user=self.collector,
+            ).exists()
+        )
+
+    def test_favorites_page_lists_user_favorites(self):
+        Favorite.objects.create(artwork=self.photo, user=self.collector)
+        self.client.login(username='collector', password='artvault123')
+
+        response = self.client.get(reverse('marketplace:favorite_list'))
+
+        self.assertContains(response, 'Blue Valley')
+        self.assertNotContains(response, 'Red Bloom')
 
     def test_finalize_accepted_bid(self):
         bid = Bid.objects.create(

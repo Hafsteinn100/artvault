@@ -87,129 +87,59 @@ function fillSearchBox() {
     }
 }
 
-function normalizeSearchText(text) {
-    return text.trim().toLowerCase();
-}
+function resizeMasonryGrid(grid) {
+    const cards = Array.from(grid.querySelectorAll(".search-result-card"));
+    if (!cards.length) return;
 
-function artworkMatchesSearch(artwork, searchText) {
-    const normalizedSearch = normalizeSearchText(searchText);
-
-    if (!normalizedSearch) return true;
-
-    const searchWords = normalizedSearch.split(/\s+/);
-    const searchableNames = [artwork.title, ...artwork.aliases].map((name) =>
-        normalizeSearchText(name)
+    const styles = getComputedStyle(grid);
+    const gap = parseFloat(styles.columnGap || styles.gap) || 20;
+    const minColumnWidth =
+        parseFloat(styles.getPropertyValue("--masonry-column-min")) || 210;
+    const gridWidth = grid.clientWidth;
+    const columnCount = Math.max(
+        1,
+        Math.floor((gridWidth + gap) / (minColumnWidth + gap)),
     );
+    const columnWidth = (gridWidth - gap * (columnCount - 1)) / columnCount;
+    const columnHeights = Array(columnCount).fill(0);
 
-    return searchWords.every((word) =>
-        searchableNames.some((name) => name.includes(word))
-    );
-}
-
-function getSelectedFilters() {
-    return Array.from(filterCheckboxes)
-        .filter((checkbox) => checkbox.checked)
-        .map((checkbox) => checkbox.value);
-}
-
-function artworkMatchesFilters(artwork, selectedFilters) {
-    if (!selectedFilters.length) return true;
-
-    return selectedFilters.includes(artwork.medium);
-}
-
-function getArtworkFromCard(card) {
-    const link = card.querySelector("a");
-
-    if (!link) return null;
-
-    const url = new URL(link.href);
-    const title = url.searchParams.get("title");
-    const image = url.searchParams.get("img");
-
-    return artworks.find((artwork) => artwork.title === title) || {
-        title,
-        image,
-        medium: "",
-        aliases: [card.querySelector("img")?.alt || ""],
-    };
-}
-
-function filterArtworkCards(searchText, selectedFilters = getSelectedFilters()) {
-    const isSearchPage = document.body.classList.contains("search-page");
-    const hasActiveFilter =
-        Boolean(normalizeSearchText(searchText)) || selectedFilters.length > 0;
-
-    if (!isSearchPage) return;
-
-    document.querySelectorAll(".search-result-card").forEach((card) => {
-        if (card.classList.contains("empty-card")) {
-            card.hidden = hasActiveFilter;
-            return;
-        }
-
-        const artwork = getArtworkFromCard(card);
-        card.hidden =
-            !artwork ||
-            !artworkMatchesSearch(artwork, searchText) ||
-            !artworkMatchesFilters(artwork, selectedFilters);
-    });
-}
-
-function setupArtworkSearch() {
-    const isSearchPage = document.body.classList.contains("search-page");
-
-    if (isSearchPage) {
-        const params = new URLSearchParams(window.location.search);
-        filterArtworkCards(params.get("q") || "");
-    }
-
-    searchInputs.forEach((input) => {
-        input.addEventListener("input", () => {
-            if (!isSearchPage) return;
-
-            searchInputs.forEach((otherInput) => {
-                if (otherInput !== input) {
-                    otherInput.value = input.value;
-                }
-            });
-
-            filterArtworkCards(input.value);
-        });
+    cards.forEach((card) => {
+        card.style.width = `${columnWidth}px`;
     });
 
-    filterCheckboxes.forEach((checkbox) => {
-        checkbox.addEventListener("change", () => {
-            const searchText = searchInputs[0]?.value || "";
+    cards.forEach((card) => {
+        const shortestColumnHeight = Math.min(...columnHeights);
+        const columnIndex = columnHeights.indexOf(shortestColumnHeight);
+        const x = columnIndex * (columnWidth + gap);
+        const y = shortestColumnHeight;
 
-            filterArtworkCards(searchText);
-        });
+        card.style.transform = `translate(${x}px, ${y}px)`;
+        columnHeights[columnIndex] = y + card.getBoundingClientRect().height + gap;
     });
 
-    searchForms.forEach((form) => {
-        form.addEventListener("submit", (event) => {
-            if (!isSearchPage) return;
+    grid.style.height = `${Math.max(...columnHeights) - gap}px`;
+}
 
-            const input = form.querySelector('input[type="search"]');
-            const searchText = input?.value || "";
-            const url = new URL(window.location.href);
+function setupBrowseMasonry() {
+    const grid = document.querySelector(".search-browse-strip");
+    if (!grid) return;
 
-            if (normalizeSearchText(searchText)) {
-                url.searchParams.set("q", searchText);
-            } else {
-                url.searchParams.delete("q");
-            }
+    const resize = () => requestAnimationFrame(() => resizeMasonryGrid(grid));
+    grid.classList.add("is-masonry-ready");
 
-            event.preventDefault();
-            window.history.replaceState({}, "", url);
-            filterArtworkCards(searchText);
-        });
+    grid.querySelectorAll("img").forEach((img) => {
+        if (img.complete) return;
+        img.addEventListener("load", resize, { once: true });
     });
+
+    resize();
+    window.addEventListener("load", resize);
+    window.addEventListener("resize", resize);
 }
 
 moveNavbar();
 loadNavbarProfile();
 fillSearchBox();
-setupArtworkSearch();
+setupBrowseMasonry();
 
 window.addEventListener("scroll", moveNavbar, { passive: true });

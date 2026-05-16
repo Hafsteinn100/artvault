@@ -154,6 +154,10 @@ input[type='submit'] {
   gap: 20px;
 }
 
+.latest-title {
+  text-align: center;
+}
+
 .card {
   background: white;
   border: 1px solid var(--line);
@@ -170,6 +174,198 @@ input[type='submit'] {
   aspect-ratio: 4 / 3;
   object-fit: cover;
   background: var(--soft);
+}
+
+.latest-grid .art-thumb {
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+.latest-grid {
+  align-items: start;
+}
+
+.latest-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.latest-image-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.latest-new-tag,
+.latest-medium-tag {
+  position: absolute;
+  top: 12px;
+  z-index: 1;
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.72);
+}
+
+.latest-new-tag {
+  left: 12px;
+}
+
+.latest-medium-tag {
+  right: 12px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.latest-image-wrap:hover .latest-medium-tag,
+.latest-card-link:focus-visible .latest-medium-tag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.browse-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
+  gap: 20px;
+  align-items: start;
+  --masonry-column-min: 190px;
+}
+
+.browse-grid.is-masonry-ready {
+  position: relative;
+  display: block;
+  min-height: 320px;
+}
+
+.browse-grid .card {
+  width: 100%;
+}
+
+.browse-grid.is-masonry-ready .card {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.browse-grid .art-thumb {
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+.browse-image-wrap {
+  position: relative;
+}
+
+.favorite-form {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+}
+
+.favorite-button {
+  width: 38px;
+  min-height: 38px;
+  padding: 0;
+  border-color: rgba(32, 25, 20, 0.18);
+  border-radius: 50%;
+  background: rgba(255, 250, 244, 0.9);
+  color: var(--ink);
+  font-size: 1.35rem;
+  line-height: 1;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.favorite-button:hover,
+.favorite-button:focus-visible,
+.favorite-button.is-favorite {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
+}
+
+.detail-favorite-form {
+  margin: 18px 0;
+}
+
+.favorite-detail-button {
+  gap: 8px;
+}
+
+.favorite-detail-button.is-favorite {
+  background: var(--accent);
+  color: white;
+}
+
+.browse-price {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(32, 25, 20, 0.86);
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+.browse-seller {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 72%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.latest-image-wrap:hover .browse-seller,
+.latest-card-link:focus-visible .browse-seller,
+.browse-image-wrap:hover .browse-seller,
+.browse-image-wrap:focus-within .browse-seller {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.seller-name {
+  min-width: 0;
+  padding: 4px 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(32, 25, 20, 0.76);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.seller-avatar {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  background: var(--soft);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
 }
 
 .meta-row,
@@ -207,7 +403,8 @@ input[type='submit'] {
 .form-panel,
 .detail-shell,
 .seller-head,
-.review-panel {
+.review-panel,
+.empty-panel {
   background: white;
   border: 1px solid var(--line);
   border-radius: 8px;
