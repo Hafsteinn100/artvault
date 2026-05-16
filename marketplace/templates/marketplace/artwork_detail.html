@@ -98,11 +98,12 @@
             {% else %}
               <a class="button" href="{% url 'marketplace:submit_bid' artwork.pk %}">Submit a bid</a>
             {% endif %}
-            <form action="{% url 'marketplace:toggle_favorite' artwork.pk %}" method="post" class="details-favorite-form">
+            <form id="favorite-form" action="{% url 'marketplace:toggle_favorite' artwork.pk %}" method="post" class="details-favorite-form">
               {% csrf_token %}
               <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-              <button class="favorite-button {% if is_favorite %}is-favorite{% endif %}" type="submit">
-                {% if is_favorite %}♥ Saved{% else %}♡ Save{% endif %}
+              <button class="favorite-banner-button {% if is_favorite %}is-favorite{% endif %}" type="submit" aria-label="{% if is_favorite %}Remove from favorites{% else %}Add to favorites{% endif %}" title="{% if is_favorite %}Remove from favorites{% else %}Add to favorites{% endif %}">
+                <i class="fa-regular fa-bookmark favorite-icon-outline" aria-hidden="true"></i>
+                <i class="fa-solid fa-bookmark favorite-icon-filled" aria-hidden="true"></i>
               </button>
             </form>
           {% else %}

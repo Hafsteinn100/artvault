@@ -775,3 +775,272 @@ body {
     }
 
 }
+
+/* === Theme toggle button === */
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.55);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+.theme-icon { display: none; }
+html:not(.theme-dark) .theme-icon-sun { display: inline-block; }
+html.theme-dark .theme-icon-moon { display: inline-block; }
+
+/* === Banner (bookmark) favorite button on details page === */
+.favorite-banner-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--brown);
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 120ms ease, color 120ms ease;
+}
+
+.favorite-banner-button:hover { transform: scale(1.08); }
+.favorite-banner-button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+.favorite-banner-button .favorite-icon-filled { display: none; }
+.favorite-banner-button.is-favorite .favorite-icon-outline { display: none; }
+.favorite-banner-button.is-favorite .favorite-icon-filled { display: inline-block; }
+
+/* === Toast notification === */
+.toast-container {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: var(--brown);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* === Profile page favorites section === */
+.profile-favorites {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid #EDE5DB;
+}
+
+.profile-favorites h2 {
+    margin-bottom: 18px;
+    color: var(--brown);
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.profile-favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+}
+
+.profile-favorite-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #EDE5DB;
+    border-radius: 10px;
+    background: #FCFAF6;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.profile-favorite-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(59, 31, 14, 0.12);
+}
+
+.profile-favorite-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.profile-favorite-body {
+    padding: 12px 14px 14px;
+}
+
+.profile-favorite-body h3 {
+    margin-bottom: 4px;
+    color: var(--brown);
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.profile-favorite-body p {
+    margin: 0;
+    color: #746C65;
+    font-size: 0.82rem;
+}
+
+.profile-favorite-price {
+    margin-top: 6px;
+    color: var(--brown);
+    font-weight: 800;
+}
+
+/* === Dark theme === */
+html.theme-dark body {
+    background: #1a1410;
+    color: #f0e6d8;
+}
+
+html.theme-dark .hero { background: #1a1410; }
+
+html.theme-dark .latest-section,
+html.theme-dark .medium-section {
+    background: #221a14;
+}
+
+html.theme-dark .how-section { background: #1d1611; }
+
+html.theme-dark .latest-section h2,
+html.theme-dark .medium-section h2 {
+    color: #f0e6d8;
+}
+
+html.theme-dark .how-section h2,
+html.theme-dark .how-card h3 {
+    color: var(--gold);
+}
+
+html.theme-dark .section-heading p,
+html.theme-dark .how-card p,
+html.theme-dark .medium {
+    color: #b9aa97;
+}
+
+html.theme-dark .art-card {
+    background: #2a1f17;
+    border-color: #3a2c20;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+}
+
+html.theme-dark .art-card h3,
+html.theme-dark .price {
+    color: #f0e6d8;
+}
+
+html.theme-dark .medium-item { color: var(--gold); }
+
+html.theme-dark .medium-item img {
+    border-color: #2a1f17;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+}
+
+html.theme-dark .how-card svg { stroke: var(--gold); }
+
+html.theme-dark body.profile-page .site-header,
+html.theme-dark body.search-page .site-header,
+html.theme-dark body.details-page .site-header,
+html.theme-dark .site-header.is-scrolled {
+    background: #0f0a07;
+}
+
+html.theme-dark .auth { background: #1d1611; }
+
+html.theme-dark .auth-container {
+    background: #2a1f17;
+    border-color: #3a2c20;
+    color: #f0e6d8;
+}
+
+html.theme-dark .auth-container h1,
+html.theme-dark .auth-container h2 {
+    color: var(--gold);
+}
+
+html.theme-dark .eyebrow,
+html.theme-dark .muted {
+    color: #b9aa97;
+}
+
+html.theme-dark .bids-table-wrap { border-color: #3a2c20; }
+html.theme-dark .bids-table { background: #2a1f17; }
+
+html.theme-dark .bids-table th {
+    background: #3a2c20;
+    color: var(--gold);
+}
+
+html.theme-dark .bids-table th,
+html.theme-dark .bids-table td {
+    border-bottom-color: #3a2c20;
+    color: #f0e6d8;
+}
+
+html.theme-dark .bids-table a { color: var(--gold); }
+
+html.theme-dark .details-main { background: #1a1410; }
+html.theme-dark .details-content h1,
+html.theme-dark .details-price { color: #f0e6d8; }
+html.theme-dark .details-content p,
+html.theme-dark .details-meta dt,
+html.theme-dark .details-meta dd { color: #b9aa97; }
+
+html.theme-dark .favorite-banner-button { color: var(--gold); }
+
+html.theme-dark .profile-favorites { border-top-color: #3a2c20; }
+html.theme-dark .profile-favorites h2 { color: var(--gold); }
+html.theme-dark .profile-favorite-card {
+    background: #1d1611;
+    border-color: #3a2c20;
+}
+html.theme-dark .profile-favorite-body h3,
+html.theme-dark .profile-favorite-price { color: var(--gold); }
+html.theme-dark .profile-favorite-body p { color: #b9aa97; }
