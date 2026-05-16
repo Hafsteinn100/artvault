@@ -54,12 +54,13 @@
     {% for artwork in page_obj %}
       <article class="card">
         <div class="browse-image-wrap">
+          <span class="browse-title-tag">{{ artwork.title }}</span>
           {% if artwork.thumbnail %}
             <img class="art-thumb" src="{{ artwork.thumbnail.image.url }}" alt="{{ artwork.thumbnail.alt_text|default:artwork.title }}">
           {% else %}
             <img class="art-thumb" src="{% static 'marketplace/medium-oil.jpg' %}" alt="{{ artwork.title }}">
           {% endif %}
-          <span class="browse-price">${{ artwork.starting_bid_price }}</span>
+          <span class="browse-price">from ${{ artwork.starting_bid_price }}</span>
           <span class="browse-seller">
             <span class="seller-name">{{ artwork.seller.name }}</span>
             <span class="seller-avatar" aria-hidden="true"></span>
@@ -79,14 +80,12 @@
             </form>
           {% endif %}
         </div>
+        <p class="browse-type-label">{{ artwork.medium }}</p>
         <div class="card-body">
           <p class="badge {% if artwork.is_sold %}sold{% else %}available{% endif %}">
             {% if artwork.is_sold %}Sold{% else %}Available{% endif %}
           </p>
-          <h2>{{ artwork.title }}</h2>
-          <p>{{ artwork.medium }} · {{ artwork.style }}</p>
           <p>{{ artwork.dimensions }}</p>
-          <p><strong>Starting bid: ${{ artwork.starting_bid_price }}</strong></p>
           <a class="button secondary" href="{% url 'marketplace:artwork_detail' artwork.pk %}">View details</a>
         </div>
       </article>
