@@ -4,9 +4,8 @@
 
 {% block content %}
   <h1 class="page-title">Review</h1>
-  <p class="lead">{{ bid.artwork.title }} · ${{ bid.price }}</p>
-
-  {% include 'marketplace/_finalization_steps.html' %}
+  <p class="lead">{{ bid.artwork.title }} &middot; ${{ bid.price }}</p>
+  {% include 'marketplace/includes/finalize_steps.html' %}
 
   <section class="review-panel">
     <h2>Contact information</h2>
@@ -17,11 +16,12 @@
     <p><strong>National id:</strong> {{ contact.national_id }}</p>
 
     <h2>Payment</h2>
-    <p><strong>Method:</strong> {{ payment.payment_method }}</p>
+    <p><strong>Method:</strong> {{ payment_method_label }}</p>
     {% if payment.payment_method == 'credit_card' %}
       <p><strong>Cardholder:</strong> {{ payment.cardholder_name }}</p>
       <p><strong>Card number:</strong> {{ payment.credit_card_number }}</p>
       <p><strong>Expiry:</strong> {{ payment.expiry_date }}</p>
+      <p><strong>CVC:</strong> {{ payment.cvc }}</p>
     {% elif payment.payment_method == 'bank_transfer' %}
       <p><strong>Bank account:</strong> {{ payment.bank_account }}</p>
     {% elif payment.payment_method == 'wire_transfer' %}

@@ -395,7 +395,28 @@ input[type='submit'] {
   font-weight: 700;
 }
 
-.wizard-step.is-current {
+.step-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 22px;
+}
+
+.step-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: white;
+  color: var(--accent-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.wizard-step.is-current,
+.step-link.is-current {
   border-color: var(--accent);
   background: var(--accent);
   color: white;
@@ -409,6 +430,11 @@ input[type='submit'] {
 .inline-form select {
   width: auto;
   min-width: 140px;
+}
+
+.step-link.is-disabled {
+  color: var(--muted);
+  background: var(--soft);
 }
 
 .badge {
