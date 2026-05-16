@@ -323,10 +323,10 @@ body {
 
 .art-card {
     overflow: hidden;
-    background: #FCFAF6;
-    border: 1px solid #EDE5DB;
-    border-radius: 12px;
-    box-shadow: 0 8px 22px rgba(59, 31, 14, 0.07);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 .art-card-link {
@@ -340,7 +340,8 @@ body {
     position: relative;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    background: var(--soft-gray);
+    border-radius: 12px;
+    background: transparent;
 }
 
 .art-image-wrap img {
@@ -370,18 +371,18 @@ body {
     text-shadow: 0 1px 5px rgba(0, 0, 0, 0.72);
 }
 
-.medium-tag {
+.image-title-tag {
     position: absolute;
     top: 12px;
     right: 12px;
     z-index: 1;
+    max-width: calc(100% - 94px);
     color: #fff;
     font-size: 13px;
     font-weight: 800;
+    line-height: 1.15;
+    text-align: right;
     text-shadow: 0 1px 5px rgba(0, 0, 0, 0.72);
-    opacity: 0;
-    transform: translateY(-4px);
-    transition: opacity 160ms ease, transform 160ms ease;
 }
 
 .latest-price {
@@ -408,8 +409,10 @@ body {
     bottom: 8px;
     z-index: 1;
     display: inline-flex;
+    flex-direction: row;
     align-items: center;
     gap: 5px;
+    width: max-content;
     max-width: 72%;
     cursor: pointer;
     text-decoration: none;
@@ -423,15 +426,16 @@ body {
     outline-offset: 3px;
 }
 
-.art-image-wrap:hover .medium-tag,
 .art-image-wrap:hover .latest-seller,
-.art-image-wrap:focus-within .medium-tag,
+.art-card:hover .latest-seller,
+.art-card-link:hover ~ .latest-seller,
 .art-image-wrap:focus-within .latest-seller {
     opacity: 1;
     transform: translateY(0);
 }
 
 .latest-seller-name {
+    order: 1;
     min-width: 0;
     padding: 4px 7px;
     overflow: hidden;
@@ -447,13 +451,23 @@ body {
 }
 
 .latest-seller-avatar {
+    order: 2;
     width: 28px;
     height: 28px;
     flex: 0 0 28px;
-    border: 2px solid rgba(255, 255, 255, 0.92);
+    border: 2px solid rgba(42, 21, 9, 0.72);
     border-radius: 50%;
-    background: #F4EFE8;
+    background: #F4EFE8 url("profile.png") center / cover no-repeat;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+}
+
+.art-type-label {
+    margin-top: 7px;
+    color: #746C65;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: left;
 }
 
 .art-card-body { padding: 15px 16px 18px; }
